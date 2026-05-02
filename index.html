@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>软考知识图谱 - 信息系统项目管理师</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/matrix.css">
+    <link rel="stylesheet" href="css/panel.css">
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="header-left">
+            <h1 class="logo">软考知识图谱</h1>
+        </div>
+        <div class="header-center">
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="搜索知识点..." autocomplete="off">
+                <div id="search-results" class="search-dropdown hidden"></div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="nav-tab active" data-view="matrix">矩阵</button>
+            <button class="nav-tab" data-view="performance">绩效域</button>
+            <button class="nav-tab" data-view="essay">论文真题</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="app">
+        <!-- Matrix View -->
+        <div id="view-matrix" class="view-container">
+            <div class="matrix-wrapper">
+                <!-- PMBOK Matrix rendered by JS -->
+                <div id="pmbook-matrix" class="matrix"></div>
+                <!-- Performance Domain Cards -->
+                <div class="section-divider"></div>
+                <h2 class="section-title">八大绩效域</h2>
+                <div id="perf-domains-grid" class="perf-domains-grid"></div>
+            </div>
+        </div>
+
+        <!-- Performance Domain Detail View -->
+        <div id="view-performance" class="view-container hidden">
+            <div class="perf-detail-wrapper">
+                <div id="perf-detail-cards" class="perf-detail-cards"></div>
+            </div>
+        </div>
+
+        <!-- Essay History View -->
+        <div id="view-essay" class="view-container hidden">
+            <div class="essay-wrapper">
+                <h2 class="section-title">论文真题 2015-2025</h2>
+                <div id="essay-timeline" class="essay-timeline"></div>
+            </div>
+        </div>
+
+        <!-- Detail Panel (shared across views) -->
+        <aside id="detail-panel" class="detail-panel hidden">
+            <div class="panel-header">
+                <h2 id="panel-title" class="panel-title"></h2>
+                <button id="panel-close" class="panel-close-btn">&times;</button>
+            </div>
+            <div class="panel-breadcrumb" id="panel-breadcrumb"></div>
+            <div class="panel-tabs" id="panel-tabs">
+                <button class="tab active" data-tab="overview">概述</button>
+                <button class="tab" data-tab="itto">输入输出</button>
+                <button class="tab" data-tab="exam">考频</button>
+                <button class="tab" data-tab="mnemonic">口诀</button>
+            </div>
+            <div class="panel-content" id="panel-content"></div>
+        </aside>
+    </main>
+
+    <!-- Scripts: D3 first, then data, then app logic -->
+    <script src="lib/d3.v7.min.js"></script>
+    <script src="data/nodes.js"></script>
+    <script src="data/edges.js"></script>
+    <script src="data/exam-frequency.js"></script>
+    <script src="data/mnemonics.js"></script>
+    <script src="data/essay-topics.js"></script>
+    <script src="data/glossary.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/matrix.js"></script>
+    <script src="js/panel.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,279 @@
+/* PMBOK Matrix Table */
+.matrix-wrapper {
+    max-width: 960px;
+}
+
+.matrix {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 3px;
+    table-layout: fixed;
+}
+
+/* Header row */
+.matrix thead th {
+    padding: 10px 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius);
+    text-align: center;
+    white-space: nowrap;
+}
+.matrix thead th:first-child {
+    width: 100px;
+    background: transparent;
+}
+
+/* Knowledge area label column */
+.matrix tbody td:first-child {
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+    vertical-align: middle;
+    border-radius: var(--radius);
+    white-space: nowrap;
+    position: relative;
+}
+
+/* Process cells */
+.matrix .cell-process {
+    padding: 6px 8px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all var(--transition);
+    vertical-align: middle;
+    text-align: center;
+    position: relative;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    min-height: 44px;
+}
+.matrix .cell-process:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-blue);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+}
+
+/* Process cell content */
+.cell-content {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+}
+.cell-color-bar {
+    width: 3px;
+    height: 20px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+.cell-name {
+    font-size: 12px;
+    line-height: 1.3;
+    color: var(--text-primary);
+}
+.cell-heat {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+}
+.cell-heat.high { background: var(--accent-red); box-shadow: 0 0 4px var(--accent-red); }
+.cell-heat.medium { background: var(--accent-orange); }
+
+/* Empty cells */
+.matrix .cell-empty {
+    background: var(--bg-primary);
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+}
+
+/* Row hover highlight */
+.matrix tbody tr:hover td {
+    background: var(--bg-tertiary);
+}
+.matrix tbody tr:hover .cell-process {
+    background: var(--bg-hover);
+}
+.matrix tbody tr:hover .cell-empty {
+    background: var(--bg-primary);
+}
+
+/* Selected cell */
+.matrix .cell-process.selected {
+    border-color: var(--accent-blue);
+    background: rgba(88,166,255,0.15);
+    box-shadow: 0 0 0 2px rgba(88,166,255,0.2);
+}
+
+/* Performance Domain Grid */
+.perf-domains-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.perf-domain-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 16px;
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+.perf-domain-card:hover {
+    border-color: var(--accent-blue);
+    background: var(--bg-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+.perf-domain-card.selected {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 2px rgba(88,166,255,0.2);
+}
+.pd-card-accent {
+    width: 4px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: var(--radius) 0 0 var(--radius);
+}
+.pd-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    padding-left: 8px;
+}
+.pd-card-desc {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    padding-left: 8px;
+}
+
+/* Performance Domain Detail Cards */
+.perf-detail-wrapper {
+    max-width: 960px;
+}
+.perf-detail-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+.perf-detail-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+.perf-detail-card:hover {
+    border-color: var(--accent-blue);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+.perf-detail-card .pd-card-accent {
+    width: 4px;
+}
+.pd-detail-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    padding-left: 10px;
+}
+.pd-detail-goals {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding-left: 10px;
+    margin-bottom: 8px;
+}
+.pd-detail-mnemonic {
+    font-size: 13px;
+    color: var(--accent-purple);
+    font-weight: 600;
+    padding: 6px 10px;
+    background: rgba(188,140,255,0.1);
+    border-radius: var(--radius);
+    margin-left: 10px;
+    display: inline-block;
+}
+
+/* Essay Timeline */
+.essay-wrapper {
+    max-width: 960px;
+}
+.essay-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.essay-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    transition: all var(--transition);
+    cursor: pointer;
+}
+.essay-item:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-blue);
+}
+.essay-year {
+    padding: 4px 10px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-blue);
+    white-space: nowrap;
+    min-width: 64px;
+    text-align: center;
+}
+.essay-title {
+    font-size: 14px;
+    flex: 1;
+}
+.essay-difficulty {
+    display: flex;
+    gap: 2px;
+}
+.essay-star {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+}
+.essay-star.filled { background: var(--accent-orange); }
+.essay-star.empty { background: var(--bg-tertiary); }
+.essay-area {
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 2px 8px;
+    background: var(--bg-tertiary);
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .perf-domains-grid { grid-template-columns: repeat(2, 1fr); }
+    .perf-detail-cards { grid-template-columns: 1fr; }
+    .matrix .cell-name { font-size: 11px; }
+    .matrix tbody td:first-child { font-size: 12px; width: 80px; }
+}

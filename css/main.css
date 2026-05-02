@@ -1,0 +1,172 @@
+/* CSS Variables - Dark Theme */
+:root {
+    --bg-primary: #0d1117;
+    --bg-secondary: #161b22;
+    --bg-tertiary: #21262d;
+    --bg-card: #1c2128;
+    --bg-hover: #30363d;
+    --text-primary: #e6edf3;
+    --text-secondary: #8b949e;
+    --text-muted: #6e7681;
+    --border-color: #30363d;
+    --border-light: #21262d;
+    --accent-blue: #58a6ff;
+    --accent-green: #3fb950;
+    --accent-red: #f85149;
+    --accent-orange: #d29922;
+    --accent-purple: #bc8cff;
+    --shadow: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
+    --radius: 6px;
+    --radius-lg: 10px;
+    --header-height: 52px;
+    --panel-width: 420px;
+    --transition: 0.2s ease;
+}
+
+/* Reset */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Layout */
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-height);
+    padding: 0 20px;
+    background: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-color);
+    z-index: 100;
+}
+
+.header-left { display: flex; align-items: center; gap: 12px; }
+.header-center { flex: 1; max-width: 400px; margin: 0 24px; }
+.header-right { display: flex; align-items: center; gap: 4px; }
+
+.logo {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+#app {
+    display: flex;
+    height: calc(100vh - var(--header-height));
+    overflow: hidden;
+}
+
+/* Nav Tabs in Header */
+.nav-tab {
+    padding: 6px 16px;
+    background: none;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: all var(--transition);
+}
+.nav-tab:hover { color: var(--text-primary); background: var(--bg-hover); }
+.nav-tab.active {
+    color: var(--accent-blue);
+    background: rgba(88,166,255,0.1);
+    border-color: rgba(88,166,255,0.3);
+}
+
+/* View Containers */
+.view-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 32px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--bg-hover) transparent;
+}
+.view-container.hidden { display: none; }
+
+/* Section */
+.section-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 32px 0;
+}
+.section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+}
+
+/* Search */
+.search-container { position: relative; }
+#search-input {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 13px;
+    outline: none;
+    transition: border-color var(--transition);
+}
+#search-input:focus { border-color: var(--accent-blue); }
+#search-input::placeholder { color: var(--text-muted); }
+
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    max-height: 320px;
+    overflow-y: auto;
+    z-index: 200;
+    box-shadow: var(--shadow-lg);
+}
+.search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background var(--transition);
+}
+.search-result-item:hover,
+.search-result-item.active { background: var(--bg-hover); }
+.search-result-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.search-result-label { flex: 1; }
+.search-result-type { color: var(--text-muted); font-size: 11px; }
+.search-result-item mark { background: rgba(88,166,255,0.3); color: var(--text-primary); border-radius: 2px; padding: 0 2px; }
+
+/* Hidden */
+.hidden { display: none !important; }
+
+/* Responsive */
+@media (max-width: 900px) {
+    .header-center { margin: 0 12px; }
+    .nav-tab { padding: 6px 10px; font-size: 12px; }
+    .view-container { padding: 16px; }
+}
+@media (max-width: 600px) {
+    .nav-tab { padding: 4px 8px; font-size: 11px; }
+    .logo { font-size: 14px; }
+}
