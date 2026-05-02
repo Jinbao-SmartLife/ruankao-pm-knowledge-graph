@@ -182,13 +182,18 @@ var IttoApp = (function() {
         'tool-funding-limit': '规划与分解',
         'tool-procurement': '规划与分解',
         // 信息系统
-        'tool-pmis': '信息系统'
+        'tool-pmis': '信息系统',
+        // 整合管理工具
+        'tool-change-control': '整合管理工具',
+        'tool-knowledge-mgmt': '整合管理工具',
+        'tool-info-mgmt': '整合管理工具',
+        'tool-regression-analysis': '数据分析'
     };
 
     var toolCategoryOrder = [
         '专家判断', '数据收集', '数据分析', '图表技术',
         '人际关系与团队技能', '估算方法', '进度工具',
-        '质量与审计', '规划与分解', '信息系统'
+        '质量与审计', '规划与分解', '信息系统', '整合管理工具'
     ];
 
     // ---- 状态 ----
@@ -579,6 +584,14 @@ var IttoApp = (function() {
         html += '</div>';
         if (node.description) {
             html += '<div class="detail-definition">' + node.description + '</div>';
+        }
+        if (node.purpose) {
+            html += '<div class="detail-purpose"><span class="detail-purpose-label">作用：</span>' + node.purpose + '</div>';
+        }
+        if (node.frequency) {
+            var freqLabel = {'once':'一次/预定义点','periodic':'定期开展','ongoing':'整个期间开展','repeat':'整个期间反复开展'};
+            var freqColor = {'once':'#4fc3f7','periodic':'#66bb6a','ongoing':'#ef5350','repeat':'#fdd835'};
+            html += '<div class="detail-frequency"><span class="freq-dot" style="background:' + (freqColor[node.frequency]||'#999') + '"></span>' + (freqLabel[node.frequency]||node.frequency) + '</div>';
         }
         html += '</div>';
 

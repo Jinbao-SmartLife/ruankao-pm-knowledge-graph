@@ -37,91 +37,91 @@ window.NODES_DATA = [
 // ============================================================
 // 过程节点 - 整合管理 (proc-int-1 ~ proc-int-7)
 // ============================================================
-{id:"proc-int-1",label:"制定项目章程",type:"process",knowledgeArea:"整合管理",processGroup:"启动",description:"编写正式批准项目并授权PM的文件",examFrequency:{choice:5,case:4,essay:5},mnemonic:"",notes:""},
-{id:"proc-int-2",label:"制定项目管理计划",type:"process",knowledgeArea:"整合管理",processGroup:"规划",description:"定义准备和协调项目计划的所有组成部分",examFrequency:{choice:5,case:4,essay:5},mnemonic:"",notes:""},
-{id:"proc-int-3",label:"指导与管理项目工作",type:"process",knowledgeArea:"整合管理",processGroup:"执行",description:"领导和执行项目管理计划中的工作",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
-{id:"proc-int-4",label:"管理项目知识",type:"process",knowledgeArea:"整合管理",processGroup:"执行",description:"利用现有知识并生成新知识",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
-{id:"proc-int-5",label:"监控项目工作",type:"process",knowledgeArea:"整合管理",processGroup:"监控",description:"跟踪审查和报告整体项目进展",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
-{id:"proc-int-6",label:"实施整体变更控制",type:"process",knowledgeArea:"整合管理",processGroup:"监控",description:"审查所有变更请求批准变更并管理变更",examFrequency:{choice:5,case:5,essay:5},mnemonic:"",notes:""},
-{id:"proc-int-7",label:"结束项目或阶段",type:"process",knowledgeArea:"整合管理",processGroup:"收尾",description:"正式完成或结束项目或阶段",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
+{id:"proc-int-1",label:"制定项目章程",type:"process",knowledgeArea:"整合管理",processGroup:"启动",description:"编写一份正式批准项目并授权项目经理在项目活动中使用组织资源的文件的过程。",purpose:"①明确项目与组织战略目标之间的直接联系 ②确立项目的正式地位 ③展示组织对项目的承诺",frequency:"once",examFrequency:{choice:5,case:4,essay:5},mnemonic:"",notes:""},
+{id:"proc-int-2",label:"制定项目管理计划",type:"process",knowledgeArea:"整合管理",processGroup:"规划",description:"定义、准备和协调所有子计划，并把它们整合为一份综合项目管理计划的过程。",purpose:"生成一份核心文件，作为所有项目工作的依据。",frequency:"once",examFrequency:{choice:5,case:4,essay:5},mnemonic:"",notes:""},
+{id:"proc-int-3",label:"指导与管理项目工作",type:"process",knowledgeArea:"整合管理",processGroup:"执行",description:"为实现项目目标而领导和执行项目管理计划中所确定的工作，并实施已批准变更的过程。",purpose:"对项目工作提供全面管理。",frequency:"ongoing",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
+{id:"proc-int-4",label:"管理项目知识",type:"process",knowledgeArea:"整合管理",processGroup:"执行",description:"使用现有知识并生成新知识，以实现项目目标，并且利用组织知识的过程。",purpose:"①利用已有组织知识 ②生成新知识 ③为未来项目积累知识",frequency:"ongoing",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
+{id:"proc-int-5",label:"监控项目工作",type:"process",knowledgeArea:"整合管理",processGroup:"监控",description:"跟踪、审查和报告整体项目进展，以实现项目管理计划中确定的绩效目标的过程。",purpose:"让干系人了解项目当前状态并认可为处理绩效问题而采取的行动。",frequency:"ongoing",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
+{id:"proc-int-6",label:"实施整体变更控制",type:"process",knowledgeArea:"整合管理",processGroup:"监控",description:"审查所有变更请求、批准变更，管理对可交付成果、组织过程资产、项目文件和项目管理计划的变更的过程。",purpose:"从整合的角度考虑记录在案的项目变更，降低项目风险。",frequency:"ongoing",examFrequency:{choice:5,case:5,essay:5},mnemonic:"",notes:""},
+{id:"proc-int-7",label:"结束项目或阶段",type:"process",knowledgeArea:"整合管理",processGroup:"收尾",description:"终结项目、阶段或合同的所有活动的过程。",purpose:"①存档项目信息 ②完成计划的工作 ③释放组织资源",frequency:"once",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
 
 // ============================================================
 // 过程节点 - 范围管理 (proc-scope-1 ~ proc-scope-6)
 // ============================================================
-{id:"proc-scope-1",label:"规划范围管理",type:"process",knowledgeArea:"范围管理",processGroup:"规划",description:"为记录如何定义确认和控制范围而创建计划",examFrequency:{choice:4,case:3,essay:4},mnemonic:"",notes:""},
-{id:"proc-scope-2",label:"收集需求",type:"process",knowledgeArea:"范围管理",processGroup:"规划",description:"确定满足业务和项目需求的要求",examFrequency:{choice:5,case:4,essay:5},mnemonic:"",notes:""},
-{id:"proc-scope-3",label:"定义范围",type:"process",knowledgeArea:"范围管理",processGroup:"规划",description:"制定项目和产品的详细描述",examFrequency:{choice:4,case:3,essay:4},mnemonic:"",notes:""},
-{id:"proc-scope-4",label:"创建WBS",type:"process",knowledgeArea:"范围管理",processGroup:"规划",description:"将项目可交付成果分解为较小组件",examFrequency:{choice:5,case:4,essay:5},mnemonic:"面向成果、4-6层、一人负责",notes:""},
-{id:"proc-scope-5",label:"确认范围",type:"process",knowledgeArea:"范围管理",processGroup:"监控",description:"正式验收已完成的项目可交付成果",examFrequency:{choice:4,case:3,essay:4},mnemonic:"石头准不会",notes:""},
-{id:"proc-scope-6",label:"控制范围",type:"process",knowledgeArea:"范围管理",processGroup:"监控",description:"监督范围状态管理范围基准变更",examFrequency:{choice:3,case:3,essay:3},mnemonic:"",notes:""},
+{id:"proc-scope-1",label:"规划范围管理",type:"process",knowledgeArea:"范围管理",processGroup:"规划",description:"是为了记录如何定义、确认和控制项目范围及产品范围，而创建范围管理计划的过程。",purpose:"在整个项目期间对如何管理范围提供指南和方向。",frequency:"once",examFrequency:{choice:4,case:3,essay:4},mnemonic:"",notes:""},
+{id:"proc-scope-2",label:"收集需求",type:"process",knowledgeArea:"范围管理",processGroup:"规划",description:"为实现目标而确定、记录并管理干系人的需要和需求的过程。",purpose:"为定义产品范围和项目范围奠定基础。",frequency:"once",examFrequency:{choice:5,case:4,essay:5},mnemonic:"",notes:""},
+{id:"proc-scope-3",label:"定义范围",type:"process",knowledgeArea:"范围管理",processGroup:"规划",description:"是制定项目和产品详细描述的过程。",purpose:"描述产品、服务或成果的边界和验收标准。",frequency:"repeat",examFrequency:{choice:4,case:3,essay:4},mnemonic:"",notes:""},
+{id:"proc-scope-4",label:"创建WBS",type:"process",knowledgeArea:"范围管理",processGroup:"规划",description:"是把项目可交付成果和项目工作分解成较小、更易于管理的组件的过程。",purpose:"为所要交付的内容提供架构。",frequency:"once",examFrequency:{choice:5,case:4,essay:5},mnemonic:"面向成果、4-6层、一人负责",notes:""},
+{id:"proc-scope-5",label:"确认范围",type:"process",knowledgeArea:"范围管理",processGroup:"监控",description:"是正式验收已完成的项目可交付成果的过程。",purpose:"①使验收过程具有客观性 ②通过确认每个可交付成果来提高最终产品获得验收的可能性。",frequency:"periodic",examFrequency:{choice:4,case:3,essay:4},mnemonic:"石头准不会",notes:""},
+{id:"proc-scope-6",label:"控制范围",type:"process",knowledgeArea:"范围管理",processGroup:"监控",description:"是监督项目和产品的范围状态，管理范围基准的变更的过程。",purpose:"在整个项目期间保持对范围基准的维护。",frequency:"ongoing",examFrequency:{choice:3,case:3,essay:3},mnemonic:"",notes:""},
 
 // ============================================================
 // 过程节点 - 进度管理 (proc-sched-1 ~ proc-sched-6)
 // ============================================================
-{id:"proc-sched-1",label:"规划进度管理",type:"process",knowledgeArea:"进度管理",processGroup:"规划",description:"为管理项目进度而制定计划",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
-{id:"proc-sched-2",label:"定义活动",type:"process",knowledgeArea:"进度管理",processGroup:"规划",description:"识别和记录为完成项目而采取的具体行动",examFrequency:{choice:4,case:3,essay:3},mnemonic:"2单1属",notes:""},
-{id:"proc-sched-3",label:"排列活动顺序",type:"process",knowledgeArea:"进度管理",processGroup:"规划",description:"识别和记录活动之间的关系",examFrequency:{choice:4,case:4,essay:3},mnemonic:"",notes:""},
-{id:"proc-sched-4",label:"估算活动持续时间",type:"process",knowledgeArea:"进度管理",processGroup:"规划",description:"估算完成单项活动所需工时数",examFrequency:{choice:5,case:4,essay:3},mnemonic:"",notes:""},
-{id:"proc-sched-5",label:"制定进度计划",type:"process",knowledgeArea:"进度管理",processGroup:"规划",description:"分析活动顺序持续时间资源需求创建进度模型",examFrequency:{choice:5,case:5,essay:4},mnemonic:"",notes:""},
-{id:"proc-sched-6",label:"控制进度",type:"process",knowledgeArea:"进度管理",processGroup:"监控",description:"监督项目状态更新进度管理进度基准变更",examFrequency:{choice:5,case:5,essay:3},mnemonic:"",notes:""},
+{id:"proc-sched-1",label:"规划进度管理",type:"process",knowledgeArea:"进度管理",processGroup:"规划",description:"是为规划、编制、管理、执行和控制项目进度而制定政策、程序和文档的过程。",purpose:"为如何在整个项目期间管理项目进度提供指南和方向。",frequency:"once",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
+{id:"proc-sched-2",label:"定义活动",type:"process",knowledgeArea:"进度管理",processGroup:"规划",description:"是识别和记录为完成项目可交付成果而须采取的具体行动的过程。",purpose:"将工作包分解为进度活动，作为对项目工作进行进度估算、规划、执行、监督和控制的基础。",frequency:"ongoing",examFrequency:{choice:4,case:3,essay:3},mnemonic:"2单1属",notes:""},
+{id:"proc-sched-3",label:"排列活动顺序",type:"process",knowledgeArea:"进度管理",processGroup:"规划",description:"是识别和记录项目活动之间关系的过程。",purpose:"定义工作之间的逻辑顺序，以便在既定的所有项目制约因素下获得最高的效率。",frequency:"ongoing",examFrequency:{choice:4,case:4,essay:3},mnemonic:"",notes:""},
+{id:"proc-sched-4",label:"估算活动持续时间",type:"process",knowledgeArea:"进度管理",processGroup:"规划",description:"是根据资源估算的结果，估算完成单项活动所需工作时段数的过程。",purpose:"确定完成每个活动所需花费的时间量。",frequency:"ongoing",examFrequency:{choice:5,case:4,essay:3},mnemonic:"",notes:""},
+{id:"proc-sched-5",label:"制定进度计划",type:"process",knowledgeArea:"进度管理",processGroup:"规划",description:"是分析活动顺序、持续时间、资源需求和进度制约因素，创建进度模型，从而落实项目执行和监控的过程。",purpose:"为完成项目活动而制定具有计划日期的进度模型。",frequency:"ongoing",examFrequency:{choice:5,case:5,essay:4},mnemonic:"",notes:""},
+{id:"proc-sched-6",label:"控制进度",type:"process",knowledgeArea:"进度管理",processGroup:"监控",description:"是监督项目状态，以更新项目进度和管理进度基准变更的过程。",purpose:"在整个项目期间保持对进度基准的维护。",frequency:"ongoing",examFrequency:{choice:5,case:5,essay:3},mnemonic:"",notes:""},
 
 // ============================================================
 // 过程节点 - 成本管理 (proc-cost-1 ~ proc-cost-4)
 // ============================================================
-{id:"proc-cost-1",label:"规划成本管理",type:"process",knowledgeArea:"成本管理",processGroup:"规划",description:"确定如何估算预算和管理项目成本",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
-{id:"proc-cost-2",label:"估算成本",type:"process",knowledgeArea:"成本管理",processGroup:"规划",description:"对完成活动所需资源的成本进行近似估算",examFrequency:{choice:5,case:4,essay:4},mnemonic:"",notes:""},
-{id:"proc-cost-3",label:"制定预算",type:"process",knowledgeArea:"成本管理",processGroup:"规划",description:"汇总估算成本建立成本基准",examFrequency:{choice:5,case:4,essay:4},mnemonic:"",notes:""},
-{id:"proc-cost-4",label:"控制成本",type:"process",knowledgeArea:"成本管理",processGroup:"监控",description:"监督项目状态管理成本基准变更",examFrequency:{choice:5,case:5,essay:4},mnemonic:"",notes:""},
+{id:"proc-cost-1",label:"规划成本管理",type:"process",knowledgeArea:"成本管理",processGroup:"规划",description:"是确定如何估算、预算、管理、监督和控制项目成本的过程。",purpose:"在整个项目期间为如何管理项目成本提供指南和方向。",frequency:"once",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
+{id:"proc-cost-2",label:"估算成本",type:"process",knowledgeArea:"成本管理",processGroup:"规划",description:"是对完成项目工作所需资源成本进行近似估算的过程。",purpose:"确定项目所需的资金。",frequency:"periodic",examFrequency:{choice:5,case:4,essay:4},mnemonic:"",notes:""},
+{id:"proc-cost-3",label:"制定预算",type:"process",knowledgeArea:"成本管理",processGroup:"规划",description:"是汇总所有单个活动或工作包的估算成本，建立一个经批准的成本基准的过程。",purpose:"确定可以依据其来进行监督和控制项目绩效的成本基准。",frequency:"once",examFrequency:{choice:5,case:4,essay:4},mnemonic:"",notes:""},
+{id:"proc-cost-4",label:"控制成本",type:"process",knowledgeArea:"成本管理",processGroup:"监控",description:"是监督项目状态，以更新项目成本和管理成本基准变更的过程。",purpose:"在整个项目期间保持对成本基准的维护。",frequency:"ongoing",examFrequency:{choice:5,case:5,essay:4},mnemonic:"",notes:""},
 
 // ============================================================
 // 过程节点 - 质量管理 (proc-qual-1 ~ proc-qual-3)
 // ============================================================
-{id:"proc-qual-1",label:"规划质量管理",type:"process",knowledgeArea:"质量管理",processGroup:"规划",description:"确定质量标准并记录如何达到标准",examFrequency:{choice:4,case:3,essay:3},mnemonic:"3需2册",notes:""},
-{id:"proc-qual-2",label:"管理质量",type:"process",knowledgeArea:"质量管理",processGroup:"执行",description:"将质量管理计划转化为可执行的质量活动",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
-{id:"proc-qual-3",label:"控制质量",type:"process",knowledgeArea:"质量管理",processGroup:"监控",description:"评估绩效并监督项目成果确保符合标准",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
+{id:"proc-qual-1",label:"规划质量管理",type:"process",knowledgeArea:"质量管理",processGroup:"规划",description:"是识别项目及其可交付成果的质量要求、标准并书面描述项目将如何证明符合质量要求、标准的过程。",purpose:"为在整个项目期间如何管理和核实质量提供指南和方向。",frequency:"once",examFrequency:{choice:4,case:3,essay:3},mnemonic:"3需2册",notes:""},
+{id:"proc-qual-2",label:"管理质量",type:"process",knowledgeArea:"质量管理",processGroup:"执行",description:"是把组织的质量政策用于项目，并将质量管理计划转化为可执行的质量活动的过程。",purpose:"①提高实现质量目标的可能性 ②识别无效过程和导致质量低劣的原因 ③促进质量过程改进。",frequency:"ongoing",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
+{id:"proc-qual-3",label:"控制质量",type:"process",knowledgeArea:"质量管理",processGroup:"监控",description:"是为了评估绩效，确保项目输出完整、正确且满足客户期望，而监督和记录质量管理活动执行结果的过程。",purpose:"①核实项目可交付成果和工作已经达到主要干系人的质量要求 ②确定项目输出是否达到预期目的。",frequency:"ongoing",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
 
 // ============================================================
 // 过程节点 - 资源管理 (proc-res-1 ~ proc-res-6)
 // ============================================================
-{id:"proc-res-1",label:"规划资源管理",type:"process",knowledgeArea:"资源管理",processGroup:"规划",description:"确定如何估算获取管理和使用资源",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
-{id:"proc-res-2",label:"估算活动资源",type:"process",knowledgeArea:"资源管理",processGroup:"规划",description:"估算执行活动所需的资源类型和数量",examFrequency:{choice:3,case:2,essay:1},mnemonic:"",notes:""},
-{id:"proc-res-3",label:"获取资源",type:"process",knowledgeArea:"资源管理",processGroup:"执行",description:"获取项目所需的团队成员和物资资源",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
-{id:"proc-res-4",label:"建设团队",type:"process",knowledgeArea:"资源管理",processGroup:"执行",description:"提高团队成员能力和团队互动",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
-{id:"proc-res-5",label:"管理团队",type:"process",knowledgeArea:"资源管理",processGroup:"执行",description:"跟踪团队成员表现并提供反馈",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
-{id:"proc-res-6",label:"控制资源",type:"process",knowledgeArea:"资源管理",processGroup:"监控",description:"确保按计划分配和使用资源",examFrequency:{choice:3,case:2,essay:1},mnemonic:"",notes:""},
+{id:"proc-res-1",label:"规划资源管理",type:"process",knowledgeArea:"资源管理",processGroup:"规划",description:"是定义如何估算、获取、管理和利用团队以及实物资源的过程。",purpose:"根据项目类型和复杂程度确定适用于项目资源的管理方法和管理程度。",frequency:"once",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
+{id:"proc-res-2",label:"估算活动资源",type:"process",knowledgeArea:"资源管理",processGroup:"规划",description:"是估算执行项目所需的团队资源，以及材料、设备和用品的类型和数量的过程。",purpose:"明确完成项目所需的资源种类、数量和特性。",frequency:"periodic",examFrequency:{choice:3,case:2,essay:1},mnemonic:"",notes:""},
+{id:"proc-res-3",label:"获取资源",type:"process",knowledgeArea:"资源管理",processGroup:"执行",description:"是获取项目所需的团队成员、设施、设备、材料、用品和其他资源的过程。",purpose:"①概述和指导资源的选择 ②将选择的资源分配给相应的活动。",frequency:"periodic",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
+{id:"proc-res-4",label:"建设团队",type:"process",knowledgeArea:"资源管理",processGroup:"执行",description:"是提高工作能力，促进团队成员互动，改善团队整体氛围，以提高项目绩效的过程。",purpose:"改进团队协作、增强人际关系技能、激励员工、减少摩擦以及提升整体项目绩效。",frequency:"ongoing",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
+{id:"proc-res-5",label:"管理团队",type:"process",knowledgeArea:"资源管理",processGroup:"执行",description:"是跟踪团队成员工作表现、提供反馈、解决问题并管理团队变更以优化项目绩效的过程。",purpose:"影响团队行为、管理冲突以及解决问题。",frequency:"ongoing",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
+{id:"proc-res-6",label:"控制资源",type:"process",knowledgeArea:"资源管理",processGroup:"监控",description:"是确保按计划为项目分配实物资源，以及根据资源使用计划监督资源实际使用情况，并采取必要纠正措施的过程。",purpose:"①确保所分配的资源适时、适地可用于项目 ②资源在不再需要时被释放。",frequency:"ongoing",examFrequency:{choice:3,case:2,essay:1},mnemonic:"",notes:""},
 
 // ============================================================
 // 过程节点 - 沟通管理 (proc-comm-1 ~ proc-comm-3)
 // ============================================================
-{id:"proc-comm-1",label:"规划沟通管理",type:"process",knowledgeArea:"沟通管理",processGroup:"规划",description:"制定沟通计划确保信息有效传递",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
-{id:"proc-comm-2",label:"管理沟通",type:"process",knowledgeArea:"沟通管理",processGroup:"执行",description:"根据沟通管理计划传递项目信息",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
-{id:"proc-comm-3",label:"监督沟通",type:"process",knowledgeArea:"沟通管理",processGroup:"监控",description:"确保满足项目沟通需求",examFrequency:{choice:2,case:2,essay:1},mnemonic:"",notes:""},
+{id:"proc-comm-1",label:"规划沟通管理",type:"process",knowledgeArea:"沟通管理",processGroup:"规划",description:"是基于每个干系人或干系人群体的信息需求、可用的组织资产，以及具体项目的需求，为项目沟通活动制定恰当的方法和管理计划的过程。",purpose:"①及时向干系人提供相关信息 ②引导干系人有效参与项目 ③编制书面沟通计划。",frequency:"periodic",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
+{id:"proc-comm-2",label:"管理沟通",type:"process",knowledgeArea:"沟通管理",processGroup:"执行",description:"确保项目信息及时且恰当地收集、生成、发布、存储、检索、管理、监督和最终处置的过程。",purpose:"促成项目团队与干系人之间的有效率且有效果的沟通。",frequency:"ongoing",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
+{id:"proc-comm-3",label:"监督沟通",type:"process",knowledgeArea:"沟通管理",processGroup:"监控",description:"是确保满足项目及其干系人的信息需求的过程。",purpose:"按沟通管理计划和干系人参与计划的要求优化信息传递流程。",frequency:"ongoing",examFrequency:{choice:2,case:2,essay:1},mnemonic:"",notes:""},
 
 // ============================================================
 // 过程节点 - 风险管理 (proc-risk-1 ~ proc-risk-7)
 // ============================================================
-{id:"proc-risk-1",label:"规划风险管理",type:"process",knowledgeArea:"风险管理",processGroup:"规划",description:"定义如何实施项目风险管理活动",examFrequency:{choice:4,case:3,essay:4},mnemonic:"",notes:""},
-{id:"proc-risk-2",label:"识别风险",type:"process",knowledgeArea:"风险管理",processGroup:"规划",description:"识别单个项目风险及整体风险的来源",examFrequency:{choice:5,case:4,essay:5},mnemonic:"",notes:""},
-{id:"proc-risk-3",label:"定性风险分析",type:"process",knowledgeArea:"风险管理",processGroup:"规划",description:"评估并优先排序已识别的风险",examFrequency:{choice:4,case:3,essay:4},mnemonic:"",notes:""},
-{id:"proc-risk-4",label:"定量风险分析",type:"process",knowledgeArea:"风险管理",processGroup:"规划",description:"量化分析风险对项目目标的影响",examFrequency:{choice:4,case:3,essay:4},mnemonic:"",notes:""},
-{id:"proc-risk-5",label:"规划风险应对",type:"process",knowledgeArea:"风险管理",processGroup:"规划",description:"制定方案以应对项目风险",examFrequency:{choice:5,case:4,essay:5},mnemonic:"",notes:""},
-{id:"proc-risk-6",label:"实施风险应对",type:"process",knowledgeArea:"风险管理",processGroup:"执行",description:"执行商定的风险应对计划",examFrequency:{choice:3,case:2,essay:3},mnemonic:"",notes:""},
-{id:"proc-risk-7",label:"监督风险",type:"process",knowledgeArea:"风险管理",processGroup:"监控",description:"监督已实施风险应对的有效性",examFrequency:{choice:4,case:3,essay:4},mnemonic:"",notes:""},
+{id:"proc-risk-1",label:"规划风险管理",type:"process",knowledgeArea:"风险管理",processGroup:"规划",description:"是定义如何实施项目风险管理活动的过程。",purpose:"确保风险管理的水平、方法和可见度与项目风险程度相匹配，与对组织和其他干系人的重要程度相匹配。",frequency:"once",examFrequency:{choice:4,case:3,essay:4},mnemonic:"",notes:""},
+{id:"proc-risk-2",label:"识别风险",type:"process",knowledgeArea:"风险管理",processGroup:"规划",description:"是识别单个项目风险以及整体项目风险的来源，并记录风险特征的过程。",purpose:"①记录现有的单个项目风险，以及整体项目风险的来源 ②汇总相关信息以便项目团队恰当应对已识别风险。",frequency:"ongoing",examFrequency:{choice:5,case:4,essay:5},mnemonic:"",notes:""},
+{id:"proc-risk-3",label:"定性风险分析",type:"process",knowledgeArea:"风险管理",processGroup:"规划",description:"是通过评估单个项目风险发生的概率和影响及其他特征，对风险进行优先级排序，从而为后续分析或行动提供基础的过程。",purpose:"重点关注高优先级的风险。",frequency:"ongoing",examFrequency:{choice:4,case:3,essay:4},mnemonic:"",notes:""},
+{id:"proc-risk-4",label:"定量风险分析",type:"process",knowledgeArea:"风险管理",processGroup:"规划",description:"是就已识别的单个项目风险和不确定性的其他来源对整体项目目标的影响进行定量分析的过程。",purpose:"①量化整体项目风险 ②提供额外的定量风险信息，以支持风险应对规划。",frequency:"ongoing",examFrequency:{choice:4,case:3,essay:4},mnemonic:"",notes:""},
+{id:"proc-risk-5",label:"规划风险应对",type:"process",knowledgeArea:"风险管理",processGroup:"规划",description:"是为了应对项目风险，而制定可选方案、选择应对策略并商定应对行动的过程。",purpose:"①制定应对整体项目风险和单个项目风险的适当方法 ②分配资源，并将相关活动添加进项目文件和项目管理计划中。",frequency:"ongoing",examFrequency:{choice:5,case:4,essay:5},mnemonic:"",notes:""},
+{id:"proc-risk-6",label:"实施风险应对",type:"process",knowledgeArea:"风险管理",processGroup:"执行",description:"是执行商定的风险应对计划的过程。",purpose:"①确保按计划执行商定的风险应对措施 ②管理整体项目风险入口、最小化单个项目威胁，以及最大化单个项目机会。",frequency:"ongoing",examFrequency:{choice:3,case:2,essay:3},mnemonic:"",notes:""},
+{id:"proc-risk-7",label:"监督风险",type:"process",knowledgeArea:"风险管理",processGroup:"监控",description:"是在整个项目期间，监督风险应对计划的实施，并跟踪已识别风险、识别和分析新风险，以及评估风险管理有效性的过程。",purpose:"保证项目决策是在整体项目风险和单个项目风险当前信息的基础上进行。",frequency:"ongoing",examFrequency:{choice:4,case:3,essay:4},mnemonic:"",notes:""},
 
 // ============================================================
 // 过程节点 - 采购管理 (proc-proc-1 ~ proc-proc-3)
 // ============================================================
-{id:"proc-proc-1",label:"规划采购管理",type:"process",knowledgeArea:"采购管理",processGroup:"规划",description:"记录项目采购决策和方法",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
-{id:"proc-proc-2",label:"实施采购",type:"process",knowledgeArea:"采购管理",processGroup:"执行",description:"获取卖方应答选择卖方并授予合同",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
-{id:"proc-proc-3",label:"控制采购",type:"process",knowledgeArea:"采购管理",processGroup:"监控",description:"管理采购关系监督合同绩效",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
+{id:"proc-proc-1",label:"规划采购管理",type:"process",knowledgeArea:"采购管理",processGroup:"规划",description:"是记录项目采购决策、明确采购方法，及识别潜在卖方的过程。",purpose:"确定是否从项目外部获取货物和服务，如果是，确定将在什么时间、以什么方式获取什么货物和服务。",frequency:"once",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
+{id:"proc-proc-2",label:"实施采购",type:"process",knowledgeArea:"采购管理",processGroup:"执行",description:"是获取卖方应答、选择卖方并授予合同的过程。",purpose:"选定合格卖方并签署关于货物或服务交付的法律协议。",frequency:"periodic",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
+{id:"proc-proc-3",label:"控制采购",type:"process",knowledgeArea:"采购管理",processGroup:"监控",description:"是管理采购关系、监督合同绩效、实施必要的变更和纠偏，以及关闭合同的过程。",purpose:"确保买卖双方履行法律协议，满足项目需求。",frequency:"ongoing",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
 
 // ============================================================
 // 过程节点 - 干系人管理 (proc-stk-1 ~ proc-stk-4)
 // ============================================================
-{id:"proc-stk-1",label:"识别干系人",type:"process",knowledgeArea:"干系人管理",processGroup:"启动",description:"识别影响或受项目影响的个人或组织",examFrequency:{choice:3,case:2,essay:3},mnemonic:"",notes:""},
-{id:"proc-stk-2",label:"规划干系人参与",type:"process",knowledgeArea:"干系人管理",processGroup:"规划",description:"制定策略以促进干系人有效参与",examFrequency:{choice:3,case:2,essay:3},mnemonic:"",notes:""},
-{id:"proc-stk-3",label:"管理干系人参与",type:"process",knowledgeArea:"干系人管理",processGroup:"执行",description:"与干系人沟通协作满足其需求",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
-{id:"proc-stk-4",label:"监督干系人参与",type:"process",knowledgeArea:"干系人管理",processGroup:"监控",description:"监督干系人关系并调整策略",examFrequency:{choice:2,case:2,essay:2},mnemonic:"",notes:""},
+{id:"proc-stk-1",label:"识别干系人",type:"process",knowledgeArea:"干系人管理",processGroup:"启动",description:"是定期识别项目干系人，分析和记录他们的利益、参与度、相互依赖性、影响力和对项目成功的潜在影响的过程。",purpose:"使项目团队能够建立对每个干系人或干系人群体的适度关注。",frequency:"periodic",examFrequency:{choice:3,case:2,essay:3},mnemonic:"",notes:""},
+{id:"proc-stk-2",label:"规划干系人参与",type:"process",knowledgeArea:"干系人管理",processGroup:"规划",description:"是根据干系人的需求、期望、利益和对项目的潜在影响，制定项目干系人参与项目的方法的过程。",purpose:"提供与干系人进行有效互动的可行计划。",frequency:"periodic",examFrequency:{choice:3,case:2,essay:3},mnemonic:"",notes:""},
+{id:"proc-stk-3",label:"管理干系人参与",type:"process",knowledgeArea:"干系人管理",processGroup:"执行",description:"是通过与干系人进行沟通协作，以满足其需求与期望、处理问题，并促进干系人合力参与的过程。",purpose:"尽可能提高干系人的支持度，并降低干系人的抵制程度。",frequency:"ongoing",examFrequency:{choice:3,case:2,essay:2},mnemonic:"",notes:""},
+{id:"proc-stk-4",label:"监督干系人参与",type:"process",knowledgeArea:"干系人管理",processGroup:"监控",description:"是监督项目干系人的关系，并通过修订参与策略和计划来引导干系人合理参与项目的过程。",purpose:"随着项目进展和环境变化，维持或提升干系人参与活动的效率和效果。",frequency:"ongoing",examFrequency:{choice:2,case:2,essay:2},mnemonic:"",notes:""},
 
 // ============================================================
 // 文档节点 - 整合管理
@@ -237,6 +237,7 @@ window.NODES_DATA = [
 {id:"doc-approved-change",label:"批准的变更请求",type:"document",knowledgeArea:"跨领域",processGroup:"监控",description:"经CCB批准同意实施的变更",examFrequency:{choice:4,case:3,essay:2},mnemonic:"",notes:""},
 {id:"doc-deliverable",label:"可交付成果",type:"document",knowledgeArea:"跨领域",processGroup:"执行",description:"为完成项目而产生的独特可验证的产品",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
 {id:"doc-accepted-deliverable",label:"验收的可交付成果",type:"document",knowledgeArea:"跨领域",processGroup:"监控",description:"经客户或发起人验收的可交付成果",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
+{id:"doc-verified-deliverable",label:"核实的可交付成果",type:"document",knowledgeArea:"跨领域",processGroup:"监控",description:"经质量控制过程检验合格的可交付成果",examFrequency:{choice:4,case:3,essay:3},mnemonic:"",notes:""},
 
 // ============================================================
 // 文档节点 - 配置管理
@@ -417,5 +418,9 @@ window.NODES_DATA = [
 {id:"tool-data-representation",label:"数据表现",type:"tool",knowledgeArea:"",processGroup:"",description:"以图形方式展示数据和信息",examFrequency:{choice:2,case:1,essay:0},mnemonic:"",notes:""},
 {id:"tool-interpersonal-skill",label:"人际关系与团队技能",type:"tool",knowledgeArea:"",processGroup:"",description:"运用人际技能管理团队和干系人",examFrequency:{choice:2,case:1,essay:0},mnemonic:"",notes:""},
 {id:"tool-comm-skill",label:"沟通技能",type:"tool",knowledgeArea:"",processGroup:"",description:"运用沟通技能与干系人交流",examFrequency:{choice:2,case:1,essay:0},mnemonic:"",notes:""},
-{id:"tool-burn-down",label:"迭代燃尽图",type:"tool",knowledgeArea:"",processGroup:"",description:"跟踪迭代中剩余工作的图表",examFrequency:{choice:2,case:1,essay:0},mnemonic:"",notes:""}
+{id:"tool-burn-down",label:"迭代燃尽图",type:"tool",knowledgeArea:"",processGroup:"",description:"跟踪迭代中剩余工作的图表",examFrequency:{choice:2,case:1,essay:0},mnemonic:"",notes:""},
+{id:"tool-change-control",label:"变更控制工具",type:"tool",knowledgeArea:"整合管理",processGroup:"监控",description:"用于管理变更请求的工具",examFrequency:{choice:2,case:1,essay:0},mnemonic:"",notes:""},
+{id:"tool-knowledge-mgmt",label:"知识管理",type:"tool",knowledgeArea:"整合管理",processGroup:"执行",description:"使用知识管理工具生成、记录和分享知识",examFrequency:{choice:2,case:1,essay:0},mnemonic:"",notes:""},
+{id:"tool-info-mgmt",label:"信息管理",type:"tool",knowledgeArea:"整合管理",processGroup:"执行",description:"使用信息管理工具管理项目信息",examFrequency:{choice:2,case:1,essay:0},mnemonic:"",notes:""},
+{id:"tool-regression-analysis",label:"回归分析",type:"tool",knowledgeArea:"整合管理",processGroup:"收尾",description:"分析变量之间关系的统计方法",examFrequency:{choice:1,case:1,essay:0},mnemonic:"",notes:""}
 ];

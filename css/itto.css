@@ -169,6 +169,36 @@
     border-radius: var(--radius);
 }
 
+.detail-purpose {
+    font-size: 11.5px;
+    color: #a8d8a8;
+    line-height: 1.5;
+    margin-top: 4px;
+    padding: 4px 10px;
+}
+.detail-purpose-label {
+    font-weight: 600;
+    color: #7ec97e;
+}
+
+.detail-frequency {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    padding: 2px 8px;
+    background: var(--bg-tertiary);
+    border-radius: 10px;
+}
+.freq-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
 /* ===== 三列布局: 输入 | 工具与技术 | 输出 ===== */
 .itto-3col {
     display: grid;
@@ -305,7 +335,9 @@
     padding: 2px 6px 4px;
 }
 .fold-group.open .fold-body {
-    display: block;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 2px;
 }
 
 /* 单个条目 */
