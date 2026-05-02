@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITTO总览 - 软考知识图谱</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/itto.css">
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="header-left">
+            <a href="index.html" class="logo" style="text-decoration:none;color:var(--text-primary)">软考知识图谱</a>
+        </div>
+        <div class="header-center" style="flex:0">
+            <span style="font-size:14px;font-weight:600;color:var(--accent-blue)">ITTO总览</span>
+        </div>
+        <div class="header-right">
+            <a href="index.html" class="nav-tab" style="text-decoration:none">矩阵视图</a>
+            <button class="nav-tab active">ITTO总览</button>
+        </div>
+    </header>
+
+    <!-- 4-Quadrant Layout -->
+    <div class="itto-layout">
+        <!-- 左上: PMBOK矩阵 -->
+        <div class="itto-quadrant matrix-quadrant">
+            <div id="itto-matrix"></div>
+        </div>
+
+        <!-- 右上: 输入与输出（分类折叠） -->
+        <div class="itto-quadrant list-quadrant">
+            <div class="list-section-title">输入与输出</div>
+            <div id="itto-doc-list"></div>
+        </div>
+
+        <!-- 左下: ITTO详情 -->
+        <div class="itto-quadrant detail-quadrant">
+            <div id="itto-detail">
+                <div class="detail-placeholder">点击矩阵中的过程查看ITTO详情</div>
+            </div>
+        </div>
+
+        <!-- 右下: 工具与技术（分类折叠） -->
+        <div class="itto-quadrant list-quadrant">
+            <div class="list-section-title">工具与技术</div>
+            <div id="itto-tool-list"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="lib/d3.v7.min.js"></script>
+    <script src="data/nodes.js"></script>
+    <script src="data/edges.js"></script>
+    <script src="data/exam-frequency.js"></script>
+    <script src="data/mnemonics.js"></script>
+    <script src="data/essay-topics.js"></script>
+    <script src="data/glossary.js"></script>
+    <script src="data/itto-details.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/itto.js"></script>
+</body>
+</html>

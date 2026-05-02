@@ -69,11 +69,12 @@ var Matrix = (function() {
         var knowledgeAreas = DataStore.knowledgeAreas;
         var processNodes = DataStore.nodesByType['process'] || [];
 
-        // 构建 (knowledgeArea, processGroup) -> node 的快速查找索引
-        var processIndex = {};
+        // 构建 (knowledgeArea, processGroup) -> [node] 的分组索引
+        var processGroups = {};
         processNodes.forEach(function(node) {
             var key = node.knowledgeArea + '|' + node.processGroup;
-            processIndex[key] = node;
+            if (!processGroups[key]) processGroups[key] = [];
+            processGroups[key].push(node);
         });
 
         // 构建 table
@@ -100,28 +101,55 @@ var Matrix = (function() {
             // 每个过程组列
             processGroupOrder.forEach(function(pg) {
                 var key = ka.label + '|' + pg;
-                var process = processIndex[key];
+                var procs = processGroups[key] || [];
 
-                if (process) {
-                    // 计算热度
-                    var freq = process.examFrequency || { choice: 0, case: 0, essay: 0 };
-                    var heatScore = (freq.essay || 0) + (freq.case || 0);
-                    var heatClass = '';
-                    if (heatScore > 7) {
-                        heatClass = 'high';
-                    } else if (heatScore > 4) {
-                        heatClass = 'medium';
-                    }
+                if (procs.length > 0) {
+                    if (procs.length === 1) {
+                        var process = procs[0];
+                        // 计算热度
+                        var freq = process.examFrequency || { choice: 0, case: 0, essay: 0 };
+                        var heatScore = (freq.essay || 0) + (freq.case || 0);
+                        var heatClass = '';
+                        if (heatScore > 7) {
+                            heatClass = 'high';
+                        } else if (heatScore > 4) {
+                            heatClass = 'medium';
+                        }
 
-                    html += '<td class="cell-process" data-node-id="' + process.id + '">';
-                    html += '<div class="cell-content">';
-                    html += '<div class="cell-color-bar" style="background:' + kaColor + '"></div>';
-                    html += '<span class="cell-name">' + process.label + '</span>';
-                    html += '</div>';
-                    if (heatClass) {
-                        html += '<div class="cell-heat ' + heatClass + '"></div>';
+                        html += '<td class="cell-process" data-node-id="' + process.id + '">';
+                        html += '<div class="cell-content">';
+                        html += '<div class="cell-color-bar" style="background:' + kaColor + '"></div>';
+                        html += '<span class="cell-name">' + process.label + '</span>';
+                        html += '</div>';
+                        if (heatClass) {
+                            html += '<div class="cell-heat ' + heatClass + '"></div>';
+                        }
+                        html += '</td>';
+                    } else {
+                        // 多过程单元格
+                        html += '<td class="cell-multi">';
+                        procs.forEach(function(proc) {
+                            var freq = proc.examFrequency || { choice: 0, case: 0, essay: 0 };
+                            var heatScore = (freq.essay || 0) + (freq.case || 0);
+                            var heatClass = '';
+                            if (heatScore > 7) {
+                                heatClass = 'high';
+                            } else if (heatScore > 4) {
+                                heatClass = 'medium';
+                            }
+
+                            html += '<div class="cell-process" data-node-id="' + proc.id + '">';
+                            html += '<div class="cell-content">';
+                            html += '<div class="cell-color-bar" style="background:' + kaColor + '"></div>';
+                            html += '<span class="cell-name">' + proc.label + '</span>';
+                            html += '</div>';
+                            if (heatClass) {
+                                html += '<div class="cell-heat ' + heatClass + '"></div>';
+                            }
+                            html += '</div>';
+                        });
+                        html += '</td>';
                     }
-                    html += '</td>';
                 } else {
                     // 空单元格：该KA在此PG没有过程
                     html += '<td class="cell-empty"></td>';

@@ -95,6 +95,20 @@
     border-radius: var(--radius);
 }
 
+/* Multi-process cells */
+.matrix .cell-multi {
+    padding: 2px;
+    vertical-align: top;
+    background: transparent;
+}
+.matrix .cell-multi .cell-process {
+    display: block;
+    margin-bottom: 3px;
+}
+.matrix .cell-multi .cell-process:last-child {
+    margin-bottom: 0;
+}
+
 /* Row hover highlight */
 .matrix tbody tr:hover td {
     background: var(--bg-tertiary);

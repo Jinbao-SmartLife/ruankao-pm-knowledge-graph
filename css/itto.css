@@ -1,0 +1,511 @@
+/* ITTO总览页面 - 4象限布局 */
+
+/* 4象限容器 */
+.itto-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    height: calc(100vh - var(--header-height));
+    gap: 1px;
+    background: var(--border-color);
+}
+
+/* 象限通用 */
+.itto-quadrant {
+    background: var(--bg-primary);
+    overflow-y: auto;
+    padding: 16px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--bg-hover) transparent;
+}
+
+/* 左上: 矩阵象限 */
+.itto-quadrant.matrix-quadrant {
+    padding: 12px;
+}
+
+/* 左下: ITTO详情象限 */
+.itto-quadrant.detail-quadrant {
+    padding: 12px 16px;
+}
+
+/* 右侧象限共用 */
+.itto-quadrant.list-quadrant {
+    padding: 10px 12px;
+}
+
+/* ===== 矩阵样式（紧凑版） ===== */
+.itto-matrix {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 2px;
+    table-layout: fixed;
+}
+
+.itto-matrix thead th {
+    padding: 6px 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+    text-align: center;
+    white-space: nowrap;
+}
+.itto-matrix thead th:first-child {
+    width: 72px;
+    background: transparent;
+}
+
+.itto-matrix tbody td:first-child {
+    padding: 4px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+
+.itto-matrix .cell-process {
+    padding: 4px 5px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    vertical-align: middle;
+    text-align: center;
+    position: relative;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+.itto-matrix .cell-process:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-blue);
+}
+
+.itto-matrix .cell-process .cell-name {
+    font-size: 10px;
+    line-height: 1.2;
+    color: var(--text-primary);
+}
+
+.itto-matrix .cell-process .cell-color-bar {
+    display: inline-block;
+    width: 2px;
+    height: 14px;
+    border-radius: 1px;
+    vertical-align: middle;
+    margin-right: 3px;
+}
+
+.itto-matrix .cell-empty {
+    background: transparent;
+}
+
+/* 多过程单元格 */
+.itto-matrix .cell-multi {
+    padding: 2px;
+    vertical-align: top;
+    background: transparent;
+}
+.itto-matrix .cell-multi .cell-process {
+    display: block;
+    margin-bottom: 2px;
+    text-align: left;
+}
+.itto-matrix .cell-multi .cell-process:last-child {
+    margin-bottom: 0;
+}
+
+.itto-matrix .cell-process.selected {
+    border-color: var(--accent-blue);
+    background: rgba(88,166,255,0.2);
+    box-shadow: 0 0 0 1px rgba(88,166,255,0.3);
+}
+
+.itto-matrix tbody tr:hover .cell-process {
+    background: var(--bg-hover);
+}
+.itto-matrix tbody tr:hover .cell-empty {
+    background: transparent;
+}
+
+/* ===== 左下: ITTO详情 ===== */
+.detail-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.detail-header {
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+}
+.detail-process-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 3px;
+}
+.detail-process-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+.detail-process-meta span {
+    margin-right: 8px;
+}
+.detail-definition {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-top: 4px;
+    padding: 6px 10px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius);
+}
+
+/* ===== 三列布局: 输入 | 工具与技术 | 输出 ===== */
+.itto-3col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.itto-col {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.itto-col-header {
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+}
+.itto-col-header.inputs { color: #58a6ff; border-top: 2px solid #58a6ff; }
+.itto-col-header.tools  { color: #d29922; border-top: 2px solid #d29922; }
+.itto-col-header.outputs { color: #3fb950; border-top: 2px solid #3fb950; }
+
+.itto-col-body {
+    padding: 6px 8px;
+    max-height: calc(50vh - 160px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--bg-hover) transparent;
+}
+
+.itto-col-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 3px 0;
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--text-primary);
+}
+
+.itto-col-dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin-top: 4px;
+    margin-right: 6px;
+    flex-shrink: 0;
+}
+
+.itto-col-empty {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 12px 0;
+}
+
+/* ===== 右侧: 折叠列表 ===== */
+.list-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* 一级分组两列布局 */
+#itto-doc-list,
+#itto-tool-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    align-content: start;
+}
+
+/* 折叠组 */
+.fold-group {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.fold-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    background: var(--bg-secondary);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+}
+.fold-header:hover {
+    background: var(--bg-hover);
+}
+.fold-header-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.fold-arrow {
+    font-size: 8px;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+    display: inline-block;
+}
+.fold-group.open .fold-arrow {
+    transform: rotate(90deg);
+}
+.fold-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.fold-count {
+    font-size: 9px;
+    color: var(--text-muted);
+    padding: 1px 5px;
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+.fold-count .hl-count {
+    color: var(--accent-blue);
+    font-weight: 600;
+}
+
+.fold-body {
+    display: none;
+    padding: 2px 6px 4px;
+}
+.fold-group.open .fold-body {
+    display: block;
+}
+
+/* 单个条目 */
+.itto-item {
+    display: flex;
+    align-items: center;
+    padding: 3px 8px;
+    margin: 1px 0;
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.itto-item:hover {
+    background: var(--bg-hover);
+}
+
+.itto-item.highlight {
+    background: rgba(88,166,255,0.12);
+    border-left: 2px solid var(--accent-blue);
+    padding-left: 6px;
+}
+.itto-item.highlight .itto-item-dot {
+    background: var(--accent-blue);
+    box-shadow: 0 0 3px var(--accent-blue);
+}
+
+.itto-item.dim {
+    opacity: 0.3;
+}
+
+.itto-item-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    margin-right: 6px;
+    flex-shrink: 0;
+    transition: all 0.15s;
+}
+.itto-item-label {
+    flex: 1;
+    line-height: 1.3;
+}
+
+.itto-item-role {
+    font-size: 9px;
+    padding: 0 4px;
+    border-radius: 3px;
+    margin-left: 4px;
+    flex-shrink: 0;
+    line-height: 16px;
+}
+.itto-item-role.input-only { background: rgba(88,166,255,0.2); color: #58a6ff; }
+.itto-item-role.output-only { background: rgba(63,185,80,0.2); color: #3fb950; }
+.itto-item-role.both { background: rgba(210,153,34,0.2); color: #d29922; }
+
+/* 条目选中态 */
+.itto-item.active {
+    background: rgba(88,166,255,0.15);
+    border-left: 2px solid var(--accent-blue);
+}
+
+/* ===== 左下: 条目关联过程详情 ===== */
+.item-detail-header {
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-color);
+}
+.item-detail-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+.item-detail-desc {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    padding: 4px 8px;
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+    margin-top: 4px;
+}
+.item-detail-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin: 8px 0 4px;
+    letter-spacing: 0.3px;
+}
+.item-detail-proc {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    margin: 2px 0;
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+.item-detail-proc:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-blue);
+}
+.item-detail-proc .proc-color-bar {
+    width: 3px;
+    height: 16px;
+    border-radius: 1px;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+.item-detail-proc .proc-info {
+    flex: 1;
+}
+.item-detail-proc .proc-name {
+    font-weight: 600;
+    font-size: 11px;
+}
+.item-detail-proc .proc-meta {
+    font-size: 9px;
+    color: var(--text-muted);
+}
+.item-detail-proc .proc-role {
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-left: 4px;
+}
+.item-detail-proc .proc-role.as-input { background: rgba(88,166,255,0.2); color: #58a6ff; }
+.item-detail-proc .proc-role.as-output { background: rgba(63,185,80,0.2); color: #3fb950; }
+.item-detail-proc .proc-role.as-tool { background: rgba(210,153,34,0.2); color: #d29922; }
+.item-detail-proc .proc-role.as-both { background: rgba(210,153,34,0.2); color: #d29922; }
+
+/* ===== 论文写作素材 ===== */
+.detail-essay-section {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-color);
+}
+
+.detail-essay-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent-purple, #a371f7);
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+}
+
+.detail-essay-block {
+    margin-bottom: 6px;
+}
+
+.detail-essay-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.detail-essay-text {
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    padding: 4px 8px;
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+}
+
+.detail-essay-framework {
+    padding: 4px 8px;
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+    border-left: 2px solid var(--accent-purple, #a371f7);
+}
+
+.framework-step {
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--text-primary);
+    padding: 2px 0;
+}
+
+.framework-step::before {
+    content: "→ ";
+    color: var(--accent-purple, #a371f7);
+    font-weight: 600;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 1100px) {
+    .itto-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+    }
+}
