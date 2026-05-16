@@ -22,14 +22,30 @@
 /* 左上: 矩阵象限 */
 .itto-quadrant.matrix-quadrant {
     padding: 12px;
+    background: var(--bg-primary);
 }
 
 /* 左下: ITTO详情象限 */
 .itto-quadrant.detail-quadrant {
     padding: 12px 16px;
+    background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(88,166,255,0.02) 100%);
 }
 
-/* 右侧象限共用 */
+/* 右上: 输入与输出象限 - 蓝色调 */
+.itto-quadrant.doc-quadrant {
+    padding: 10px 12px;
+    background: linear-gradient(135deg, rgba(88,166,255,0.05) 0%, var(--bg-primary) 100%);
+    border-top: 2px solid rgba(88,166,255,0.3);
+}
+
+/* 右下: 工具与技术象限 - 琥珀色调 */
+.itto-quadrant.tool-quadrant {
+    padding: 10px 12px;
+    background: linear-gradient(135deg, rgba(210,153,34,0.05) 0%, var(--bg-primary) 100%);
+    border-top: 2px solid rgba(210,153,34,0.3);
+}
+
+/* 右侧象限共用（向后兼容） */
 .itto-quadrant.list-quadrant {
     padding: 10px 12px;
 }
@@ -57,6 +73,13 @@
     background: transparent;
 }
 
+/* 过程组列头颜色区分 */
+.itto-matrix thead th:nth-child(2) { color: #4fc3f7; background: rgba(79,195,247,0.08); }
+.itto-matrix thead th:nth-child(3) { color: #81c784; background: rgba(129,199,132,0.08); }
+.itto-matrix thead th:nth-child(4) { color: #ffb74d; background: rgba(255,183,77,0.08); }
+.itto-matrix thead th:nth-child(5) { color: #e57373; background: rgba(229,115,115,0.08); }
+.itto-matrix thead th:nth-child(6) { color: #ba68c8; background: rgba(186,104,200,0.08); }
+
 .itto-matrix tbody td:first-child {
     padding: 4px 6px;
     font-size: 11px;
@@ -74,7 +97,7 @@
     cursor: pointer;
     transition: all 0.15s ease;
     vertical-align: middle;
-    text-align: center;
+    text-align: left;
     position: relative;
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
@@ -145,6 +168,9 @@
     margin-bottom: 10px;
     padding-bottom: 8px;
     border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(90deg, rgba(88,166,255,0.04), transparent);
+    padding: 10px 12px;
+    border-radius: 4px;
 }
 .detail-process-name {
     font-size: 15px;
@@ -165,7 +191,8 @@
     line-height: 1.5;
     margin-top: 4px;
     padding: 6px 10px;
-    background: var(--bg-tertiary);
+    background: rgba(88,166,255,0.05);
+    border-left: 2px solid rgba(88,166,255,0.3);
     border-radius: var(--radius);
 }
 
@@ -175,6 +202,9 @@
     line-height: 1.5;
     margin-top: 4px;
     padding: 4px 10px;
+    background: rgba(63,185,80,0.05);
+    border-left: 2px solid rgba(63,185,80,0.3);
+    border-radius: 3px;
 }
 .detail-purpose-label {
     font-weight: 600;
@@ -222,9 +252,9 @@
     border-bottom: 1px solid var(--border-color);
     background: var(--bg-tertiary);
 }
-.itto-col-header.inputs { color: #58a6ff; border-top: 2px solid #58a6ff; }
-.itto-col-header.tools  { color: #d29922; border-top: 2px solid #d29922; }
-.itto-col-header.outputs { color: #3fb950; border-top: 2px solid #3fb950; }
+.itto-col-header.inputs { color: #58a6ff; border-top: 2px solid #58a6ff; background: rgba(88,166,255,0.08); }
+.itto-col-header.tools  { color: #d29922; border-top: 2px solid #d29922; background: rgba(210,153,34,0.08); }
+.itto-col-header.outputs { color: #3fb950; border-top: 2px solid #3fb950; background: rgba(63,185,80,0.08); }
 
 .itto-col-body {
     padding: 6px 8px;
@@ -233,6 +263,11 @@
     scrollbar-width: thin;
     scrollbar-color: var(--bg-hover) transparent;
 }
+
+/* 列体颜色区分 */
+.itto-col-inputs .itto-col-body { background: rgba(88,166,255,0.03); }
+.itto-col-tools .itto-col-body  { background: rgba(210,153,34,0.03); }
+.itto-col-outputs .itto-col-body { background: rgba(63,185,80,0.03); }
 
 .itto-col-item {
     display: flex;
@@ -270,6 +305,22 @@
     border-bottom: 1px solid var(--border-color);
 }
 
+/* 输入与输出 - 蓝色标题 */
+.section-title-doc {
+    color: #58a6ff;
+    border-bottom-color: rgba(88,166,255,0.3);
+    padding-left: 10px;
+    border-left: 3px solid #58a6ff;
+}
+
+/* 工具与技术 - 琥珀色标题 */
+.section-title-tool {
+    color: #d29922;
+    border-bottom-color: rgba(210,153,34,0.3);
+    padding-left: 10px;
+    border-left: 3px solid #d29922;
+}
+
 /* 一级分组两列布局 */
 #itto-doc-list,
 #itto-tool-list {
@@ -285,6 +336,17 @@
     border-radius: 4px;
     overflow: hidden;
 }
+
+/* 文档分组 - 蓝色左边框 */
+.doc-quadrant .fold-group {
+    border-left: 2px solid rgba(88,166,255,0.4);
+}
+
+/* 工具分组 - 琥珀色左边框 */
+.tool-quadrant .fold-group {
+    border-left: 2px solid rgba(210,153,34,0.4);
+}
+
 .fold-header {
     display: flex;
     align-items: center;
@@ -294,6 +356,16 @@
     cursor: pointer;
     user-select: none;
     transition: background 0.15s;
+}
+
+/* 文档分组标题 - 蓝色图标 */
+.doc-quadrant .fold-arrow {
+    color: #58a6ff;
+}
+
+/* 工具分组标题 - 琥珀色图标 */
+.tool-quadrant .fold-arrow {
+    color: #d29922;
 }
 .fold-header:hover {
     background: var(--bg-hover);
@@ -407,6 +479,9 @@
     margin-bottom: 8px;
     padding-bottom: 6px;
     border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(90deg, rgba(88,166,255,0.04), transparent);
+    padding: 10px 12px;
+    border-radius: 4px;
 }
 .item-detail-name {
     font-size: 14px;
@@ -419,7 +494,8 @@
     color: var(--text-secondary);
     line-height: 1.5;
     padding: 4px 8px;
-    background: var(--bg-tertiary);
+    background: rgba(88,166,255,0.05);
+    border-left: 2px solid rgba(88,166,255,0.2);
     border-radius: 3px;
     margin-top: 4px;
 }
@@ -446,6 +522,7 @@
 .item-detail-proc:hover {
     background: var(--bg-hover);
     border-color: var(--accent-blue);
+    box-shadow: 0 0 0 1px rgba(88,166,255,0.1);
 }
 .item-detail-proc .proc-color-bar {
     width: 3px;
@@ -481,15 +558,20 @@
 .detail-essay-section {
     margin-top: 10px;
     padding-top: 8px;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid rgba(163,113,247,0.2);
+    background: linear-gradient(180deg, rgba(163,113,247,0.04) 0%, transparent 100%);
+    border-radius: 4px;
+    padding: 10px;
 }
 
 .detail-essay-title {
     font-size: 12px;
     font-weight: 700;
-    color: var(--accent-purple, #a371f7);
+    color: #a371f7;
     margin-bottom: 8px;
     letter-spacing: 0.3px;
+    padding-left: 10px;
+    border-left: 3px solid #a371f7;
 }
 
 .detail-essay-block {
@@ -499,7 +581,7 @@
 .detail-essay-label {
     font-size: 10px;
     font-weight: 600;
-    color: var(--text-muted);
+    color: #c9a5f7;
     margin-bottom: 2px;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -510,15 +592,16 @@
     line-height: 1.5;
     color: var(--text-secondary);
     padding: 4px 8px;
-    background: var(--bg-tertiary);
+    background: rgba(163,113,247,0.06);
     border-radius: 3px;
+    border-left: 1px solid rgba(163,113,247,0.15);
 }
 
 .detail-essay-framework {
     padding: 4px 8px;
-    background: var(--bg-tertiary);
+    background: rgba(163,113,247,0.06);
     border-radius: 3px;
-    border-left: 2px solid var(--accent-purple, #a371f7);
+    border-left: 2px solid #a371f7;
 }
 
 .framework-step {

@@ -41,16 +41,16 @@
 
 /* Process cells */
 .matrix .cell-process {
-    padding: 6px 8px;
+    padding: 4px 6px;
     border-radius: var(--radius);
     cursor: pointer;
     transition: all var(--transition);
     vertical-align: middle;
-    text-align: center;
+    text-align: left;
     position: relative;
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    min-height: 44px;
+    min-height: 32px;
 }
 .matrix .cell-process:hover {
     background: var(--bg-hover);
@@ -64,7 +64,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    justify-content: center;
+    justify-content: flex-start;
 }
 .cell-color-bar {
     width: 3px;
