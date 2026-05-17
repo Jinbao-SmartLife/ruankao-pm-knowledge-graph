@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>绩效域记忆 - 软考十大管理</title>
+<style>
+:root {
+    --bg-primary:#0d1117; --bg-secondary:#161b22; --bg-tertiary:#21262d;
+    --bg-card:#1c2128; --bg-hover:#30363d;
+    --text-primary:#e6edf3; --text-secondary:#8b949e; --text-muted:#6e7681;
+    --border-color:#30363d;
+    --accent-blue:#58a6ff; --accent-green:#3fb950; --accent-red:#f85149;
+    --accent-orange:#d29922; --accent-purple:#bc8cff; --accent-pink:#f778ba;
+    --accent-cyan:#56d4dd; --accent-yellow:#e3b341;
+    --radius:6px; --radius-lg:10px; --transition:0.2s ease;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",-apple-system,sans-serif;font-size:14px;color:var(--text-primary);background:var(--bg-primary);height:100vh;overflow:hidden}
+
+/* Header */
+#header{display:flex;align-items:center;justify-content:space-between;height:52px;padding:0 20px;background:var(--bg-tertiary);border-bottom:1px solid var(--border-color);position:relative;z-index:100}
+.header-left{display:flex;align-items:center;gap:8px}
+.header-left a{text-decoration:none;color:var(--text-primary);font-size:16px;font-weight:600}
+.header-right{display:flex;align-items:center;gap:4px}
+.page-tab{padding:6px 16px;background:none;border:1px solid transparent;color:var(--text-secondary);font-size:13px;font-weight:500;cursor:pointer;border-radius:var(--radius);transition:all var(--transition);text-decoration:none;white-space:nowrap}
+.page-tab:hover{color:var(--text-primary);background:var(--bg-hover)}
+.page-tab.active{color:var(--accent-blue);background:rgba(88,166,255,0.1);border-color:rgba(88,166,255,0.3)}
+.test-toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);cursor:pointer;user-select:none}
+.test-toggle input{display:none}
+.toggle-track{width:36px;height:20px;border-radius:10px;background:var(--bg-hover);position:relative;transition:var(--transition)}
+.toggle-track::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--text-secondary);transition:var(--transition)}
+.test-toggle input:checked+.toggle-track{background:var(--accent-orange)}
+.test-toggle input:checked+.toggle-track::after{left:18px;background:#fff}
+body.test-mode .answer{color:transparent!important;background:var(--bg-hover)!important;border-radius:4px;cursor:pointer;transition:none}
+body.test-mode .answer:hover{background:var(--bg-tertiary)!important}
+body.test-mode .answer.revealed{color:inherit!important;background:transparent!important}
+
+/* Nav */
+#nav{display:flex;gap:0;padding:0 16px;background:var(--bg-secondary);border-bottom:1px solid var(--border-color);overflow-x:auto}
+.nav-tab{padding:10px 16px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;border-bottom:2px solid transparent;transition:var(--transition);user-select:none;white-space:nowrap}
+.nav-tab:hover{color:var(--text-primary)}
+.nav-tab.active{color:var(--accent-blue);border-bottom-color:var(--accent-blue)}
+
+/* Main */
+#main{height:calc(100vh - 52px - 41px);overflow-y:auto;padding:20px 24px;scroll-behavior:smooth}
+.section{display:none}.section.active{display:block}
+.section-title{font-size:18px;font-weight:700;margin-bottom:6px}
+.section-desc{font-size:13px;color:var(--text-secondary);margin-bottom:20px}
+
+/* Overview cards */
+.overview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+@media(max-width:900px){.overview-grid{grid-template-columns:repeat(2,1fr)}}
+.overview-card{background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:14px;cursor:pointer;transition:var(--transition);position:relative}
+.overview-card:hover{border-color:var(--accent-blue);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+.overview-card .num{position:absolute;top:8px;right:10px;font-size:28px;font-weight:800;color:var(--bg-hover);line-height:1}
+.overview-card .oc-title{font-size:14px;font-weight:600;margin-bottom:6px}
+.overview-card .oc-mnemonic{font-size:12px;color:var(--accent-orange);margin-bottom:4px}
+.overview-card .oc-exam{font-size:11px;color:var(--accent-cyan)}
+.overview-card.c1 .oc-title{color:#f97583}.overview-card.c2 .oc-title{color:var(--accent-blue)}
+.overview-card.c3 .oc-title{color:var(--accent-purple)}.overview-card.c4 .oc-title{color:var(--accent-green)}
+.overview-card.c5 .oc-title{color:var(--accent-orange)}.overview-card.c6 .oc-title{color:var(--accent-cyan)}
+.overview-card.c7 .oc-title{color:var(--accent-pink)}.overview-card.c8 .oc-title{color:var(--accent-yellow)}
+
+/* Domain detail */
+.domain-card{background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--radius-lg);margin-bottom:20px;overflow:hidden}
+.domain-header{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:var(--transition);border-left:4px solid var(--border-color)}
+.domain-header:hover{background:var(--bg-tertiary)}
+.domain-header .dh-left{display:flex;align-items:center;gap:12px}
+.domain-header .dh-num{font-size:20px;font-weight:800;color:var(--bg-hover);min-width:28px}
+.domain-header .dh-title{font-size:16px;font-weight:600}
+.domain-header .dh-mnemonic{font-size:13px;color:var(--accent-orange);margin-left:8px}
+.domain-header .dh-exam{font-size:11px;color:var(--accent-cyan);margin-left:6px;background:rgba(86,212,221,0.1);padding:1px 8px;border-radius:3px}
+.domain-header .dh-toggle{font-size:12px;color:var(--text-muted);transition:var(--transition)}
+.domain-card.open .dh-toggle{transform:rotate(180deg)}
+.domain-body{display:none;padding:0 20px 20px}
+.domain-card.open .domain-body{display:block}
+
+/* Sub-tabs */
+.sub-tabs{display:flex;gap:0;border-bottom:1px solid var(--border-color);margin-bottom:16px}
+.sub-tab{padding:8px 16px;font-size:13px;color:var(--text-secondary);cursor:pointer;border-bottom:2px solid transparent;transition:var(--transition)}
+.sub-tab:hover{color:var(--text-primary)}
+.sub-tab.active{color:var(--accent-blue);border-bottom-color:var(--accent-blue)}
+.sub-content{display:none}
+.sub-content.active{display:block}
+
+/* Goal items */
+.goal-list{list-style:none;padding:0}
+.goal-list li{padding:10px 14px;margin-bottom:6px;background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border-color);font-size:13px;line-height:1.6;display:flex;align-items:flex-start;gap:8px}
+.goal-list .g-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--bg-hover);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--text-secondary)}
+.mnemonic-block{padding:10px 14px;margin-bottom:12px;background:rgba(210,153,34,0.08);border-radius:var(--radius);border-left:3px solid var(--accent-orange);font-size:13px;color:var(--accent-orange)}
+.mnemonic-block strong{color:var(--accent-orange)}
+
+/* Key points */
+.point-section{margin-bottom:14px}
+.point-section-title{font-size:13px;font-weight:600;color:var(--accent-blue);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border-color)}
+.point-list{list-style:none;padding:0}
+.point-list li{padding:6px 10px;margin-bottom:3px;font-size:13px;border-radius:4px;background:var(--bg-card)}
+.point-list li .sub{display:block;font-size:11px;color:var(--text-secondary);margin-top:2px}
+.point-list .indent{padding-left:24px}
+.note-block{padding:10px 14px;margin:10px 0;background:rgba(88,166,255,0.06);border-radius:var(--radius);border-left:3px solid var(--accent-blue);font-size:12px;color:var(--text-secondary);line-height:1.6}
+.note-block strong{color:var(--accent-blue)}
+
+/* Check table */
+.check-table{width:100%;border-collapse:collapse;font-size:13px}
+.check-table th{padding:8px 10px;text-align:left;color:var(--text-secondary);font-weight:500;border-bottom:1px solid var(--border-color);background:var(--bg-card)}
+.check-table td{padding:8px 10px;border-bottom:1px solid var(--border-color);vertical-align:top}
+.check-table td:first-child{color:var(--text-secondary);width:45%}
+
+/* Compare/summary blocks */
+.summary-block{padding:12px 16px;margin:10px 0;background:var(--bg-card);border-radius:var(--radius-lg);border:1px solid var(--border-color)}
+.summary-block .sb-title{font-size:13px;font-weight:600;margin-bottom:6px;color:var(--accent-green)}
+.summary-block .sb-body{font-size:12px;color:var(--text-secondary);line-height:1.8}
+
+/* Colors per domain */
+.domain-card.d1 .domain-header{border-left-color:#f97583}.domain-card.d2 .domain-header{border-left-color:var(--accent-blue)}
+.domain-card.d3 .domain-header{border-left-color:var(--accent-purple)}.domain-card.d4 .domain-header{border-left-color:var(--accent-green)}
+.domain-card.d5 .domain-header{border-left-color:var(--accent-orange)}.domain-card.d6 .domain-header{border-left-color:var(--accent-cyan)}
+.domain-card.d7 .domain-header{border-left-color:var(--accent-pink)}.domain-card.d8 .domain-header{border-left-color:var(--accent-yellow)}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div id="header">
+    <div class="header-left">
+        <a href="index.html">软考知识图谱</a>
+    </div>
+    <div class="header-right">
+        <a href="index.html" class="page-tab">矩阵</a>
+        <a href="performance.html" class="page-tab active">绩效域</a>
+        <a href="itto.html" class="page-tab">ITTO</a>
+        <a href="memory.html" class="page-tab">关联记忆</a>
+        <label class="test-toggle" style="margin-left:8px">
+            <span>测试</span>
+            <input type="checkbox" id="testModeToggle">
+            <span class="toggle-track"></span>
+        </label>
+    </div>
+</div>
+
+<!-- Nav -->
+<div id="nav">
+    <div class="nav-tab active" data-section="overview">总览速记</div>
+    <div class="nav-tab" data-section="detail">逐域详解</div>
+</div>
+
+<!-- Main -->
+<div id="main">
+
+<!-- ===== Section: Overview ===== -->
+<div class="section active" id="sec-overview">
+    <div class="section-title">八大绩效域速记</div>
+    <div class="section-desc">每个绩效域围绕三个方向展开：预期目标（背）→ 绩效要点（背）→ 检查方法（理解）。点击卡片跳转详解。</div>
+
+    <div class="overview-grid">
+        <div class="overview-card c1" onclick="goDetail(1)">
+            <div class="num">1</div>
+            <div class="oc-title">干系人绩效域</div>
+            <div class="oc-mnemonic answer">支持反对高效认同</div>
+            <div class="oc-exam">23年考过</div>
+        </div>
+        <div class="overview-card c2" onclick="goDetail(2)">
+            <div class="num">2</div>
+            <div class="oc-title">团队绩效域</div>
+            <div class="oc-mnemonic answer">高绩效领导责任</div>
+        </div>
+        <div class="overview-card c3" onclick="goDetail(3)">
+            <div class="num">3</div>
+            <div class="oc-title">开发方法和生命周期</div>
+            <div class="oc-mnemonic answer">符合关联组成</div>
+        </div>
+        <div class="overview-card c4" onclick="goDetail(4)">
+            <div class="num">4</div>
+            <div class="oc-title">规划绩效域</div>
+            <div class="oc-mnemonic answer">有条系统演变适当充分调整</div>
+        </div>
+        <div class="overview-card c5" onclick="goDetail(5)">
+            <div class="num">5</div>
+            <div class="oc-title">工作绩效域</div>
+            <div class="oc-mnemonic answer">过程优约束控能力建沟通变资源省采购活变更管知识传</div>
+            <div class="oc-exam">23年考过</div>
+        </div>
+        <div class="overview-card c6" onclick="goDetail(6)">
+            <div class="num">6</div>
+            <div class="oc-title">交付绩效域</div>
+            <div class="oc-mnemonic answer">做对事做成事产生价值理解需求干系人满意</div>
+            <div class="oc-exam">25.05考过</div>
+        </div>
+        <div class="overview-card c7" onclick="goDetail(7)">
+            <div class="num">7</div>
+            <div class="oc-title">度量绩效域</div>
+            <div class="oc-mnemonic answer">理解充分决策行动预测价值</div>
+        </div>
+        <div class="overview-card c8" onclick="goDetail(8)">
+            <div class="num">8</div>
+            <div class="oc-title">不确定性绩效域</div>
+            <div class="oc-mnemonic answer">风险模糊复杂</div>
+            <div class="oc-exam">25.05考过</div>
+        </div>
+    </div>
+
+    <!-- Quick comparison: all goals -->
+    <div style="background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:20px;">
+        <div style="font-size:15px;font-weight:600;margin-bottom:14px;">绩效域速查表</div>
+        <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:700px;">
+            <thead><tr style="border-bottom:2px solid var(--border-color);">
+                <th style="padding:6px 8px;text-align:left;color:var(--text-muted);width:80px;">绩效域</th>
+                <th style="padding:6px 8px;text-align:left;color:var(--text-muted);width:80px;">目标口诀</th>
+                <th style="padding:6px 8px;text-align:left;color:var(--text-muted);">预期目标</th>
+                <th style="padding:6px 8px;text-align:left;color:var(--text-muted);">绩效要点</th>
+                <th style="padding:6px 8px;text-align:left;color:var(--text-muted);width:130px;">检查方法</th>
+            </tr></thead>
+            <tbody>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:8px;color:#f97583;font-weight:600;vertical-align:top;">1 干系人</td>
+                    <td style="padding:8px;color:var(--accent-orange);vertical-align:top;" class="answer">支持反对高效认同</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer">高效工作关系 · 认同目标 · 支持者满意获益 · 反对者无负面影响</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer"><strong>别理分级参见</strong><br>识别(影响方向)→理解分析(参与评估矩阵)→优先级排序(权力利益方格)→参与(人际技能)→监督</td>
+                    <td style="padding:8px;color:var(--text-secondary);vertical-align:top;" class="answer">参与连续性 · 变更频率 · 行为满意度问题风险</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:8px;color:var(--accent-blue);font-weight:600;vertical-align:top;">2 团队</td>
+                    <td style="padding:8px;color:var(--accent-orange);vertical-align:top;" class="answer">高绩效领导责任</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer">共享责任 · 高绩效团队 · 全员领导力与人际技能</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer"><strong>团队文化</strong>：透明诚信尊重积极讨论支持勇气庆祝<br><strong>高绩效团队</strong>：开诚布公共识共享责任信任协作适应性韧性赋能认可<br><strong>领导力</strong>：愿景·批判思维·激励·人际(情商→决策→冲突管理)</td>
+                    <td style="padding:8px;color:var(--text-secondary);vertical-align:top;" class="answer">目标责任心 · 信任协作适应赋能 · 领导力适宜性</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:8px;color:var(--accent-purple);font-weight:600;vertical-align:top;">3 开发方法</td>
+                    <td style="padding:8px;color:var(--accent-orange);vertical-align:top;" class="answer">符合关联组成</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer">方法符合交付物 · 生命周期组成 · 价值关联</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer"><strong>交付节奏</strong>：一次性·多次·定期·持续<br><strong>开发方法</strong>：预测型(难变更)·混合型(模块化)·适应型(高不确定)<br><strong>选择</strong>：确定传统→预测；创新多变→适应；安全法规→增量</td>
+                    <td style="padding:8px;color:var(--text-secondary);vertical-align:top;" class="answer">方法适宜性 · 价值关联度 · 生命周期合理性</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:8px;color:var(--accent-green);font-weight:600;vertical-align:top;">4 规划</td>
+                    <td style="padding:8px;color:var(--accent-orange);vertical-align:top;" class="answer">有条系统演变适当充分调整</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer">有条理协调 · 系统方法 · 演变说明 · 投入适当 · 内容充分 · 可调整</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer"><strong>影响因素</strong>：开发方法·交付物·组织·市场·法规<br><strong>估算因素</strong>：区间·准确度(准不准)·精确度(细不细)·信心<br><strong>6项</strong>：定人·定话·定物·定买·定改·定尺子(度量指标)</td>
+                    <td style="padding:8px;color:var(--text-secondary);vertical-align:top;" class="answer">绩效偏差 · 整体性 · 详尽程度 · 适宜性 · 充分性 · 可适应变化</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:8px;color:var(--accent-orange);font-weight:600;vertical-align:top;">5 工作</td>
+                    <td style="padding:8px;color:var(--accent-orange);vertical-align:top;" class="answer">过程优约束控能力建沟通变资源省采购活变更管知识传</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer">高效绩效 · 适合过程 · 沟通参与 · 实物资源 · 采购管理 · 处理变更 · 持续学习</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer"><strong>过程</strong>：精益生产(价值流图)·回顾会议·价值导向<br><strong>制约</strong>：日期·法规·预算·质量政策<br><strong>实物资源</strong>：减搬运·消等待·少报废·促安全</td>
+                    <td style="padding:8px;color:var(--text-secondary);vertical-align:top;" class="answer">状态报告 · 过程适宜性 · 沟通有效性 · 资源利用率 · 采购审计 · 变更处理 · 团队绩效</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:8px;color:var(--accent-cyan);font-weight:600;vertical-align:top;">6 交付</td>
+                    <td style="padding:8px;color:var(--accent-orange);vertical-align:top;" class="answer">做对事做成事产生价值理解需求干系人满意</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer">实现业务目标 · 实现预期成果 · 预定时间收益 · 理解需求 · 干系人满意</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer"><strong>价值交付</strong>：看节奏(过程/结束/持续)<br><strong>需求管理</strong>：启发·演变(原型/演示/故事板)·管控·范围调整<br><strong>质量</strong>：缺陷累积，越早发现成本越低</td>
+                    <td style="padding:8px;color:var(--text-secondary);vertical-align:top;" class="answer">目标一致性 · 完成度 · 收益 · 需求稳定性 · 满意度·质量问题</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:8px;color:var(--accent-pink);font-weight:600;vertical-align:top;">7 度量</td>
+                    <td style="padding:8px;color:var(--accent-orange);vertical-align:top;" class="answer">理解充分决策行动预测价值</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer">充分理解 · 数据支持决策 · 及时行动 · 基于预测评估决策实现价值</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer"><strong>KPI</strong>：提前指标·滞后指标 <strong>SMART</strong><br><strong>度量7类</strong>：可交付物·交付(在制控量)·基准(SV/SPI/CV/CPI)·资源·价值(ROI/NPV)·干系人·预测(ETC/EAC/VAC/TCPI)<br><strong>展示</strong>：仪表盘·BVC·任务版·燃烧图<br><strong>陷阱</strong>：霍桑·虚荣·士气·误用·确认偏见·相关≠因果</td>
+                    <td style="padding:8px;color:var(--text-secondary);vertical-align:top;" class="answer">度量结果和报告 · 度量结果 · 工作绩效数据</td>
+                </tr>
+                <tr>
+                    <td style="padding:8px;color:var(--accent-yellow);font-weight:600;vertical-align:top;">8 不确定性</td>
+                    <td style="padding:8px;color:var(--accent-orange);vertical-align:top;" class="answer">风险模糊复杂</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer">了解环境 · 识别应对 · 了解依赖 · 预测威胁机会 · 最小化负面影响 · 利用机会 · 有效利用储备</td>
+                    <td style="padding:8px;vertical-align:top;" class="answer"><strong>三层</strong>：风险(不可知未来)·模糊(不了解状况)·复杂(不可预测系统)<br><strong>模糊</strong>：概念→定义术语；情景→渐进明细·实验·原型<br><strong>复杂</strong>：系统(解耦·模拟)·构建(多样·平衡)·过程(迭代·参与·故障保护)<br><strong>应对</strong>：收集信息·多种准备·集合设计·增加韧性</td>
+                    <td style="padding:8px;color:var(--text-secondary);vertical-align:top;" class="answer">环境因素 · 风险应对措施 · 应对适宜性 · 管理机制 · 临界值内 · 利用机会机制 · 储备使用</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+
+<!-- ===== Section: Detail ===== -->
+<div class="section" id="sec-detail">
+    <div class="section-title">绩效域详解</div>
+    <div class="section-desc">点击展开每个绩效域的预期目标、绩效要点和检查方法。</div>
+
+<!-- Domain 1: 干系人 -->
+<div class="domain-card d1" id="domain-1">
+<div class="domain-header" onclick="toggleDomain(this)">
+    <div class="dh-left">
+        <span class="dh-num">1</span>
+        <span class="dh-title">干系人绩效域</span>
+        <span class="dh-mnemonic">支持反对高效认同</span>
+        <span class="dh-exam">23年考过</span>
+    </div>
+    <span class="dh-toggle">▼</span>
+</div>
+<div class="domain-body">
+    <div class="sub-tabs" data-domain="1">
+        <div class="sub-tab active" data-sub="goal">预期目标</div>
+        <div class="sub-tab" data-sub="points">绩效要点</div>
+        <div class="sub-tab" data-sub="check">检查方法</div>
+    </div>
+    <div class="sub-content active" id="d1-goal">
+        <div class="mnemonic-block"><strong>口诀：支持反对高效认同</strong></div>
+        <ul class="goal-list">
+            <li><span class="g-num">1</span><span class="answer">与干系人建立<strong>高效的工作关系</strong></span></li>
+            <li><span class="g-num">2</span><span class="answer">干系人<strong>认同</strong>项目目标</span></li>
+            <li><span class="g-num">3</span><span class="answer"><strong>支持</strong>项目的干系人提高了满意度，并从中获益</span></li>
+            <li><span class="g-num">4</span><span class="answer"><strong>反对</strong>项目的干系人没有对项目产生负面影响</span></li>
+        </ul>
+    </div>
+    <div class="sub-content" id="d1-points">
+        <div class="mnemonic-block"><strong>口诀：别理分级参见</strong>（识别、理解和分析、优先级排序、参与、监督）</div>
+        <div class="point-section">
+            <div class="point-section-title">绩效要点 5步</div>
+            <ul class="point-list">
+                <li class="answer"><strong>识别</strong> — 使用影响方向分析（向上、向下…）</li>
+                <li class="answer"><strong>理解和分析</strong> — 不同干系人的立场，使用干系人参与评估矩阵（支持、不知晓…）</li>
+                <li class="answer"><strong>优先级排序</strong> — 使用方格模型，权力/利益方格图</li>
+                <li class="answer"><strong>参与</strong> — 使用人际关系技能、积极倾听、冲突管理</li>
+                <li class="answer"><strong>监督</strong> — 监督干系人参与</li>
+            </ul>
+        </div>
+        <div class="note-block"><strong>区分</strong>：干系人管理步骤（识别→规划→管理→监督）vs 绩效域要点（识别→理解分析→排序→参与→监督），绩效域更强调"理解和分析"及"优先级排序"</div>
+    </div>
+    <div class="sub-content" id="d1-check">
+        <table class="check-table">
+            <thead><tr><th>预期目标</th><th>指标及检查方法</th></tr></thead>
+            <tbody>
+                <tr><td class="answer">建立高效的工作关系</td><td class="answer">干系人参与的连续性</td></tr>
+                <tr><td class="answer">干系人认同项目目标</td><td class="answer">变更的频率</td></tr>
+                <tr><td class="answer">支持项目的干系人提高了满意度</td><td class="answer" rowspan="2">干系人行为、满意度、干系人相关问题和风险</td></tr>
+                <tr><td class="answer">反对项目的干系人没有负面影响</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+<!-- Domain 2: 团队 -->
+<div class="domain-card d2" id="domain-2">
+<div class="domain-header" onclick="toggleDomain(this)">
+    <div class="dh-left">
+        <span class="dh-num">2</span>
+        <span class="dh-title">团队绩效域</span>
+        <span class="dh-mnemonic">高绩效领导责任</span>
+    </div>
+    <span class="dh-toggle">▼</span>
+</div>
+<div class="domain-body">
+    <div class="sub-tabs" data-domain="2">
+        <div class="sub-tab active" data-sub="goal">预期目标</div>
+        <div class="sub-tab" data-sub="points">绩效要点</div>
+        <div class="sub-tab" data-sub="check">检查方法</div>
+    </div>
+    <div class="sub-content active" id="d2-goal">
+        <div class="mnemonic-block"><strong>口诀：高绩效领导责任</strong>（预期目标和绩效要点关键点相同）</div>
+        <ul class="goal-list">
+            <li><span class="g-num">1</span><span class="answer"><strong>共享责任</strong></span></li>
+            <li><span class="g-num">2</span><span class="answer">建立<strong>高绩效</strong>团队</span></li>
+            <li><span class="g-num">3</span><span class="answer">所有团队成员都展现出相应的<strong>领导力</strong>和人际关系技能</span></li>
+        </ul>
+    </div>
+    <div class="sub-content" id="d2-points">
+        <div class="note-block"><strong>写作关联十大管理</strong>：团队文化→建设团队，高绩效项目团队→建设团队，领导力→管理团队</div>
+        <div class="point-section">
+            <div class="point-section-title">1. 项目团队文化（共享责任）</div>
+            <ul class="point-list">
+                <li class="answer">透明 · 诚信 · 尊重 · 积极讨论 · 支持 · 勇气 · 庆祝成功</li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">2. 高绩效的项目团队（9要素）</div>
+            <ul class="point-list">
+                <li class="answer">开诚布公的沟通（达成共识、信任和协作的基石） · 共识 · 共享责任 · 信任 · 协作 · 适应性（根据环境调整工作方式） · 韧性（快速恢复） · 赋能 · 认可</li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">3. 领导力技能</div>
+            <ul class="point-list">
+                <li class="answer"><strong>建立和维护愿景</strong></li>
+                <li class="answer"><strong>批判性思维</strong></li>
+                <li class="answer"><strong>激励</strong></li>
+                <li class="answer"><strong>人际关系技能</strong>
+                    <span class="sub">① 情商：自我意识→自我管理→社交意识→社交技能（高阶境界）</span>
+                    <span class="sub">② 决策：单方面决策+群体决策，发散汇聚模式</span>
+                    <span class="sub">③ 冲突管理：尊重、开诚布公沟通；聚焦问题、聚焦当前和未来；共同寻找备选方案</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="sub-content" id="d2-check">
+        <table class="check-table">
+            <thead><tr><th>预期目标</th><th>指标及检查方法</th></tr></thead>
+            <tbody>
+                <tr><td class="answer">共享责任</td><td class="answer">目标和责任心</td></tr>
+                <tr><td class="answer">建立高绩效团队</td><td class="answer">信任与协作程度 · 适应变化的能力 · 彼此赋能</td></tr>
+                <tr><td class="answer">全员领导力和人际技能</td><td class="answer">管理和领导力风格适宜性</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+<!-- Domain 3: 开发方法和生命周期 -->
+<div class="domain-card d3" id="domain-3">
+<div class="domain-header" onclick="toggleDomain(this)">
+    <div class="dh-left">
+        <span class="dh-num">3</span>
+        <span class="dh-title">开发方法和生命周期绩效域</span>
+        <span class="dh-mnemonic">符合关联组成</span>
+        <span class="dh-exam">较难</span>
+    </div>
+    <span class="dh-toggle">▼</span>
+</div>
+<div class="domain-body">
+    <div class="sub-tabs" data-domain="3">
+        <div class="sub-tab active" data-sub="goal">预期目标</div>
+        <div class="sub-tab" data-sub="points">绩效要点</div>
+        <div class="sub-tab" data-sub="check">检查方法</div>
+    </div>
+    <div class="sub-content active" id="d3-goal">
+        <div class="mnemonic-block"><strong>口诀：符合关联组成</strong></div>
+        <ul class="goal-list">
+            <li><span class="g-num">1</span><span class="answer">开发方法<strong>符合</strong>交付物</span></li>
+            <li><span class="g-num">2</span><span class="answer">生命周期<strong>组成</strong>（由促进交付节奏的项目阶段和产生交付所需的开发方法组成）</span></li>
+            <li><span class="g-num">3</span><span class="answer">价值<strong>关联</strong>（将项目交付与干系人价值紧密关联）</span></li>
+        </ul>
+    </div>
+    <div class="sub-content" id="d3-points">
+        <div class="point-section">
+            <div class="point-section-title">交付节奏（4种）</div>
+            <ul class="point-list">
+                <li class="answer"><strong>一次性交付</strong> — 只在项目结束时交付</li>
+                <li class="answer"><strong>多次交付</strong> — 多个组件，不同时间交付</li>
+                <li class="answer"><strong>定期交付</strong> — 强调定期（与多次交付相似）</li>
+                <li class="answer"><strong>持续交付</strong></li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">开发方法（3种）</div>
+            <ul class="point-list">
+                <li class="answer"><strong>预测型/瀑布型</strong> — 早期阶段明确定义，难变更</li>
+                <li class="answer"><strong>混合型</strong> — 适应型+预测型，模块化交付</li>
+                <li class="answer"><strong>适应型/迭代型/增量型/敏捷</strong> — 高度不确定、不断变化</li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">开发方法选择口诀</div>
+            <ul class="point-list">
+                <li class="answer" style="color:var(--accent-orange);">确定传统用预测，创新多变用适应</li>
+                <li class="answer" style="color:var(--accent-orange);">安全法规要严格，组件灵活选增量</li>
+                <li class="answer" style="color:var(--accent-orange);">人/进度/资金制约 → 适应型</li>
+                <li class="answer">层级多、流程严、文化保守、团队大且分散 → <strong>预测型</strong>（如传统国企）</li>
+                <li class="answer">结构扁平、文化开放、团队小且同地 → <strong>适应型</strong>（如互联网创业）</li>
+            </ul>
+        </div>
+    </div>
+    <div class="sub-content" id="d3-check">
+        <table class="check-table">
+            <thead><tr><th>预期目标</th><th>指标及检查方法</th></tr></thead>
+            <tbody>
+                <tr><td class="answer">开发方法与项目交付物相符合</td><td class="answer">开发方法适宜性</td></tr>
+                <tr><td class="answer">将项目交付与干系人价值紧密联合</td><td class="answer">价值关联度</td></tr>
+                <tr><td class="answer">项目生命周期由交付节奏和开发方法组成</td><td class="answer">生命周期组成合理性</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+<!-- Domain 4: 规划 -->
+<div class="domain-card d4" id="domain-4">
+<div class="domain-header" onclick="toggleDomain(this)">
+    <div class="dh-left">
+        <span class="dh-num">4</span>
+        <span class="dh-title">规划绩效域</span>
+        <span class="dh-mnemonic">有条系统演变适当充分调整</span>
+    </div>
+    <span class="dh-toggle">▼</span>
+</div>
+<div class="domain-body">
+    <div class="sub-tabs" data-domain="4">
+        <div class="sub-tab active" data-sub="goal">预期目标</div>
+        <div class="sub-tab" data-sub="points">绩效要点</div>
+        <div class="sub-tab" data-sub="check">检查方法</div>
+    </div>
+    <div class="sub-content active" id="d4-goal">
+        <div class="mnemonic-block"><strong>口诀：有条系统演变适当充分调整</strong></div>
+        <ul class="goal-list">
+            <li><span class="g-num">1</span><span class="answer">项目以<strong>有条理</strong>、协调一致的方式推进</span></li>
+            <li><span class="g-num">2</span><span class="answer">应用<strong>系统</strong>的方法交付项目成果</span></li>
+            <li><span class="g-num">3</span><span class="answer">对<strong>演变</strong>情况进行详细说明</span></li>
+            <li><span class="g-num">4</span><span class="answer">规划投入的时间成本是<strong>适当</strong>的</span></li>
+            <li><span class="g-num">5</span><span class="answer">规划的内容对管理干系人的需求而言是<strong>充分</strong>的</span></li>
+            <li><span class="g-num">6</span><span class="answer">可以根据新出现的和不断变化的需求进行<strong>调整</strong></span></li>
+        </ul>
+    </div>
+    <div class="sub-content" id="d4-points">
+        <div class="point-section">
+            <div class="point-section-title">规划的影响因素</div>
+            <ul class="point-list">
+                <li class="answer">开发方法 · 项目可交付物 · 组织需求 · 市场条件 · 法律或法规限制</li>
+            </ul>
+            <div class="note-block"><strong>总结</strong>：规划不是越多越好、越早越好，要根据开发方法、交付物、组织、市场和法规，灵活决定"怎么规划、做多少规划、什么时候规划"</div>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">项目估算（4个影响因素）</div>
+            <ul class="point-list">
+                <li class="answer"><strong>区间</strong> — 估算区间随项目进展逐步缩小</li>
+                <li class="answer"><strong>准确度</strong> — 正确性（准不准），与区间相关</li>
+                <li class="answer"><strong>精确度</strong> — 精准度（细不细），小数点位数</li>
+                <li class="answer"><strong>信心</strong></li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">估算内容（4种）</div>
+            <ul class="point-list">
+                <li class="answer"><strong>确定性/概率</strong> — 一个数字 vs 带概率的区间</li>
+                <li class="answer"><strong>绝对/相对</strong> — 直接给数字 vs 跟别的项目比</li>
+                <li class="answer"><strong>基于工作流</strong> — 按干活效率算</li>
+                <li class="answer"><strong>不确定性调整</strong> — 加个储备，防风险</li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">规划要点（6项）</div>
+            <ul class="point-list">
+                <li class="answer"><strong>定人</strong> — 规划项目团队的组成和结构（集中办公）</li>
+                <li class="answer"><strong>定话</strong> — 对沟通进行规划</li>
+                <li class="answer"><strong>定物</strong> — 实物资源规划（人力资源外的任何资源）</li>
+                <li class="answer"><strong>定买</strong> — 采购规划</li>
+                <li class="answer"><strong>定改</strong> — 变更规划</li>
+                <li class="answer"><strong>定尺子</strong> — 度量指标和一致性（确定度量指标、基准和临界值，围绕进度成本范围，"只测量最重要的东西"）</li>
+            </ul>
+        </div>
+    </div>
+    <div class="sub-content" id="d4-check">
+        <table class="check-table">
+            <thead><tr><th>预期目标</th><th>指标及检查方法</th></tr></thead>
+            <tbody>
+                <tr><td class="answer">有条理、协调一致的方式推进</td><td class="answer">绩效偏差</td></tr>
+                <tr><td class="answer">应用系统的方法交付项目成果</td><td class="answer">规划的整体性</td></tr>
+                <tr><td class="answer">对演变情况进行详细说明</td><td class="answer">规划的详尽程度</td></tr>
+                <tr><td class="answer">规划投入的时间成本适当</td><td class="answer">规划的适宜性</td></tr>
+                <tr><td class="answer">规划内容对管理干系人需求充分</td><td class="answer">规划的充分性</td></tr>
+                <tr><td class="answer">根据新变化进行调整</td><td class="answer">可适应变化</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+<!-- Domain 5: 工作 -->
+<div class="domain-card d5" id="domain-5">
+<div class="domain-header" onclick="toggleDomain(this)">
+    <div class="dh-left">
+        <span class="dh-num">5</span>
+        <span class="dh-title">工作绩效域</span>
+        <span class="dh-mnemonic">过程优约束控能力建沟通变资源省采购活变更管知识传</span>
+        <span class="dh-exam">23年考过</span>
+    </div>
+    <span class="dh-toggle">▼</span>
+</div>
+<div class="domain-body">
+    <div class="sub-tabs" data-domain="5">
+        <div class="sub-tab active" data-sub="goal">预期目标</div>
+        <div class="sub-tab" data-sub="points">绩效要点</div>
+        <div class="sub-tab" data-sub="check">检查方法</div>
+    </div>
+    <div class="sub-content active" id="d5-goal">
+        <ul class="goal-list">
+            <li><span class="g-num">1</span><span class="answer">高效且有效的项目绩效</span></li>
+            <li><span class="g-num">2</span><span class="answer">适合项目和环境的项目过程</span></li>
+            <li><span class="g-num">3</span><span class="answer">干系人适当的沟通和参与</span></li>
+            <li><span class="g-num">4</span><span class="answer">对实物资源进行了有效管理</span></li>
+            <li><span class="g-num">5</span><span class="answer">对采购进行了有效管理</span></li>
+            <li><span class="g-num">6</span><span class="answer">有效处理了变更</span></li>
+            <li><span class="g-num">7</span><span class="answer">通过持续学习和过程改进提高了团队能力</span></li>
+        </ul>
+        <div class="note-block" style="margin-top:10px;"><strong>强调</strong>：执行，强调团队如何完成工作、如何正确完成工作，与交付不相关</div>
+    </div>
+    <div class="sub-content" id="d5-points">
+        <div class="mnemonic-block"><strong>口诀：过程优，约束控，能力建，沟通变，资源省，采购活，变更管，知识传</strong></div>
+        <div class="point-section">
+            <div class="point-section-title">绩效要点 8项</div>
+            <ul class="point-list">
+                <li class="answer"><strong>项目过程</strong> — 过程审计和质量保证活动。优化方法：①精益生产法（价值流图）②回顾会议 ③价值导向审查</li>
+                <li class="answer"><strong>制约因素</strong> — 最终交付日期、法律法规、固定预算、质量政策等，平衡不断变化的制约因素</li>
+                <li class="answer"><strong>专注于工作过程和能力</strong></li>
+                <li class="answer"><strong>管理沟通和参与</strong></li>
+                <li class="answer"><strong>管理实物资源</strong> — 减少搬运储存 · 消除等待时间 · 最小化报废浪费 · 促进安全工作环境</li>
+                <li class="answer"><strong>处理采购事宜</strong></li>
+                <li class="answer"><strong>监督新工作和变更</strong></li>
+                <li class="answer"><strong>学习和持续改进</strong></li>
+            </ul>
+        </div>
+    </div>
+    <div class="sub-content" id="d5-check">
+        <table class="check-table">
+            <thead><tr><th>预期目标</th><th>指标及检查方法</th></tr></thead>
+            <tbody>
+                <tr><td class="answer">高效且有效的项目绩效</td><td class="answer">状态报告</td></tr>
+                <tr><td class="answer">适合项目和环境的项目过程</td><td class="answer">过程的适宜性 · 过程相关性和有效性</td></tr>
+                <tr><td class="answer">干系人沟通和参与</td><td class="answer">沟通有效性</td></tr>
+                <tr><td class="answer">实物资源有效管理</td><td class="answer">资源利用率</td></tr>
+                <tr><td class="answer">采购有效管理</td><td class="answer">采购过程适宜（采购审计）</td></tr>
+                <tr><td class="answer">有效处理变更</td><td class="answer">变更处理情况（变更日志/待办事项列表）</td></tr>
+                <tr><td class="answer">持续学习和过程改进</td><td class="answer">团队绩效（错误和返工减少，效率提高）</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+<!-- Domain 6: 交付 -->
+<div class="domain-card d6" id="domain-6">
+<div class="domain-header" onclick="toggleDomain(this)">
+    <div class="dh-left">
+        <span class="dh-num">6</span>
+        <span class="dh-title">交付绩效域</span>
+        <span class="dh-mnemonic">做对事做成事产生价值理解需求干系人满意</span>
+        <span class="dh-exam">25.05考过</span>
+    </div>
+    <span class="dh-toggle">▼</span>
+</div>
+<div class="domain-body">
+    <div class="sub-tabs" data-domain="6">
+        <div class="sub-tab active" data-sub="goal">预期目标</div>
+        <div class="sub-tab" data-sub="points">绩效要点</div>
+        <div class="sub-tab" data-sub="check">检查方法</div>
+    </div>
+    <div class="sub-content active" id="d6-goal">
+        <div class="mnemonic-block"><strong>口诀：做对事、做成事、产生价值、理解需求、干系人满意</strong></div>
+        <ul class="goal-list">
+            <li><span class="g-num">1</span><span class="answer">项目有助于实现<strong>业务目标和战略</strong></span></li>
+            <li><span class="g-num">2</span><span class="answer">项目实现了<strong>预期成果</strong></span></li>
+            <li><span class="g-num">3</span><span class="answer">在预定时间内实现了<strong>项目收益</strong></span></li>
+            <li><span class="g-num">4</span><span class="answer">项目团队对<strong>需求</strong>有清晰的理解</span></li>
+            <li><span class="g-num">5</span><span class="answer"><strong>干系人</strong>接受项目可交付物和成果，并对其满意</span></li>
+        </ul>
+    </div>
+    <div class="sub-content" id="d6-points">
+        <div class="point-section">
+            <div class="point-section-title">1. 价值交付</div>
+            <ul class="point-list">
+                <li class="answer">开发方法支持过程交付 → 进展过程中可交付价值</li>
+                <li class="answer">结束时才发布 → 项目完成后产生价值</li>
+                <li class="answer">有的项目结束后一段时间还可继续获得价值</li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">2. 可交付物（需求管理）</div>
+            <ul class="point-list">
+                <li class="answer">范围明确稳定 vs 逐步明细 vs 不断提出新需求</li>
+                <li class="answer"><strong>需求启发</strong></li>
+                <li class="answer"><strong>不断演变和发现</strong> — 使用原型、演示、故事板和模型等方法</li>
+                <li class="answer"><strong>管理需求</strong></li>
+                <li class="answer"><strong>定义范围和管理变更</strong></li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">3. 质量</div>
+            <ul class="point-list">
+                <li class="answer" style="color:var(--accent-red);">前期缺陷会累积，发现缺陷时间越晚，纠正成本越高</li>
+                <li class="answer">前期工作完成得越多，变更成本越大</li>
+            </ul>
+        </div>
+        <div class="summary-block">
+            <div class="sb-title">绩效要点总结</div>
+            <div class="sb-body answer">
+                价值交付：看节奏，可过程交付、结束交付或持续交付<br>
+                需求管理：启发需求、演变细化、工具管控、范围随需调整<br>
+                质量管控：前期缺陷会累积，越早发现问题，纠正成本越低
+            </div>
+        </div>
+    </div>
+    <div class="sub-content" id="d6-check">
+        <table class="check-table">
+            <thead><tr><th>预期目标</th><th>指标及检查方法</th></tr></thead>
+            <tbody>
+                <tr><td class="answer">实现业务目标和战略</td><td class="answer">目标一致性（战略、需求、目标、结果一致）</td></tr>
+                <tr><td class="answer">实现预期成果</td><td class="answer">项目完成度</td></tr>
+                <tr><td class="answer">预定时间内实现项目收益</td><td class="answer">项目收益</td></tr>
+                <tr><td class="answer">团队对需求有清晰理解</td><td class="answer">需求稳定性</td></tr>
+                <tr><td class="answer">干系人接受并满意</td><td class="answer">干系人满意度 · 质量问题</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+<!-- Domain 7: 度量 -->
+<div class="domain-card d7" id="domain-7">
+<div class="domain-header" onclick="toggleDomain(this)">
+    <div class="dh-left">
+        <span class="dh-num">7</span>
+        <span class="dh-title">度量绩效域</span>
+        <span class="dh-mnemonic">理解充分决策行动预测价值</span>
+    </div>
+    <span class="dh-toggle">▼</span>
+</div>
+<div class="domain-body">
+    <div class="sub-tabs" data-domain="7">
+        <div class="sub-tab active" data-sub="goal">预期目标</div>
+        <div class="sub-tab" data-sub="points">绩效要点</div>
+        <div class="sub-tab" data-sub="check">检查方法</div>
+    </div>
+    <div class="sub-content active" id="d7-goal">
+        <div class="mnemonic-block"><strong>口诀：理解充分决策行动预测价值</strong></div>
+        <ul class="goal-list">
+            <li><span class="g-num">1</span><span class="answer">对项目状况充分<strong>理解</strong></span></li>
+            <li><span class="g-num">2</span><span class="answer">数据<strong>充分</strong>，可支持决策</span></li>
+            <li><span class="g-num">3</span><span class="answer">及时采取<strong>行动</strong>，确保项目最佳绩效</span></li>
+            <li><span class="g-num">4</span><span class="answer">能够基于<strong>预测</strong>和评估作出<strong>决策</strong>，实现目标并产生<strong>价值</strong></span></li>
+        </ul>
+    </div>
+    <div class="sub-content" id="d7-points">
+        <div class="point-section">
+            <div class="point-section-title">KPI：提前指标 vs 滞后指标</div>
+            <ul class="point-list">
+                <li class="answer"><strong>提前指标</strong> — 预测项目的变化或趋势</li>
+                <li class="answer"><strong>滞后指标</strong> — 反映过去的绩效或状况</li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">有效度量指标 — SMART</div>
+            <ul class="point-list">
+                <li class="answer"><strong>S</strong>具体的 · <strong>M</strong>有意义的 · <strong>A</strong>可实现的 · <strong>R</strong>具有相关性的 · <strong>T</strong>具有及时性</li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">度量内容（7类）</div>
+            <ul class="point-list">
+                <li class="answer"><strong>可交付物</strong> — 错误/缺陷信息 · 绩效度量指标 · 技术绩效度量指标</li>
+                <li class="answer"><strong>交付</strong> — <span style="color:var(--accent-orange);">在制控量，提前看总时，周期看干活，队列看排队，批量看一次，效率看增值</span></li>
+                <li class="answer"><strong>基准绩效</strong> — 进度：SV/SPI · 成本：CV/CPI · 燃烧率（实际成本）</li>
+                <li class="answer"><strong>资源</strong> — 实际vs计划的利用率、成本</li>
+                <li class="answer"><strong>价值</strong> — 成本效益比 · 计划vs实际收益 · ROI · NPV</li>
+                <li class="answer"><strong>干系人</strong> — 净推荐值 · 情绪图 · 士气 · 离职率</li>
+                <li class="answer"><strong>预测型</strong> — ETC · EAC · VAC(=BAC-EAC) · TCPI · 回归分析 · 产量分析</li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">展示度量信息（4种）</div>
+            <ul class="point-list">
+                <li class="answer"><strong>仪表盘</strong> — 高层级概要信息</li>
+                <li class="answer"><strong>大型可见图标 BVC</strong> — 手动维护，向组织提供度量信息</li>
+                <li class="answer"><strong>任务版</strong> — 小黑板</li>
+                <li class="answer"><strong>燃烧图</strong> — 燃起图（已完成工作量） · 燃尽图（剩余工作）</li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">度量陷阱（6个）</div>
+            <ul class="point-list">
+                <li class="answer"><strong>霍桑效应</strong> — 度量会对其行为产生影响</li>
+                <li class="answer"><strong>虚荣指标</strong> — 对决策没有帮助的指标</li>
+                <li class="answer"><strong>士气低落</strong> — 无法实现的目标导致士气下降</li>
+                <li class="answer"><strong>误用度量指标</strong></li>
+                <li class="answer"><strong>确认偏见</strong> — 倾向于寻找支持原有观点的信息</li>
+                <li class="answer"><strong>相关性与因果关系混淆</strong></li>
+            </ul>
+        </div>
+    </div>
+    <div class="sub-content" id="d7-check">
+        <table class="check-table">
+            <thead><tr><th>预期目标</th><th>指标及检查方法</th></tr></thead>
+            <tbody>
+                <tr><td class="answer">对项目状况充分理解</td><td class="answer">度量结果和报告</td></tr>
+                <tr><td class="answer">数据充分可支持决策</td><td class="answer">度量结果</td></tr>
+                <tr><td class="answer">及时采取行动确保绩效</td><td class="answer">度量结果</td></tr>
+                <tr><td class="answer">基于预测评估作出决策实现价值</td><td class="answer">工作绩效数据</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+<!-- Domain 8: 不确定性 -->
+<div class="domain-card d8" id="domain-8">
+<div class="domain-header" onclick="toggleDomain(this)">
+    <div class="dh-left">
+        <span class="dh-num">8</span>
+        <span class="dh-title">不确定性绩效域</span>
+        <span class="dh-mnemonic">风险模糊复杂</span>
+        <span class="dh-exam">25.05考过</span>
+    </div>
+    <span class="dh-toggle">▼</span>
+</div>
+<div class="domain-body">
+    <div class="sub-tabs" data-domain="8">
+        <div class="sub-tab active" data-sub="goal">预期目标</div>
+        <div class="sub-tab" data-sub="points">绩效要点</div>
+        <div class="sub-tab" data-sub="check">检查方法</div>
+    </div>
+    <div class="sub-content active" id="d8-goal">
+        <div class="note-block"><strong>不确定性的三层含义</strong>：风险（不可知未来事件）· 模糊性（不了解当前/未来状况）· 复杂性（不可预测结果的动态系统）</div>
+        <ul class="goal-list">
+            <li><span class="g-num">1</span><span class="answer">了解项目的运行环境（技术、社会、政治、市场、经济）</span></li>
+            <li><span class="g-num">2</span><span class="answer">积极识别、分析和应对不确定性</span></li>
+            <li><span class="g-num">3</span><span class="answer">了解项目中多个因素之间的相互依赖关系</span></li>
+            <li><span class="g-num">4</span><span class="answer">能够对威胁和机会进行预测，了解问题的后果</span></li>
+            <li><span class="g-num">5</span><span class="answer">最小化不确定性对项目交付的负面影响</span></li>
+            <li><span class="g-num">6</span><span class="answer">能够利用机会改进项目的绩效和成果</span></li>
+            <li><span class="g-num">7</span><span class="answer">有效利用成本和进度储备，与项目目标保持一致</span></li>
+        </ul>
+    </div>
+    <div class="sub-content" id="d8-points">
+        <div class="point-section">
+            <div class="point-section-title">风险</div>
+            <ul class="point-list">
+                <li class="answer">确定风险<strong>临界值</strong>，在项目风险影响级别中明确定义，并与干系人沟通</li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">模糊性（2种）</div>
+            <ul class="point-list">
+                <li class="answer"><strong>概念模糊性</strong> — 缺乏有效的理解 → 确定共同规则、定义术语</li>
+                <li class="answer"><strong>情景模糊性</strong> — 可能出现多个结果 → 渐进明细、实验、原型法</li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">处理复杂性的方法</div>
+            <ul class="point-list">
+                <li class="answer"><strong>基于系统</strong>：解耦 · 模拟</li>
+                <li class="answer"><strong>重新构建</strong>：多样性 · 平衡</li>
+                <li class="answer"><strong>基于过程</strong>：迭代 · 参与 · 故障保护（增加冗余/备份）</li>
+            </ul>
+        </div>
+        <div class="point-section">
+            <div class="point-section-title">针对不确定性的应对方法（4种）</div>
+            <ul class="point-list">
+                <li class="answer">收集信息</li>
+                <li class="answer">为多种结果做好准备</li>
+                <li class="answer">集合设计</li>
+                <li class="answer">增加韧性</li>
+            </ul>
+        </div>
+    </div>
+    <div class="sub-content" id="d8-check">
+        <table class="check-table">
+            <thead><tr><th>预期目标</th><th>指标及检查方法</th></tr></thead>
+            <tbody>
+                <tr><td class="answer">了解运行环境</td><td class="answer">环境因素</td></tr>
+                <tr><td class="answer">识别分析和应对不确定性</td><td class="answer">风险应对措施</td></tr>
+                <tr><td class="answer">了解因素相互依赖关系</td><td class="answer">应对措施适宜性</td></tr>
+                <tr><td class="answer">预测威胁和机会</td><td class="answer">风险管理机制或系统</td></tr>
+                <tr><td class="answer">最小化负面影响</td><td class="answer">项目绩效处于临界值内</td></tr>
+                <tr><td class="answer">利用机会改进绩效</td><td class="answer">利用机会的机制</td></tr>
+                <tr><td class="answer">有效利用储备</td><td class="answer">储备使用</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+</div><!-- end sec-detail -->
+
+</div><!-- end #main -->
+
+<script>
+/* Nav tabs */
+document.querySelectorAll('#nav .nav-tab').forEach(function(tab){
+    tab.addEventListener('click',function(){
+        var target=this.getAttribute('data-section');
+        document.querySelectorAll('#nav .nav-tab').forEach(function(t){t.classList.remove('active')});
+        this.classList.add('active');
+        document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active')});
+        var sec=document.getElementById('sec-'+target);
+        if(sec)sec.classList.add('active');
+    });
+});
+
+/* Test mode */
+document.getElementById('testModeToggle').addEventListener('change',function(){
+    if(this.checked){
+        document.body.classList.add('test-mode');
+    }else{
+        document.body.classList.remove('test-mode');
+        document.querySelectorAll('.answer.revealed').forEach(function(el){el.classList.remove('revealed')});
+    }
+});
+document.addEventListener('click',function(e){
+    if(!document.body.classList.contains('test-mode'))return;
+    if(e.target.classList.contains('answer'))e.target.classList.toggle('revealed');
+});
+
+/* Domain card toggle */
+function toggleDomain(header){
+    var card=header.parentElement;
+    card.classList.toggle('open');
+}
+
+/* Sub-tabs */
+document.querySelectorAll('.sub-tab').forEach(function(tab){
+    tab.addEventListener('click',function(){
+        var domain=this.parentElement.getAttribute('data-domain');
+        var sub=this.getAttribute('data-sub');
+        this.parentElement.querySelectorAll('.sub-tab').forEach(function(t){t.classList.remove('active')});
+        this.classList.add('active');
+        document.querySelectorAll('#d'+domain+'-goal,#d'+domain+'-points,#d'+domain+'-check').forEach(function(c){c.classList.remove('active')});
+        var target=document.getElementById('d'+domain+'-'+sub);
+        if(target)target.classList.add('active');
+    });
+});
+
+/* Overview card click → go detail */
+function goDetail(num){
+    document.querySelectorAll('#nav .nav-tab').forEach(function(t){t.classList.remove('active')});
+    document.querySelector('#nav .nav-tab[data-section="detail"]').classList.add('active');
+    document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active')});
+    document.getElementById('sec-detail').classList.add('active');
+    var card=document.getElementById('domain-'+num);
+    if(card&&!card.classList.contains('open'))card.classList.add('open');
+    card.scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+
+</body>
+</html>

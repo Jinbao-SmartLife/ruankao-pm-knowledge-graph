@@ -3,9 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITTO总览 - 软考知识图谱</title>
+    <title>ITTO - 软考知识图谱</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/itto.css">
+    <style>
+    .test-toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);cursor:pointer;user-select:none}
+    .test-toggle input{display:none}
+    .toggle-track{width:36px;height:20px;border-radius:10px;background:var(--bg-hover);position:relative;transition:var(--transition)}
+    .toggle-track::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--text-secondary);transition:var(--transition)}
+    .test-toggle input:checked+.toggle-track{background:var(--accent-orange)}
+    .test-toggle input:checked+.toggle-track::after{left:18px;background:#fff}
+    body.test-mode .answer{color:transparent!important;background:var(--bg-hover)!important;border-radius:4px;cursor:pointer}
+    body.test-mode .answer:hover{background:var(--bg-tertiary)!important}
+    body.test-mode .answer.revealed{color:inherit!important;background:transparent!important}
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -14,11 +25,18 @@
             <a href="index.html" class="logo" style="text-decoration:none;color:var(--text-primary)">软考知识图谱</a>
         </div>
         <div class="header-center" style="flex:0">
-            <span style="font-size:14px;font-weight:600;color:var(--accent-blue)">ITTO总览</span>
+            <span style="font-size:14px;font-weight:600;color:var(--accent-blue)">ITTO</span>
         </div>
         <div class="header-right">
-            <a href="index.html" class="nav-tab" style="text-decoration:none">矩阵视图</a>
-            <button class="nav-tab active">ITTO总览</button>
+            <a href="index.html" class="nav-tab" style="text-decoration:none">矩阵</a>
+            <a href="performance.html" class="nav-tab" style="text-decoration:none">绩效域</a>
+            <a href="itto.html" class="nav-tab active" style="text-decoration:none">ITTO</a>
+            <a href="memory.html" class="nav-tab" style="text-decoration:none">关联记忆</a>
+            <label class="test-toggle" style="margin-left:8px">
+                <span>测试</span>
+                <input type="checkbox" id="testModeToggle">
+                <span class="toggle-track"></span>
+            </label>
         </div>
     </header>
 
@@ -60,5 +78,15 @@
     <script src="data/itto-details.js"></script>
     <script src="js/data.js"></script>
     <script src="js/itto.js"></script>
+    <script>
+    document.getElementById('testModeToggle').addEventListener('change', function() {
+        document.body.classList.toggle('test-mode', this.checked);
+    });
+    document.addEventListener('click', function(e) {
+        if (document.body.classList.contains('test-mode') && e.target.classList.contains('answer')) {
+            e.target.classList.toggle('revealed');
+        }
+    });
+    </script>
 </body>
 </html>
