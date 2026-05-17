@@ -6,14 +6,14 @@
 <title>绩效域记忆 - 软考十大管理</title>
 <style>
 :root {
-    --bg-primary:#0d1117; --bg-secondary:#161b22; --bg-tertiary:#21262d;
-    --bg-card:#1c2128; --bg-hover:#30363d;
-    --text-primary:#e6edf3; --text-secondary:#8b949e; --text-muted:#6e7681;
-    --border-color:#30363d;
-    --accent-blue:#58a6ff; --accent-green:#3fb950; --accent-red:#f85149;
-    --accent-orange:#d29922; --accent-purple:#bc8cff; --accent-pink:#f778ba;
-    --accent-cyan:#56d4dd; --accent-yellow:#e3b341;
-    --radius:6px; --radius-lg:10px; --transition:0.2s ease;
+    --bg-primary:#ffffff; --bg-secondary:#f6f8fa; --bg-tertiary:#eef1f5;
+    --bg-card:#f6f8fa; --bg-hover:#e1e4e8;
+    --text-primary:#1f2328; --text-secondary:#656d76; --text-muted:#8b949e;
+    --border-color:#d0d7de;
+    --accent-blue:#0969da; --accent-green:#1a7f37; --accent-red:#cf222e;
+    --accent-orange:#9a6700; --accent-purple:#8250df; --accent-pink:#bf3989;
+    --accent-cyan:#0550ae; --accent-yellow:#9a6700;
+    --radius:4px; --radius-lg:6px; --transition:0.2s ease;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",-apple-system,sans-serif;font-size:14px;color:var(--text-primary);background:var(--bg-primary);height:100vh;overflow:hidden}
@@ -23,16 +23,16 @@ body{font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",-apple-system,sa
 .header-left{display:flex;align-items:center;gap:8px}
 .header-left a{text-decoration:none;color:var(--text-primary);font-size:16px;font-weight:600}
 .header-right{display:flex;align-items:center;gap:4px}
-.page-tab{padding:6px 16px;background:none;border:1px solid transparent;color:var(--text-secondary);font-size:13px;font-weight:500;cursor:pointer;border-radius:var(--radius);transition:all var(--transition);text-decoration:none;white-space:nowrap}
-.page-tab:hover{color:var(--text-primary);background:var(--bg-hover)}
-.page-tab.active{color:var(--accent-blue);background:rgba(88,166,255,0.1);border-color:rgba(88,166,255,0.3)}
+.page-tab{padding:6px 16px;background:none;border:none;color:var(--text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:color var(--transition);text-decoration:none;white-space:nowrap}
+.page-tab:hover{color:var(--text-primary)}
+.page-tab.active{color:var(--text-primary);font-weight:600}
 .test-toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);cursor:pointer;user-select:none}
 .test-toggle input{display:none}
-.toggle-track{width:36px;height:20px;border-radius:10px;background:var(--bg-hover);position:relative;transition:var(--transition)}
-.toggle-track::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--text-secondary);transition:var(--transition)}
+.toggle-track{width:32px;height:18px;border-radius:4px;background:var(--bg-hover);position:relative;transition:var(--transition)}
+.toggle-track::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:3px;background:var(--text-secondary);transition:var(--transition)}
 .test-toggle input:checked+.toggle-track{background:var(--accent-orange)}
-.test-toggle input:checked+.toggle-track::after{left:18px;background:#fff}
-body.test-mode .answer{color:transparent!important;background:var(--bg-hover)!important;border-radius:4px;cursor:pointer;transition:none}
+.test-toggle input:checked+.toggle-track::after{left:16px;background:#fff}
+body.test-mode .answer{color:transparent!important;background:var(--bg-hover)!important;border-radius:3px;cursor:pointer}
 body.test-mode .answer:hover{background:var(--bg-tertiary)!important}
 body.test-mode .answer.revealed{color:inherit!important;background:transparent!important}
 
@@ -52,12 +52,12 @@ body.test-mode .answer.revealed{color:inherit!important;background:transparent!i
 .overview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
 @media(max-width:900px){.overview-grid{grid-template-columns:repeat(2,1fr)}}
 .overview-card{background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:14px;cursor:pointer;transition:var(--transition);position:relative}
-.overview-card:hover{border-color:var(--accent-blue);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+.overview-card:hover{border-color:var(--accent-blue)}
 .overview-card .num{position:absolute;top:8px;right:10px;font-size:28px;font-weight:800;color:var(--bg-hover);line-height:1}
 .overview-card .oc-title{font-size:14px;font-weight:600;margin-bottom:6px}
 .overview-card .oc-mnemonic{font-size:12px;color:var(--accent-orange);margin-bottom:4px}
 .overview-card .oc-exam{font-size:11px;color:var(--accent-cyan)}
-.overview-card.c1 .oc-title{color:#f97583}.overview-card.c2 .oc-title{color:var(--accent-blue)}
+.overview-card.c1 .oc-title{color:#cf222e}.overview-card.c2 .oc-title{color:var(--accent-blue)}
 .overview-card.c3 .oc-title{color:var(--accent-purple)}.overview-card.c4 .oc-title{color:var(--accent-green)}
 .overview-card.c5 .oc-title{color:var(--accent-orange)}.overview-card.c6 .oc-title{color:var(--accent-cyan)}
 .overview-card.c7 .oc-title{color:var(--accent-pink)}.overview-card.c8 .oc-title{color:var(--accent-yellow)}
@@ -70,7 +70,7 @@ body.test-mode .answer.revealed{color:inherit!important;background:transparent!i
 .domain-header .dh-num{font-size:20px;font-weight:800;color:var(--bg-hover);min-width:28px}
 .domain-header .dh-title{font-size:16px;font-weight:600}
 .domain-header .dh-mnemonic{font-size:13px;color:var(--accent-orange);margin-left:8px}
-.domain-header .dh-exam{font-size:11px;color:var(--accent-cyan);margin-left:6px;background:rgba(86,212,221,0.1);padding:1px 8px;border-radius:3px}
+.domain-header .dh-exam{font-size:11px;color:var(--accent-cyan);margin-left:6px;background:rgba(5,80,174,0.1);padding:1px 8px;border-radius:3px}
 .domain-header .dh-toggle{font-size:12px;color:var(--text-muted);transition:var(--transition)}
 .domain-card.open .dh-toggle{transform:rotate(180deg)}
 .domain-body{display:none;padding:0 20px 20px}
@@ -88,7 +88,7 @@ body.test-mode .answer.revealed{color:inherit!important;background:transparent!i
 .goal-list{list-style:none;padding:0}
 .goal-list li{padding:10px 14px;margin-bottom:6px;background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border-color);font-size:13px;line-height:1.6;display:flex;align-items:flex-start;gap:8px}
 .goal-list .g-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--bg-hover);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--text-secondary)}
-.mnemonic-block{padding:10px 14px;margin-bottom:12px;background:rgba(210,153,34,0.08);border-radius:var(--radius);border-left:3px solid var(--accent-orange);font-size:13px;color:var(--accent-orange)}
+.mnemonic-block{padding:10px 14px;margin-bottom:12px;background:rgba(154,103,0,0.08);border-radius:var(--radius);border-left:3px solid var(--accent-orange);font-size:13px;color:var(--accent-orange)}
 .mnemonic-block strong{color:var(--accent-orange)}
 
 /* Key points */
@@ -113,7 +113,7 @@ body.test-mode .answer.revealed{color:inherit!important;background:transparent!i
 .summary-block .sb-body{font-size:12px;color:var(--text-secondary);line-height:1.8}
 
 /* Colors per domain */
-.domain-card.d1 .domain-header{border-left-color:#f97583}.domain-card.d2 .domain-header{border-left-color:var(--accent-blue)}
+.domain-card.d1 .domain-header{border-left-color:#cf222e}.domain-card.d2 .domain-header{border-left-color:var(--accent-blue)}
 .domain-card.d3 .domain-header{border-left-color:var(--accent-purple)}.domain-card.d4 .domain-header{border-left-color:var(--accent-green)}
 .domain-card.d5 .domain-header{border-left-color:var(--accent-orange)}.domain-card.d6 .domain-header{border-left-color:var(--accent-cyan)}
 .domain-card.d7 .domain-header{border-left-color:var(--accent-pink)}.domain-card.d8 .domain-header{border-left-color:var(--accent-yellow)}
@@ -214,7 +214,7 @@ body.test-mode .answer.revealed{color:inherit!important;background:transparent!i
             </tr></thead>
             <tbody>
                 <tr style="border-bottom:1px solid var(--border-color);">
-                    <td style="padding:8px;color:#f97583;font-weight:600;vertical-align:top;">1 干系人</td>
+                    <td style="padding:8px;color:#cf222e;font-weight:600;vertical-align:top;">1 干系人</td>
                     <td style="padding:8px;color:var(--accent-orange);vertical-align:top;" class="answer">支持反对高效认同</td>
                     <td style="padding:8px;vertical-align:top;" class="answer">高效工作关系 · 认同目标 · 支持者满意获益 · 反对者无负面影响</td>
                     <td style="padding:8px;vertical-align:top;" class="answer"><strong>别理分级参见</strong><br>识别(影响方向)→理解分析(参与评估矩阵)→优先级排序(权力利益方格)→参与(人际技能)→监督</td>

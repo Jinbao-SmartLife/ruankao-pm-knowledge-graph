@@ -28,21 +28,18 @@
 /* 左下: ITTO详情象限 */
 .itto-quadrant.detail-quadrant {
     padding: 12px 16px;
-    background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(88,166,255,0.02) 100%);
 }
 
-/* 右上: 输入与输出象限 - 蓝色调 */
+/* 右上: 输入与输出象限 */
 .itto-quadrant.doc-quadrant {
     padding: 10px 12px;
-    background: linear-gradient(135deg, rgba(88,166,255,0.05) 0%, var(--bg-primary) 100%);
-    border-top: 2px solid rgba(88,166,255,0.3);
+    border-top: 2px solid rgba(9,105,218,0.3);
 }
 
-/* 右下: 工具与技术象限 - 琥珀色调 */
+/* 右下: 工具与技术象限 */
 .itto-quadrant.tool-quadrant {
     padding: 10px 12px;
-    background: linear-gradient(135deg, rgba(210,153,34,0.05) 0%, var(--bg-primary) 100%);
-    border-top: 2px solid rgba(210,153,34,0.3);
+    border-top: 2px solid rgba(154,103,0,0.3);
 }
 
 /* 右侧象限共用（向后兼容） */
@@ -74,11 +71,11 @@
 }
 
 /* 过程组列头颜色区分 */
-.itto-matrix thead th:nth-child(2) { color: #4fc3f7; background: rgba(79,195,247,0.08); }
-.itto-matrix thead th:nth-child(3) { color: #81c784; background: rgba(129,199,132,0.08); }
-.itto-matrix thead th:nth-child(4) { color: #ffb74d; background: rgba(255,183,77,0.08); }
-.itto-matrix thead th:nth-child(5) { color: #e57373; background: rgba(229,115,115,0.08); }
-.itto-matrix thead th:nth-child(6) { color: #ba68c8; background: rgba(186,104,200,0.08); }
+.itto-matrix thead th:nth-child(2) { color: #0550ae; background: rgba(9,105,218,0.06); }
+.itto-matrix thead th:nth-child(3) { color: #116329; background: rgba(26,127,55,0.06); }
+.itto-matrix thead th:nth-child(4) { color: #8a6914; background: rgba(154,103,0,0.06); }
+.itto-matrix thead th:nth-child(5) { color: #a40e26; background: rgba(207,34,46,0.06); }
+.itto-matrix thead th:nth-child(6) { color: #6e40c9; background: rgba(130,80,223,0.06); }
 
 .itto-matrix tbody td:first-child {
     padding: 4px 6px;
@@ -143,8 +140,7 @@
 
 .itto-matrix .cell-process.selected {
     border-color: var(--accent-blue);
-    background: rgba(88,166,255,0.2);
-    box-shadow: 0 0 0 1px rgba(88,166,255,0.3);
+    background: rgba(9,105,218,0.2);
 }
 
 .itto-matrix tbody tr:hover .cell-process {
@@ -166,10 +162,8 @@
 
 .detail-header {
     margin-bottom: 10px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border-color);
-    background: linear-gradient(90deg, rgba(88,166,255,0.04), transparent);
     padding: 10px 12px;
+    border-bottom: 1px solid var(--border-color);
     border-radius: 4px;
 }
 .detail-process-name {
@@ -191,24 +185,24 @@
     line-height: 1.5;
     margin-top: 4px;
     padding: 6px 10px;
-    background: rgba(88,166,255,0.05);
-    border-left: 2px solid rgba(88,166,255,0.3);
+    background: rgba(9,105,218,0.05);
+    border-left: 2px solid rgba(9,105,218,0.3);
     border-radius: var(--radius);
 }
 
 .detail-purpose {
     font-size: 11.5px;
-    color: #a8d8a8;
+    color: #116329;
     line-height: 1.5;
     margin-top: 4px;
     padding: 4px 10px;
-    background: rgba(63,185,80,0.05);
-    border-left: 2px solid rgba(63,185,80,0.3);
+    background: rgba(26,127,55,0.05);
+    border-left: 2px solid rgba(26,127,55,0.3);
     border-radius: 3px;
 }
 .detail-purpose-label {
     font-weight: 600;
-    color: #7ec97e;
+    color: #1a7f37;
 }
 
 .detail-frequency {
@@ -220,7 +214,7 @@
     margin-top: 4px;
     padding: 2px 8px;
     background: var(--bg-tertiary);
-    border-radius: 10px;
+    border-radius: 4px;
 }
 .freq-dot {
     width: 8px;
@@ -252,9 +246,9 @@
     border-bottom: 1px solid var(--border-color);
     background: var(--bg-tertiary);
 }
-.itto-col-header.inputs { color: #58a6ff; border-top: 2px solid #58a6ff; background: rgba(88,166,255,0.08); }
-.itto-col-header.tools  { color: #d29922; border-top: 2px solid #d29922; background: rgba(210,153,34,0.08); }
-.itto-col-header.outputs { color: #3fb950; border-top: 2px solid #3fb950; background: rgba(63,185,80,0.08); }
+.itto-col-header.inputs { color: #0969da; border-top: 2px solid #0969da; background: rgba(9,105,218,0.08); }
+.itto-col-header.tools  { color: #9a6700; border-top: 2px solid #9a6700; background: rgba(154,103,0,0.08); }
+.itto-col-header.outputs { color: #1a7f37; border-top: 2px solid #1a7f37; background: rgba(26,127,55,0.08); }
 
 .itto-col-body {
     padding: 6px 8px;
@@ -265,9 +259,9 @@
 }
 
 /* 列体颜色区分 */
-.itto-col-inputs .itto-col-body { background: rgba(88,166,255,0.03); }
-.itto-col-tools .itto-col-body  { background: rgba(210,153,34,0.03); }
-.itto-col-outputs .itto-col-body { background: rgba(63,185,80,0.03); }
+.itto-col-inputs .itto-col-body { background: rgba(9,105,218,0.03); }
+.itto-col-tools .itto-col-body  { background: rgba(154,103,0,0.03); }
+.itto-col-outputs .itto-col-body { background: rgba(26,127,55,0.03); }
 
 .itto-col-item {
     display: flex;
@@ -307,18 +301,18 @@
 
 /* 输入与输出 - 蓝色标题 */
 .section-title-doc {
-    color: #58a6ff;
-    border-bottom-color: rgba(88,166,255,0.3);
+    color: #0969da;
+    border-bottom-color: rgba(9,105,218,0.3);
     padding-left: 10px;
-    border-left: 3px solid #58a6ff;
+    border-left: 3px solid #0969da;
 }
 
 /* 工具与技术 - 琥珀色标题 */
 .section-title-tool {
-    color: #d29922;
-    border-bottom-color: rgba(210,153,34,0.3);
+    color: #9a6700;
+    border-bottom-color: rgba(154,103,0,0.3);
     padding-left: 10px;
-    border-left: 3px solid #d29922;
+    border-left: 3px solid #9a6700;
 }
 
 /* 一级分组两列布局 */
@@ -339,12 +333,12 @@
 
 /* 文档分组 - 蓝色左边框 */
 .doc-quadrant .fold-group {
-    border-left: 2px solid rgba(88,166,255,0.4);
+    border-left: 2px solid rgba(9,105,218,0.4);
 }
 
 /* 工具分组 - 琥珀色左边框 */
 .tool-quadrant .fold-group {
-    border-left: 2px solid rgba(210,153,34,0.4);
+    border-left: 2px solid rgba(154,103,0,0.4);
 }
 
 .fold-header {
@@ -360,12 +354,12 @@
 
 /* 文档分组标题 - 蓝色图标 */
 .doc-quadrant .fold-arrow {
-    color: #58a6ff;
+    color: #0969da;
 }
 
 /* 工具分组标题 - 琥珀色图标 */
 .tool-quadrant .fold-arrow {
-    color: #d29922;
+    color: #9a6700;
 }
 .fold-header:hover {
     background: var(--bg-hover);
@@ -429,13 +423,12 @@
 }
 
 .itto-item.highlight {
-    background: rgba(88,166,255,0.12);
+    background: rgba(9,105,218,0.12);
     border-left: 2px solid var(--accent-blue);
     padding-left: 6px;
 }
 .itto-item.highlight .itto-item-dot {
     background: var(--accent-blue);
-    box-shadow: 0 0 3px var(--accent-blue);
 }
 
 .itto-item.dim {
@@ -464,13 +457,13 @@
     flex-shrink: 0;
     line-height: 16px;
 }
-.itto-item-role.input-only { background: rgba(88,166,255,0.2); color: #58a6ff; }
-.itto-item-role.output-only { background: rgba(63,185,80,0.2); color: #3fb950; }
-.itto-item-role.both { background: rgba(210,153,34,0.2); color: #d29922; }
+.itto-item-role.input-only { background: rgba(9,105,218,0.2); color: #0969da; }
+.itto-item-role.output-only { background: rgba(26,127,55,0.2); color: #1a7f37; }
+.itto-item-role.both { background: rgba(154,103,0,0.2); color: #9a6700; }
 
 /* 条目选中态 */
 .itto-item.active {
-    background: rgba(88,166,255,0.15);
+    background: rgba(9,105,218,0.15);
     border-left: 2px solid var(--accent-blue);
 }
 
@@ -479,7 +472,7 @@
     margin-bottom: 8px;
     padding-bottom: 6px;
     border-bottom: 1px solid var(--border-color);
-    background: linear-gradient(90deg, rgba(88,166,255,0.04), transparent);
+    background: linear-gradient(90deg, rgba(9,105,218,0.04), transparent);
     padding: 10px 12px;
     border-radius: 4px;
 }
@@ -494,8 +487,8 @@
     color: var(--text-secondary);
     line-height: 1.5;
     padding: 4px 8px;
-    background: rgba(88,166,255,0.05);
-    border-left: 2px solid rgba(88,166,255,0.2);
+    background: rgba(9,105,218,0.05);
+    border-left: 2px solid rgba(9,105,218,0.2);
     border-radius: 3px;
     margin-top: 4px;
 }
@@ -522,7 +515,6 @@
 .item-detail-proc:hover {
     background: var(--bg-hover);
     border-color: var(--accent-blue);
-    box-shadow: 0 0 0 1px rgba(88,166,255,0.1);
 }
 .item-detail-proc .proc-color-bar {
     width: 3px;
@@ -549,17 +541,17 @@
     flex-shrink: 0;
     margin-left: 4px;
 }
-.item-detail-proc .proc-role.as-input { background: rgba(88,166,255,0.2); color: #58a6ff; }
-.item-detail-proc .proc-role.as-output { background: rgba(63,185,80,0.2); color: #3fb950; }
-.item-detail-proc .proc-role.as-tool { background: rgba(210,153,34,0.2); color: #d29922; }
-.item-detail-proc .proc-role.as-both { background: rgba(210,153,34,0.2); color: #d29922; }
+.item-detail-proc .proc-role.as-input { background: rgba(9,105,218,0.2); color: #0969da; }
+.item-detail-proc .proc-role.as-output { background: rgba(26,127,55,0.2); color: #1a7f37; }
+.item-detail-proc .proc-role.as-tool { background: rgba(154,103,0,0.2); color: #9a6700; }
+.item-detail-proc .proc-role.as-both { background: rgba(154,103,0,0.2); color: #9a6700; }
 
 /* ===== 论文写作素材 ===== */
 .detail-essay-section {
     margin-top: 10px;
     padding-top: 8px;
-    border-top: 1px solid rgba(163,113,247,0.2);
-    background: linear-gradient(180deg, rgba(163,113,247,0.04) 0%, transparent 100%);
+    border-top: 1px solid rgba(130,80,223,0.2);
+    background: linear-gradient(180deg, rgba(130,80,223,0.04) 0%, transparent 100%);
     border-radius: 4px;
     padding: 10px;
 }
@@ -567,11 +559,11 @@
 .detail-essay-title {
     font-size: 12px;
     font-weight: 700;
-    color: #a371f7;
+    color: #8250df;
     margin-bottom: 8px;
     letter-spacing: 0.3px;
     padding-left: 10px;
-    border-left: 3px solid #a371f7;
+    border-left: 3px solid #8250df;
 }
 
 .detail-essay-block {
@@ -581,7 +573,7 @@
 .detail-essay-label {
     font-size: 10px;
     font-weight: 600;
-    color: #c9a5f7;
+    color: #b394f0;
     margin-bottom: 2px;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -592,16 +584,16 @@
     line-height: 1.5;
     color: var(--text-secondary);
     padding: 4px 8px;
-    background: rgba(163,113,247,0.06);
+    background: rgba(130,80,223,0.06);
     border-radius: 3px;
-    border-left: 1px solid rgba(163,113,247,0.15);
+    border-left: 1px solid rgba(130,80,223,0.15);
 }
 
 .detail-essay-framework {
     padding: 4px 8px;
-    background: rgba(163,113,247,0.06);
+    background: rgba(130,80,223,0.06);
     border-radius: 3px;
-    border-left: 2px solid #a371f7;
+    border-left: 2px solid #8250df;
 }
 
 .framework-step {
@@ -613,7 +605,7 @@
 
 .framework-step::before {
     content: "→ ";
-    color: var(--accent-purple, #a371f7);
+    color: var(--accent-purple, #8250df);
     font-weight: 600;
 }
 

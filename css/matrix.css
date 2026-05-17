@@ -55,8 +55,6 @@
 .matrix .cell-process:hover {
     background: var(--bg-hover);
     border-color: var(--accent-blue);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow);
 }
 
 /* Process cell content */
@@ -85,7 +83,7 @@
     bottom: 4px;
     right: 4px;
 }
-.cell-heat.high { background: var(--accent-red); box-shadow: 0 0 4px var(--accent-red); }
+.cell-heat.high { background: var(--accent-red); }
 .cell-heat.medium { background: var(--accent-orange); }
 
 /* Empty cells */
@@ -124,7 +122,6 @@
 .matrix .cell-process.selected {
     border-color: var(--accent-blue);
     background: rgba(88,166,255,0.15);
-    box-shadow: 0 0 0 2px rgba(88,166,255,0.2);
 }
 
 /* Performance Domain Grid */
@@ -147,12 +144,9 @@
 .perf-domain-card:hover {
     border-color: var(--accent-blue);
     background: var(--bg-hover);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
 }
 .perf-domain-card.selected {
     border-color: var(--accent-blue);
-    box-shadow: 0 0 0 2px rgba(88,166,255,0.2);
 }
 .pd-card-accent {
     width: 4px;
@@ -196,8 +190,6 @@
 }
 .perf-detail-card:hover {
     border-color: var(--accent-blue);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
 }
 .perf-detail-card .pd-card-accent {
     width: 4px;

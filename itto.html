@@ -9,11 +9,11 @@
     <style>
     .test-toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);cursor:pointer;user-select:none}
     .test-toggle input{display:none}
-    .toggle-track{width:36px;height:20px;border-radius:10px;background:var(--bg-hover);position:relative;transition:var(--transition)}
-    .toggle-track::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--text-secondary);transition:var(--transition)}
+    .toggle-track{width:32px;height:18px;border-radius:4px;background:var(--bg-hover);position:relative;transition:var(--transition)}
+    .toggle-track::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:3px;background:var(--text-secondary);transition:var(--transition)}
     .test-toggle input:checked+.toggle-track{background:var(--accent-orange)}
-    .test-toggle input:checked+.toggle-track::after{left:18px;background:#fff}
-    body.test-mode .answer{color:transparent!important;background:var(--bg-hover)!important;border-radius:4px;cursor:pointer}
+    .test-toggle input:checked+.toggle-track::after{left:16px;background:#fff}
+    body.test-mode .answer{color:transparent!important;background:var(--bg-hover)!important;border-radius:3px;cursor:pointer}
     body.test-mode .answer:hover{background:var(--bg-tertiary)!important}
     body.test-mode .answer.revealed{color:inherit!important;background:transparent!important}
     </style>

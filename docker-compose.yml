@@ -1,0 +1,12 @@
+name: pmweb
+
+services:
+  pmweb:
+    image: nginx:alpine
+    container_name: nginx-pmweb
+    ports:
+      - "18081:80"
+    volumes:
+      - ./:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
