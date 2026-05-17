@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>关联记忆 - 软考十大管理</title>
+<style>
+:root {
+    --bg-primary: #0d1117;
+    --bg-secondary: #161b22;
+    --bg-tertiary: #21262d;
+    --bg-card: #1c2128;
+    --bg-hover: #30363d;
+    --text-primary: #e6edf3;
+    --text-secondary: #8b949e;
+    --text-muted: #6e7681;
+    --border-color: #30363d;
+    --accent-blue: #58a6ff;
+    --accent-green: #3fb950;
+    --accent-red: #f85149;
+    --accent-orange: #d29922;
+    --accent-purple: #bc8cff;
+    --accent-pink: #f778ba;
+    --accent-cyan: #56d4dd;
+    --shadow: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
+    --radius: 6px;
+    --radius-lg: 10px;
+    --transition: 0.2s ease;
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    font-family: "PingFang SC","Microsoft YaHei","Noto Sans SC",-apple-system,BlinkMacSystemFont,sans-serif;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ===== Header ===== */
+#header {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 48px; padding: 0 20px;
+    background: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-color);
+    position: relative; z-index: 100;
+}
+#header h1 { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+#header .subtitle { font-size: 12px; color: var(--text-secondary); margin-left: 12px; }
+
+/* Test mode toggle */
+.test-toggle {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--text-secondary); cursor: pointer;
+    user-select: none;
+}
+.test-toggle input { display: none; }
+.test-toggle .toggle-track {
+    width: 36px; height: 20px; border-radius: 10px;
+    background: var(--bg-hover); position: relative; transition: var(--transition);
+}
+.test-toggle .toggle-track::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--text-secondary); transition: var(--transition);
+}
+.test-toggle input:checked + .toggle-track { background: var(--accent-orange); }
+.test-toggle input:checked + .toggle-track::after { left: 18px; background: #fff; }
+body.test-mode .answer { color: transparent !important; text-shadow: none; background: var(--bg-hover) !important; border-radius: 4px; cursor: pointer; }
+body.test-mode .answer:hover { background: var(--bg-tertiary) !important; }
+body.test-mode .answer.revealed { color: var(--text-primary) !important; background: transparent !important; }
+
+/* ===== Nav tabs ===== */
+#nav {
+    display: flex; gap: 0; padding: 0 16px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+.nav-tab {
+    padding: 10px 18px; font-size: 13px; font-weight: 500;
+    color: var(--text-secondary); cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: var(--transition); user-select: none;
+    white-space: nowrap;
+}
+.nav-tab:hover { color: var(--text-primary); }
+.nav-tab.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+
+/* ===== Main content ===== */
+#main {
+    height: calc(100vh - 48px - 41px);
+    overflow-y: auto; padding: 20px 24px;
+    scroll-behavior: smooth;
+}
+.section { display: none; }
+.section.active { display: block; }
+
+/* ===== Section titles ===== */
+.section-title {
+    font-size: 18px; font-weight: 700; margin-bottom: 16px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--border-color);
+}
+.section-desc { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; }
+
+/* ===== Flow chain ===== */
+.flow-chain {
+    background: var(--bg-secondary); border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px;
+}
+.flow-chain-title {
+    font-size: 15px; font-weight: 600; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+}
+.flow-chain-title .tag {
+    font-size: 11px; padding: 2px 8px; border-radius: 3px;
+    font-weight: 500;
+}
+.flow-row {
+    display: flex; align-items: center; gap: 0;
+    overflow-x: auto; padding: 8px 0;
+}
+.flow-node {
+    flex-shrink: 0; text-align: center; min-width: 130px;
+}
+.flow-box {
+    padding: 10px 12px; border-radius: var(--radius);
+    border: 1.5px solid var(--border-color);
+    background: var(--bg-card); line-height: 1.4;
+    transition: var(--transition); cursor: default;
+    font-size: 13px;
+}
+.flow-box:hover { border-color: var(--accent-blue); }
+.flow-box .label { font-weight: 600; margin-bottom: 2px; }
+.flow-box .detail { font-size: 11px; color: var(--text-secondary); }
+.flow-box.highlight { border-color: var(--accent-blue); box-shadow: 0 0 12px rgba(88,166,255,0.15); }
+
+.flow-box.style-input { border-color: var(--accent-purple); background: rgba(188,140,255,0.08); }
+.flow-box.style-process { border-color: var(--accent-blue); background: rgba(88,166,255,0.08); }
+.flow-box.style-output { border-color: var(--accent-green); background: rgba(63,185,80,0.08); }
+.flow-box.style-data { border-color: var(--accent-pink); background: rgba(247,120,186,0.08); }
+.flow-box.style-report { border-color: var(--accent-cyan); background: rgba(86,212,221,0.08); }
+
+.flow-arrow {
+    flex-shrink: 0; width: 40px; text-align: center;
+    color: var(--text-muted); font-size: 18px; line-height: 1;
+}
+.flow-arrow .arrow-label { display: block; font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+/* ===== Tool share cards ===== */
+.tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px; margin-bottom: 20px;
+}
+.tool-card {
+    background: var(--bg-secondary); border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg); overflow: hidden;
+    transition: var(--transition);
+}
+.tool-card:hover { border-color: var(--accent-blue); }
+.tool-card-header {
+    padding: 14px 16px; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.tool-card-header:hover { background: var(--bg-tertiary); }
+.tool-card-title { font-size: 14px; font-weight: 600; }
+.tool-card-title .mnemonic {
+    font-size: 12px; color: var(--accent-orange); margin-left: 8px;
+    font-weight: 500;
+}
+.tool-card-count {
+    font-size: 11px; color: var(--text-muted);
+    background: var(--bg-hover); padding: 2px 8px; border-radius: 10px;
+}
+.tool-card-body {
+    padding: 0 16px 14px; display: none;
+}
+.tool-card.open .tool-card-body { display: block; }
+.tool-card.open .tool-card-header { border-bottom: 1px solid var(--border-color); }
+
+.tool-list { list-style: none; padding: 0; }
+.tool-list li {
+    padding: 8px 0; border-bottom: 1px solid var(--border-color);
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 8px;
+}
+.tool-list li:last-child { border-bottom: none; }
+.tool-list .proc-name { font-size: 13px; font-weight: 500; }
+.tool-list .proc-note { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+.tool-list .proc-tag {
+    font-size: 10px; padding: 1px 6px; border-radius: 3px;
+    white-space: nowrap; flex-shrink: 0;
+}
+.proc-tag.ka { background: rgba(88,166,255,0.15); color: var(--accent-blue); }
+.proc-tag.pg { background: rgba(188,140,255,0.15); color: var(--accent-purple); }
+
+/* ===== Pattern card ===== */
+.pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 16px; margin-bottom: 20px;
+}
+.pattern-card {
+    background: var(--bg-secondary); border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg); padding: 18px;
+}
+.pattern-card-title {
+    font-size: 15px; font-weight: 600; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+}
+.pattern-row {
+    display: flex; gap: 12px; margin-bottom: 10px; align-items: flex-start;
+}
+.pattern-label {
+    font-size: 12px; color: var(--text-muted); min-width: 50px;
+    padding-top: 4px; flex-shrink: 0;
+}
+.pattern-content { flex: 1; }
+.chip {
+    display: inline-block; font-size: 12px; padding: 3px 10px;
+    border-radius: 12px; margin: 2px 4px 2px 0;
+    border: 1px solid var(--border-color); background: var(--bg-card);
+    transition: var(--transition);
+}
+.chip.blue { border-color: rgba(88,166,255,0.3); color: var(--accent-blue); background: rgba(88,166,255,0.08); }
+.chip.green { border-color: rgba(63,185,80,0.3); color: var(--accent-green); background: rgba(63,185,80,0.08); }
+.chip.red { border-color: rgba(248,81,73,0.3); color: var(--accent-red); background: rgba(248,81,73,0.08); }
+.chip.purple { border-color: rgba(188,140,255,0.3); color: var(--accent-purple); background: rgba(188,140,255,0.08); }
+.chip.orange { border-color: rgba(210,153,34,0.3); color: var(--accent-orange); background: rgba(210,153,34,0.08); }
+.chip.pink { border-color: rgba(247,120,186,0.3); color: var(--accent-pink); background: rgba(247,120,186,0.08); }
+.chip.cyan { border-color: rgba(86,212,221,0.3); color: var(--accent-cyan); background: rgba(86,212,221,0.08); }
+
+.pattern-note {
+    font-size: 12px; color: var(--accent-orange);
+    margin-top: 8px; padding: 8px 12px;
+    background: rgba(210,153,34,0.08); border-radius: var(--radius);
+    border-left: 3px solid var(--accent-orange);
+}
+.pattern-note strong { color: var(--accent-orange); }
+
+/* ===== Compare panels ===== */
+.compare-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 16px; margin-bottom: 20px;
+}
+.compare-card {
+    background: var(--bg-secondary); border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg); overflow: hidden;
+}
+.compare-title {
+    padding: 14px 16px; font-size: 15px; font-weight: 600;
+    background: var(--bg-tertiary); border-bottom: 1px solid var(--border-color);
+}
+.compare-body { padding: 16px; }
+.compare-cols {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border: 1px solid var(--border-color); border-radius: var(--radius);
+    overflow: hidden;
+}
+.compare-col { padding: 12px; }
+.compare-col:first-child { border-right: 1px solid var(--border-color); }
+.compare-col-header {
+    font-size: 13px; font-weight: 600; margin-bottom: 8px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--border-color);
+    text-align: center;
+}
+.compare-col-header.blue { color: var(--accent-blue); }
+.compare-col-header.green { color: var(--accent-green); }
+.compare-col ul { list-style: none; padding: 0; }
+.compare-col li {
+    padding: 4px 0; font-size: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+.compare-col li:last-child { border-bottom: none; }
+
+.compare-list { list-style: none; padding: 0; margin-top: 12px; }
+.compare-list li {
+    padding: 10px 12px; margin-bottom: 6px;
+    background: var(--bg-card); border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    font-size: 13px;
+}
+.compare-list li strong { color: var(--accent-blue); }
+.compare-list .note { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+/* ===== Rule cards ===== */
+.rule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px; margin-bottom: 20px;
+}
+.rule-card {
+    background: var(--bg-secondary); border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg); padding: 16px;
+}
+.rule-card-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+.rule-card-body { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+.rule-card-body strong { color: var(--text-primary); }
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+    .tool-grid { grid-template-columns: 1fr; }
+    .pattern-grid { grid-template-columns: 1fr; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .rule-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div id="header">
+    <div style="display:flex;align-items:center;gap:8px;">
+        <a href="index.html" style="text-decoration:none;color:var(--text-primary);font-size:14px;font-weight:600;">软考知识图谱</a>
+        <span style="color:var(--text-muted);">/</span>
+        <h1 style="font-size:14px;font-weight:600;">关联记忆</h1>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+        <div style="display:flex;gap:0;">
+            <a href="index.html" class="nav-tab" style="text-decoration:none;font-size:12px;padding:4px 10px;border-bottom:2px solid transparent;">首页</a>
+            <a href="itto.html" class="nav-tab" style="text-decoration:none;font-size:12px;padding:4px 10px;border-bottom:2px solid transparent;">ITTO总览</a>
+            <span class="nav-tab" style="font-size:12px;padding:4px 10px;border-bottom:2px solid var(--accent-blue);color:var(--accent-blue);cursor:default;">关联记忆</span>
+        </div>
+        <label class="test-toggle">
+            <span>测试模式</span>
+            <input type="checkbox" id="testModeToggle">
+            <span class="toggle-track"></span>
+        </label>
+    </div>
+</div>
+
+<!-- Nav -->
+<div id="nav">
+    <div class="nav-tab active" data-section="flow">流转链路</div>
+    <div class="nav-tab" data-section="tools">工具共用</div>
+    <div class="nav-tab" data-section="patterns">分组规律</div>
+    <div class="nav-tab" data-section="compare">对比速记</div>
+</div>
+
+<!-- Main -->
+<div id="main">
+
+<!-- ==================== Section 1: 流转链路 ==================== -->
+<div class="section active" id="sec-flow">
+    <div class="section-title">流转链路</div>
+    <div class="section-desc">核心流转路径：同一个成果在不同过程间传递，理解上下游关系。</div>
+
+    <!-- 工作绩效三阶段 -->
+    <div class="flow-chain">
+        <div class="flow-chain-title">
+            <span>工作绩效三阶段流转</span>
+            <span class="tag" style="background:rgba(247,120,186,0.15);color:var(--accent-pink)">核心链路</span>
+        </div>
+        <div class="flow-row">
+            <div class="flow-node">
+                <div class="flow-box style-process">
+                    <div class="label">指导与管理项目工作</div>
+                    <div class="detail">执行过程组</div>
+                </div>
+            </div>
+            <div class="flow-arrow">
+                <span>→</span>
+                <span class="arrow-label">输出</span>
+            </div>
+            <div class="flow-node">
+                <div class="flow-box style-data">
+                    <div class="label answer">工作绩效数据</div>
+                    <div class="detail">原始观测数据</div>
+                </div>
+            </div>
+            <div class="flow-arrow">
+                <span>→</span>
+                <span class="arrow-label">输入</span>
+            </div>
+            <div class="flow-node">
+                <div class="flow-box style-process">
+                    <div class="label answer">子监控过程组（10个）</div>
+                    <div class="detail">分析比较</div>
+                </div>
+            </div>
+            <div class="flow-arrow">
+                <span>→</span>
+                <span class="arrow-label">输出</span>
+            </div>
+            <div class="flow-node">
+                <div class="flow-box style-data">
+                    <div class="label answer">工作绩效信息</div>
+                    <div class="detail">分析后的信息</div>
+                </div>
+            </div>
+            <div class="flow-arrow">
+                <span>→</span>
+                <span class="arrow-label">输入</span>
+            </div>
+            <div class="flow-node">
+                <div class="flow-box style-process">
+                    <div class="label answer">监控项目工作</div>
+                    <div class="detail">总监控</div>
+                </div>
+            </div>
+            <div class="flow-arrow">
+                <span>→</span>
+                <span class="arrow-label">输出</span>
+            </div>
+            <div class="flow-node">
+                <div class="flow-box style-report">
+                    <div class="label answer">工作绩效报告</div>
+                    <div class="detail">汇总报告</div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top:12px;">
+            <span style="font-size:12px;color:var(--text-muted);">报告去向：</span>
+            <span class="chip orange">整体变更控制</span>
+            <span class="chip orange">监督风险</span>
+            <span class="chip orange">管理沟通</span>
+            <span class="chip orange">管理团队</span>
+            <span style="font-size:12px;color:var(--accent-orange);margin-left:8px;">口诀：狗团变疯</span>
+        </div>
+    </div>
+
+    <!-- 可交付成果链 -->
+    <div class="flow-chain">
+        <div class="flow-chain-title">
+            <span>可交付成果流转链</span>
+            <span class="tag" style="background:rgba(63,185,80,0.15);color:var(--accent-green)">质量控制链</span>
+        </div>
+        <div class="flow-row">
+            <div class="flow-node">
+                <div class="flow-box style-process">
+                    <div class="label">指导与管理项目工作</div>
+                    <div class="detail">执行过程组</div>
+                </div>
+            </div>
+            <div class="flow-arrow">
+                <span>→</span>
+                <span class="arrow-label answer">可交付成果</span>
+            </div>
+            <div class="flow-node">
+                <div class="flow-box style-process" style="border-color:var(--accent-blue);">
+                    <div class="label">质量控制 <span class="answer" style="font-size:11px;color:var(--accent-cyan);">（检查）</span></div>
+                    <div class="detail">工具：检查、测试/产品评估</div>
+                </div>
+            </div>
+            <div class="flow-arrow">
+                <span>→</span>
+                <span class="arrow-label answer">核实的可交付成果</span>
+            </div>
+            <div class="flow-node">
+                <div class="flow-box style-process" style="border-color:var(--accent-purple);">
+                    <div class="label">确认范围 <span class="answer" style="font-size:11px;color:var(--accent-cyan);">（检查）</span></div>
+                    <div class="detail">工具：检查、决策(投票)</div>
+                </div>
+            </div>
+            <div class="flow-arrow">
+                <span>→</span>
+                <span class="arrow-label answer">验收的可交付成果</span>
+            </div>
+            <div class="flow-node">
+                <div class="flow-box style-process" style="border-color:var(--accent-green);">
+                    <div class="label">结束项目或阶段</div>
+                    <div class="detail">收尾过程组</div>
+                </div>
+            </div>
+            <div class="flow-arrow">
+                <span>→</span>
+                <span class="arrow-label answer">最终成果移交</span>
+            </div>
+            <div class="flow-node">
+                <div class="flow-box style-report">
+                    <div class="label">✅ 完成</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 变更请求链 -->
+    <div class="flow-chain">
+        <div class="flow-chain-title">
+            <span>变更请求流转链</span>
+            <span class="tag" style="background:rgba(248,81,73,0.15);color:var(--accent-red)">变更控制</span>
+        </div>
+        <div class="flow-row">
+            <div class="flow-node" style="min-width:200px;">
+                <div class="flow-box" style="border-color:var(--accent-red);background:rgba(248,81,73,0.06);">
+                    <div class="label" style="color:var(--accent-red);">输出变更请求（多个过程）</div>
+                    <div class="detail answer" style="margin-top:4px;">
+                        识别干系人 · 规划过程(4个)<br>
+                        执行(除管理知识、管理沟通)<br>
+                        监控 + 子监控(除整体变更控制)
+                    </div>
+                </div>
+            </div>
+            <div class="flow-arrow">
+                <span>→</span>
+                <span class="arrow-label">输入</span>
+            </div>
+            <div class="flow-node">
+                <div class="flow-box style-process" style="border-color:var(--accent-red);background:rgba(248,81,73,0.08);">
+                    <div class="label">实施整体变更控制</div>
+                    <div class="detail">审查·批准·管理变更</div>
+                </div>
+            </div>
+            <div class="flow-arrow">
+                <span>→</span>
+                <span class="arrow-label answer">批准的变更请求</span>
+            </div>
+            <div class="flow-node" style="min-width:200px;">
+                <div class="flow-box" style="border-color:var(--accent-green);background:rgba(63,185,80,0.06);">
+                    <div class="label" style="color:var(--accent-green);">输入批准的变更请求</div>
+                    <div class="detail answer" style="margin-top:4px;">
+                        口诀：置彩礼<br>
+                        指导与管理工作 · 质量控制 · 采购控制
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top:10px;">
+            <span style="font-size:12px;color:var(--text-muted);">不输出变更请求的执行/监控过程：</span>
+            <span class="chip red">管理项目知识 → 经验教训登记册</span>
+            <span class="chip red">管理沟通 → 沟通记录</span>
+            <span class="chip red">整体变更控制 → 批准的变更请求</span>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== Section 2: 工具共用 ==================== -->
+<div class="section" id="sec-tools">
+    <div class="section-title">工具共用规律</div>
+    <div class="section-desc">同一工具/技术在多个过程中出现，点击展开查看关联过程。</div>
+
+    <div class="tool-grid">
+
+        <!-- 估算工具 -->
+        <div class="tool-card open">
+            <div class="tool-card-header" onclick="toggleCard(this)">
+                <div class="tool-card-title">
+                    估算工具（4种 + 1）
+                    <span class="mnemonic">核心规律</span>
+                </div>
+                <span class="tool-card-count">3个过程共用</span>
+            </div>
+            <div class="tool-card-body">
+                <div style="margin-bottom:10px;">
+                    <span class="chip blue">自下而上估算</span>
+                    <span class="chip blue">类比估算</span>
+                    <span class="chip blue">参数估算</span>
+                    <span class="chip blue">三点估算</span>
+                    <span class="chip blue">备选方案分析</span>
+                    <span style="font-size:11px;color:var(--text-muted);display:block;margin-top:4px;">三点估算不适用于"估算资源"</span>
+                </div>
+                <ul class="tool-list">
+                    <li>
+                        <div>
+                            <div class="proc-name answer">估算活动持续时间</div>
+                            <div class="proc-note answer">输出：持续时间估算 + 估算依据 | 整个期间开展</div>
+                        </div>
+                        <span class="proc-tag ka">进度管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">估算成本</div>
+                            <div class="proc-note answer">输出：成本估算 + 估算依据 | 定期开展</div>
+                        </div>
+                        <span class="proc-tag ka">成本管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">估算活动资源</div>
+                            <div class="proc-note answer">输出：资源需求 + 估算依据 | 定期开展</div>
+                        </div>
+                        <span class="proc-tag ka">资源管理</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 检查 -->
+        <div class="tool-card open">
+            <div class="tool-card-header" onclick="toggleCard(this)">
+                <div class="tool-card-title">
+                    检查
+                </div>
+                <span class="tool-card-count">3个过程</span>
+            </div>
+            <div class="tool-card-body">
+                <ul class="tool-list">
+                    <li>
+                        <div>
+                            <div class="proc-name answer">确认范围</div>
+                            <div class="proc-note answer">可交付成果 → 核实 → 验收</div>
+                        </div>
+                        <span class="proc-tag ka">范围管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">质量控制</div>
+                            <div class="proc-note answer">可交付成果 → 质量核验</div>
+                        </div>
+                        <span class="proc-tag ka">质量管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">控制采购</div>
+                            <div class="proc-note answer">卖方交付成果 → 验证</div>
+                        </div>
+                        <span class="proc-tag ka">采购管理</span>
+                    </li>
+                </ul>
+                <div class="pattern-note">
+                    <strong>关联</strong>：可交付成果流转链 = 确认范围(检查) + 质量控制(检查) 的上下游关系
+                </div>
+            </div>
+        </div>
+
+        <!-- 审计 -->
+        <div class="tool-card">
+            <div class="tool-card-header" onclick="toggleCard(this)">
+                <div class="tool-card-title">审计</div>
+                <span class="tool-card-count">3个过程</span>
+            </div>
+            <div class="tool-card-body">
+                <ul class="tool-list">
+                    <li>
+                        <div>
+                            <div class="proc-name answer">管理质量 → 质量审计</div>
+                            <div class="proc-note answer">识别良好实践、分享、识别差距、改进、积累</div>
+                        </div>
+                        <span class="proc-tag ka">质量管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">控制采购 → 采购审计</div>
+                            <div class="proc-note answer">结构化审查</div>
+                        </div>
+                        <span class="proc-tag ka">采购管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">监督风险 → 风险审计</div>
+                            <div class="proc-note answer">评估风险管理过程的有效性</div>
+                        </div>
+                        <span class="proc-tag ka">风险管理</span>
+                    </li>
+                </ul>
+                <div class="pattern-note">
+                    <strong>辨析</strong>：管理质量用审计，质量控制用检查（同属质量管理域）<br>
+                    <strong>补充</strong>：配置审计 — 评估配置管理过程的有效性
+                </div>
+            </div>
+        </div>
+
+        <!-- 偏差分析 + 趋势分析 -->
+        <div class="tool-card">
+            <div class="tool-card-header" onclick="toggleCard(this)">
+                <div class="tool-card-title">
+                    偏差分析 + 趋势分析
+                </div>
+                <span class="tool-card-count">5个过程</span>
+            </div>
+            <div class="tool-card-body">
+                <ul class="tool-list">
+                    <li>
+                        <div>
+                            <div class="proc-name answer">监控项目工作</div>
+                        </div>
+                        <span class="proc-tag ka">整合管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">结束项目或阶段</div>
+                        </div>
+                        <span class="proc-tag ka">整合管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">控制范围</div>
+                        </div>
+                        <span class="proc-tag ka">范围管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">控制进度</div>
+                            <div class="proc-note answer">还使用挣值分析</div>
+                        </div>
+                        <span class="proc-tag ka">进度管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">控制成本</div>
+                            <div class="proc-note answer">还使用挣值分析</div>
+                        </div>
+                        <span class="proc-tag ka">成本管理</span>
+                    </li>
+                </ul>
+                <div class="pattern-note">
+                    <strong>规律</strong>：控制进度 + 控制成本 额外使用<strong>挣值分析</strong>（EVA）
+                </div>
+            </div>
+        </div>
+
+        <!-- 冲突管理 -->
+        <div class="tool-card">
+            <div class="tool-card-header" onclick="toggleCard(this)">
+                <div class="tool-card-title">
+                    冲突管理
+                    <span class="mnemonic">与人有关</span>
+                </div>
+                <span class="tool-card-count">6个过程</span>
+            </div>
+            <div class="tool-card-body">
+                <ul class="tool-list">
+                    <li>
+                        <div>
+                            <div class="proc-name answer">制定项目章程</div>
+                        </div>
+                        <span class="proc-tag pg">启动</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">制定项目管理计划</div>
+                        </div>
+                        <span class="proc-tag pg">规划</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">建设团队</div>
+                        </div>
+                        <span class="proc-tag pg">执行</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">管理团队</div>
+                        </div>
+                        <span class="proc-tag pg">执行</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">管理沟通</div>
+                        </div>
+                        <span class="proc-tag pg">执行</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">管理干系人参与</div>
+                        </div>
+                        <span class="proc-tag pg">执行</span>
+                    </li>
+                </ul>
+                <div class="pattern-note">
+                    <strong>记忆</strong>：大方向规划（章程、计划）+ 团队沟通干系人（与人有关）
+                </div>
+            </div>
+        </div>
+
+        <!-- 标杆对照 + 思维导图 -->
+        <div class="tool-card">
+            <div class="tool-card-header" onclick="toggleCard(this)">
+                <div class="tool-card-title">
+                    标杆对照 + 思维导图
+                    <span class="mnemonic">求人质</span>
+                </div>
+                <span class="tool-card-count">3个过程</span>
+            </div>
+            <div class="tool-card-body">
+                <div style="margin-bottom:8px;font-size:12px;color:var(--text-secondary);">
+                    只在<strong style="color:var(--accent-purple);">规划过程组</strong>出现
+                </div>
+                <ul class="tool-list">
+                    <li>
+                        <div>
+                            <div class="proc-name answer">收集需求</div>
+                            <div class="proc-note answer"><strong>求</strong> - 标杆：实际vs计划 | 思维导图：共性差异</div>
+                        </div>
+                        <span class="proc-tag ka">范围管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">规划质量管理</div>
+                            <div class="proc-note answer"><strong>人</strong></div>
+                        </div>
+                        <span class="proc-tag ka">质量管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">规划干系人参与</div>
+                            <div class="proc-note answer"><strong>质</strong></div>
+                        </div>
+                        <span class="proc-tag ka">干系人管理</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 分解 -->
+        <div class="tool-card">
+            <div class="tool-card-header" onclick="toggleCard(this)">
+                <div class="tool-card-title">分解</div>
+                <span class="tool-card-count">2个过程</span>
+            </div>
+            <div class="tool-card-body">
+                <ul class="tool-list">
+                    <li>
+                        <div>
+                            <div class="proc-name answer">创建WBS</div>
+                            <div class="proc-note answer">将可交付成果分解为较小组件 → 输出范围基准</div>
+                        </div>
+                        <span class="proc-tag ka">范围管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">定义活动</div>
+                            <div class="proc-note answer">将工作包分解为活动 → 输出活动清单</div>
+                        </div>
+                        <span class="proc-tag ka">进度管理</span>
+                    </li>
+                </ul>
+                <div class="pattern-note">
+                    <strong>递进关系</strong>：创建WBS（可交付成果→工作包）→ 定义活动（工作包→活动）
+                </div>
+            </div>
+        </div>
+
+        <!-- 模拟 -->
+        <div class="tool-card">
+            <div class="tool-card-header" onclick="toggleCard(this)">
+                <div class="tool-card-title">
+                    模拟（蒙特卡洛）
+                </div>
+                <span class="tool-card-count">2个过程</span>
+            </div>
+            <div class="tool-card-body">
+                <ul class="tool-list">
+                    <li>
+                        <div>
+                            <div class="proc-name answer">制定进度计划</div>
+                            <div class="proc-note answer">模拟不同场景下的进度分布</div>
+                        </div>
+                        <span class="proc-tag ka">进度管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">实施定量风险分析</div>
+                            <div class="proc-note answer">量化风险对项目目标的影响</div>
+                        </div>
+                        <span class="proc-tag ka">风险管理</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 干系人参与评估矩阵 -->
+        <div class="tool-card">
+            <div class="tool-card-header" onclick="toggleCard(this)">
+                <div class="tool-card-title">
+                    干系人参与评估矩阵
+                    <span class="mnemonic">2规2监</span>
+                </div>
+                <span class="tool-card-count">4个过程</span>
+            </div>
+            <div class="tool-card-body">
+                <ul class="tool-list">
+                    <li>
+                        <div>
+                            <div class="proc-name answer">规划沟通管理</div>
+                        </div>
+                        <span class="proc-tag pg">规划</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">规划干系人参与</div>
+                        </div>
+                        <span class="proc-tag pg">规划</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">监督沟通</div>
+                        </div>
+                        <span class="proc-tag pg">监控</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">监督干系人参与</div>
+                        </div>
+                        <span class="proc-tag pg">监控</span>
+                    </li>
+                </ul>
+                <div class="pattern-note">
+                    <strong>规律</strong>：沟通和干系人的"一规划一监督"成对出现
+                </div>
+            </div>
+        </div>
+
+        <!-- 假设条件和制约因素 -->
+        <div class="tool-card">
+            <div class="tool-card-header" onclick="toggleCard(this)">
+                <div class="tool-card-title">
+                    假设条件和制约因素分析
+                </div>
+                <span class="tool-card-count">2个过程 + 2个文件</span>
+            </div>
+            <div class="tool-card-body">
+                <ul class="tool-list">
+                    <li>
+                        <div>
+                            <div class="proc-name answer">识别风险</div>
+                            <div class="proc-note answer">假设条件识别危险</div>
+                        </div>
+                        <span class="proc-tag ka">风险管理</span>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="proc-name answer">规划干系人参与</div>
+                            <div class="proc-note answer">制约因素创造机会</div>
+                        </div>
+                        <span class="proc-tag ka">干系人管理</span>
+                    </li>
+                </ul>
+                <div style="margin-top:8px;font-size:12px;color:var(--text-secondary);">
+                    <strong>包含这两项内容的文件：</strong>
+                </div>
+                <ul class="tool-list">
+                    <li>
+                        <div><div class="proc-name answer">项目范围说明书</div></div>
+                    </li>
+                    <li>
+                        <div><div class="proc-name answer">采购管理计划书</div></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ==================== Section 3: 分组规律 ==================== -->
+<div class="section" id="sec-patterns">
+    <div class="section-title">分组规律</div>
+    <div class="section-desc">跨过程的共性模式，理解规律后可以批量推断。</div>
+
+    <div class="pattern-grid">
+
+        <!-- 子监控必有 -->
+        <div class="pattern-card">
+            <div class="pattern-card-title">
+                <span style="color:var(--accent-blue);">子监控过程组必有规律</span>
+            </div>
+            <div class="pattern-row">
+                <div class="pattern-label">范围</div>
+                <div class="pattern-content">
+                    <span class="chip blue answer">确认范围</span>
+                    <span class="chip blue answer">控制范围</span>
+                </div>
+            </div>
+            <div class="pattern-row">
+                <div class="pattern-label">进度</div>
+                <div class="pattern-content">
+                    <span class="chip blue answer">控制进度</span>
+                </div>
+            </div>
+            <div class="pattern-row">
+                <div class="pattern-label">成本</div>
+                <div class="pattern-content">
+                    <span class="chip blue answer">控制成本</span>
+                </div>
+            </div>
+            <div class="pattern-row">
+                <div class="pattern-label">质量</div>
+                <div class="pattern-content">
+                    <span class="chip blue answer">质量控制</span>
+                </div>
+            </div>
+            <div class="pattern-row">
+                <div class="pattern-label">资源</div>
+                <div class="pattern-content">
+                    <span class="chip blue answer">控制资源</span>
+                </div>
+            </div>
+            <div class="pattern-row">
+                <div class="pattern-label">沟通</div>
+                <div class="pattern-content">
+                    <span class="chip blue answer">监督沟通</span>
+                </div>
+            </div>
+            <div class="pattern-row">
+                <div class="pattern-label">风险</div>
+                <div class="pattern-content">
+                    <span class="chip blue answer">监督风险</span>
+                </div>
+            </div>
+            <div class="pattern-row">
+                <div class="pattern-label">采购</div>
+                <div class="pattern-content">
+                    <span class="chip blue answer">控制采购</span>
+                </div>
+            </div>
+            <div class="pattern-row">
+                <div class="pattern-label">干系人</div>
+                <div class="pattern-content">
+                    <span class="chip blue answer">监督干系人参与</span>
+                </div>
+            </div>
+            <div style="margin-top:12px;padding:12px;background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border-color);">
+                <div style="font-size:13px;font-weight:600;margin-bottom:6px;">必有输入/输出</div>
+                <div style="display:flex;gap:16px;">
+                    <div>
+                        <div style="font-size:11px;color:var(--accent-purple);margin-bottom:4px;">必有输入</div>
+                        <span class="chip purple">项目管理计划</span>
+                        <span class="chip purple answer">工作绩效数据</span>
+                    </div>
+                    <div>
+                        <div style="font-size:11px;color:var(--accent-green);margin-bottom:4px;">必有输出</div>
+                        <span class="chip green answer">工作绩效信息</span>
+                        <span class="chip green answer">变更请求</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 基准产出 -->
+        <div class="pattern-card">
+            <div class="pattern-card-title">
+                <span style="color:var(--accent-green);">基准产出规律</span>
+            </div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">
+                范围、进度、成本三个管理在规划过程组的<strong style="color:var(--text-primary);">最后一个活动</strong>产出基准
+            </div>
+            <div class="flow-row" style="padding:0;">
+                <div class="flow-node" style="min-width:120px;">
+                    <div class="flow-box style-process">
+                        <div class="label">创建WBS</div>
+                        <div class="detail">范围管理</div>
+                    </div>
+                </div>
+                <div class="flow-arrow"><span>→</span></div>
+                <div class="flow-node" style="min-width:120px;">
+                    <div class="flow-box style-output">
+                        <div class="label answer">范围基准</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flow-row" style="padding:0;margin-top:8px;">
+                <div class="flow-node" style="min-width:120px;">
+                    <div class="flow-box style-process">
+                        <div class="label">制定进度计划</div>
+                        <div class="detail">进度管理</div>
+                    </div>
+                </div>
+                <div class="flow-arrow"><span>→</span></div>
+                <div class="flow-node" style="min-width:120px;">
+                    <div class="flow-box style-output">
+                        <div class="label answer">进度基准</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flow-row" style="padding:0;margin-top:8px;">
+                <div class="flow-node" style="min-width:120px;">
+                    <div class="flow-box style-process">
+                        <div class="label">制定预算</div>
+                        <div class="detail">成本管理</div>
+                    </div>
+                </div>
+                <div class="flow-arrow"><span>→</span></div>
+                <div class="flow-node" style="min-width:120px;">
+                    <div class="flow-box style-output">
+                        <div class="label answer">成本基准</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 规划采购+质量管理 共有输入 -->
+        <div class="pattern-card">
+            <div class="pattern-card-title">
+                <span style="color:var(--accent-orange);">规划采购 + 质量管理 共有输入</span>
+                <span style="font-size:12px;color:var(--accent-orange);margin-left:4px;">质量与需求息息相关</span>
+            </div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">口诀：<strong style="color:var(--accent-orange);">2册2需</strong></div>
+            <div>
+                <span class="chip orange answer">干系人登记册</span>
+                <span class="chip orange answer">风险登记册</span>
+                <span class="chip orange answer">需求文件</span>
+                <span class="chip orange answer">需求跟踪矩阵</span>
+            </div>
+            <div class="pattern-note" style="margin-top:12px;">
+                <strong>识别→登记册</strong>：识别干系人→干系人登记册，识别风险→风险登记册
+            </div>
+        </div>
+
+        <!-- 日历对比 -->
+        <div class="pattern-card">
+            <div class="pattern-card-title">
+                <span style="color:var(--accent-cyan);">资源日历 vs 项目日历</span>
+            </div>
+            <div class="compare-cols">
+                <div class="compare-col">
+                    <div class="compare-col-header blue">资源日历</div>
+                    <div style="text-align:center;">
+                        <div style="font-size:13px;font-weight:500;" class="answer">获取资源</div>
+                        <div style="font-size:11px;color:var(--text-secondary);">输出</div>
+                    </div>
+                </div>
+                <div class="compare-col">
+                    <div class="compare-col-header green">项目日历</div>
+                    <div style="text-align:center;">
+                        <div style="font-size:13px;font-weight:500;" class="answer">制定进度计划</div>
+                        <div style="font-size:11px;color:var(--text-secondary);">输出</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 通用规律 -->
+        <div class="pattern-card">
+            <div class="pattern-card-title">
+                <span style="color:var(--text-primary);">通用规律</span>
+            </div>
+            <ul style="list-style:none;padding:0;">
+                <li style="padding:8px 0;border-bottom:1px solid var(--border-color);font-size:13px;">
+                    <strong style="color:var(--accent-blue);">输入通用</strong>：几乎所有过程都考虑
+                    <span class="chip answer" style="margin-left:4px;">组织过程资产（OPA）</span>
+                    <span class="chip answer">事业环境因素（EEF）</span>
+                </li>
+                <li style="padding:8px 0;border-bottom:1px solid var(--border-color);font-size:13px;">
+                    <strong style="color:var(--accent-blue);">上下游</strong>：
+                    <span class="answer">上一步输出 → 下一步输入</span>
+                </li>
+                <li style="padding:8px 0;font-size:13px;">
+                    <strong style="color:var(--accent-blue);">更新即输出</strong>：带有"更新"字眼的都是输出 —
+                    <span class="chip answer">项目管理计划更新</span>
+                    <span class="chip answer">项目文件更新</span>
+                    <span class="chip answer">组织过程资产更新</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 估算依据产出 -->
+        <div class="pattern-card">
+            <div class="pattern-card-title">
+                <span style="color:var(--accent-purple);">估算依据 — 共有输出</span>
+            </div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">3个估算过程都输出"估算依据"</div>
+            <div>
+                <span class="chip purple answer">估算活动持续时间 → 持续时间估算 + 估算依据</span>
+            </div>
+            <div style="margin-top:4px;">
+                <span class="chip purple answer">估算成本 → 成本估算 + 估算依据</span>
+            </div>
+            <div style="margin-top:4px;">
+                <span class="chip purple answer">估算活动资源 → 资源需求 + 估算依据</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ==================== Section 4: 对比速记 ==================== -->
+<div class="section" id="sec-compare">
+    <div class="section-title">对比速记</div>
+    <div class="section-desc">易混淆知识点的对比记忆。</div>
+
+    <div class="compare-grid">
+
+        <!-- 审计 vs 检查 -->
+        <div class="compare-card">
+            <div class="compare-title">审计 vs 检查</div>
+            <div class="compare-body">
+                <div class="compare-cols">
+                    <div class="compare-col">
+                        <div class="compare-col-header blue">审计（过程审查）</div>
+                        <ul>
+                            <li class="answer"><strong>管理质量</strong> → 质量审计</li>
+                            <li class="answer"><strong>控制采购</strong> → 采购审计</li>
+                            <li class="answer"><strong>监督风险</strong> → 风险审计</li>
+                        </ul>
+                        <div style="margin-top:6px;font-size:11px;color:var(--text-secondary);" class="answer">
+                            配置审计：评估配置管理有效性
+                        </div>
+                    </div>
+                    <div class="compare-col">
+                        <div class="compare-col-header green">检查（成果验证）</div>
+                        <ul>
+                            <li class="answer"><strong>确认范围</strong> → 验收可交付成果</li>
+                            <li class="answer"><strong>质量控制</strong> → 核实可交付成果</li>
+                            <li class="answer"><strong>控制采购</strong> → 验证卖方交付</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="pattern-note" style="margin-top:12px;">
+                    <strong>关键区分</strong>：同在质量管理域，管理质量用<strong>审计</strong>（审查过程），质量控制用<strong>检查</strong>（验证成果）
+                </div>
+            </div>
+        </div>
+
+        <!-- 工作绩效三级 -->
+        <div class="compare-card">
+            <div class="compare-title">工作绩效三级对比</div>
+            <div class="compare-body">
+                <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                    <thead>
+                        <tr style="border-bottom:1px solid var(--border-color);">
+                            <th style="padding:6px 8px;text-align:left;color:var(--text-secondary);font-weight:500;">级别</th>
+                            <th style="padding:6px 8px;text-align:left;color:var(--text-secondary);font-weight:500;">产出过程</th>
+                            <th style="padding:6px 8px;text-align:left;color:var(--text-secondary);font-weight:500;">去向</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom:1px solid var(--border-color);">
+                            <td style="padding:8px;"><span class="chip pink">数据</span></td>
+                            <td style="padding:8px;" class="answer">指导与管理项目工作</td>
+                            <td style="padding:8px;" class="answer">→ 子监控过程组</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid var(--border-color);">
+                            <td style="padding:8px;"><span class="chip pink">信息</span></td>
+                            <td style="padding:8px;" class="answer">子监控过程组（10个）</td>
+                            <td style="padding:8px;" class="answer">→ 监控项目工作（总监控）</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px;"><span class="chip cyan">报告</span></td>
+                            <td style="padding:8px;" class="answer">监控项目工作</td>
+                            <td style="padding:8px;" class="answer">→ 狗团变疯（变更/风险/沟通/团队）</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 基准产出对比 -->
+        <div class="compare-card">
+            <div class="compare-title">三大基准 — 规划过程组最后一步</div>
+            <div class="compare-body">
+                <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                    <thead>
+                        <tr style="border-bottom:1px solid var(--border-color);">
+                            <th style="padding:6px 8px;text-align:left;color:var(--text-secondary);font-weight:500;">管理域</th>
+                            <th style="padding:6px 8px;text-align:left;color:var(--text-secondary);font-weight:500;">产出过程</th>
+                            <th style="padding:6px 8px;text-align:left;color:var(--text-secondary);font-weight:500;">基准</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom:1px solid var(--border-color);">
+                            <td style="padding:8px;"><span class="chip blue">范围管理</span></td>
+                            <td style="padding:8px;" class="answer">创建WBS</td>
+                            <td style="padding:8px;" class="answer">范围基准</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid var(--border-color);">
+                            <td style="padding:8px;"><span class="chip blue">进度管理</span></td>
+                            <td style="padding:8px;" class="answer">制定进度计划</td>
+                            <td style="padding:8px;" class="answer">进度基准</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px;"><span class="chip blue">成本管理</span></td>
+                            <td style="padding:8px;" class="answer">制定预算</td>
+                            <td style="padding:8px;" class="answer">成本基准</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 分解的两次使用 -->
+        <div class="compare-card">
+            <div class="compare-title">分解工具的两次使用</div>
+            <div class="compare-body">
+                <div class="flow-row" style="padding:0;">
+                    <div class="flow-node" style="min-width:150px;">
+                        <div class="flow-box style-process">
+                            <div class="label">创建WBS</div>
+                            <div class="detail">范围管理 · 规划</div>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">
+                        <span>→</span>
+                        <span class="arrow-label answer">分解</span>
+                    </div>
+                    <div class="flow-node" style="min-width:150px;">
+                        <div class="flow-box style-output">
+                            <div class="label answer">可交付成果 → 工作包</div>
+                            <div class="detail answer">输出：范围基准</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flow-row" style="padding:0;margin-top:12px;">
+                    <div class="flow-node" style="min-width:150px;">
+                        <div class="flow-box style-process">
+                            <div class="label">定义活动</div>
+                            <div class="detail">进度管理 · 规划</div>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">
+                        <span>→</span>
+                        <span class="arrow-label answer">分解</span>
+                    </div>
+                    <div class="flow-node" style="min-width:150px;">
+                        <div class="flow-box style-output">
+                            <div class="label answer">工作包 → 活动</div>
+                            <div class="detail answer">输出：活动清单、活动属性、里程碑清单</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pattern-note" style="margin-top:12px;">
+                    <strong>递进</strong>：先分解成果（WBS），再分解工作（活动），粒度由粗到细
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div><!-- end #main -->
+
+<script>
+/* ===== Tab switching ===== */
+var navTabs = document.querySelectorAll('.nav-tab');
+var sections = document.querySelectorAll('.section');
+
+navTabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+        var target = this.getAttribute('data-section');
+        navTabs.forEach(function(t) { t.classList.remove('active'); });
+        this.classList.add('active');
+        sections.forEach(function(s) { s.classList.remove('active'); });
+        var sec = document.getElementById('sec-' + target);
+        if (sec) sec.classList.add('active');
+    });
+});
+
+/* ===== Test mode ===== */
+var testToggle = document.getElementById('testModeToggle');
+testToggle.addEventListener('change', function() {
+    if (this.checked) {
+        document.body.classList.add('test-mode');
+    } else {
+        document.body.classList.remove('test-mode');
+        document.querySelectorAll('.answer.revealed').forEach(function(el) {
+            el.classList.remove('revealed');
+        });
+    }
+});
+
+/* Click to reveal in test mode */
+document.addEventListener('click', function(e) {
+    if (!document.body.classList.contains('test-mode')) return;
+    if (e.target.classList.contains('answer')) {
+        e.target.classList.toggle('revealed');
+    }
+});
+
+/* ===== Tool card toggle ===== */
+function toggleCard(header) {
+    var card = header.parentElement;
+    card.classList.toggle('open');
+}
+
+/* ===== Flow node hover highlight ===== */
+document.querySelectorAll('.flow-box').forEach(function(box) {
+    box.addEventListener('mouseenter', function() {
+        this.classList.add('highlight');
+    });
+    box.addEventListener('mouseleave', function() {
+        this.classList.remove('highlight');
+    });
+});
+</script>
+
+</body>
+</html>
