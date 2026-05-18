@@ -283,3 +283,33 @@
     .matrix .cell-name { font-size: 11px; }
     .matrix tbody td:first-child { font-size: 12px; width: 80px; }
 }
+
+@media (max-width: 768px) {
+    .matrix-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 8px;
+    }
+    .matrix {
+        min-width: 600px;
+    }
+    .perf-domains-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .perf-domain-card { padding: 12px; }
+    .perf-detail-card { padding: 14px; }
+    .essay-item {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .essay-title { flex: 1 1 100%; order: 3; font-size: 13px; }
+    .essay-year { min-width: 50px; padding: 3px 8px; font-size: 11px; }
+    .essay-area { font-size: 10px; padding: 2px 6px; }
+}
+
+@media (max-width: 480px) {
+    .perf-domains-grid { grid-template-columns: 1fr; }
+    .pd-card-title { font-size: 13px; }
+    .pd-card-desc { font-size: 10px; }
+    .perf-detail-card { padding: 10px; }
+    .pd-detail-title { font-size: 14px; }
+    .essay-wrapper { padding: 0; }
+}

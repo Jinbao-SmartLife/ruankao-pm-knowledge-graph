@@ -309,6 +309,35 @@ body.test-mode .answer.revealed { color: var(--text-primary) !important; backgro
     .compare-grid { grid-template-columns: 1fr; }
     .rule-grid { grid-template-columns: 1fr; }
 }
+@media (max-width: 768px) {
+    body { overflow-y: auto; height: auto; }
+    #header { flex-wrap: wrap; height: auto; padding: 8px 12px; gap: 6px; }
+    #header > div:last-child {
+        order: 3;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 2px;
+    }
+    .page-tab { font-size: 12px; padding: 4px 10px; }
+    #nav { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    #main { height: auto; min-height: calc(100vh - 120px); overflow-y: visible; padding: 12px; }
+    .flow-chain { padding: 12px; }
+    .flow-node { min-width: 100px; }
+    .flow-box { padding: 8px 10px; font-size: 12px; }
+    .flow-arrow { width: 24px; font-size: 14px; }
+    .compare-cols { grid-template-columns: 1fr; }
+    .compare-col:first-child { border-right: none; border-bottom: 1px solid var(--border-color); }
+    .section-title { font-size: 16px; }
+}
+@media (max-width: 480px) {
+    #main { padding: 8px; }
+    .flow-node { min-width: 80px; }
+    .flow-box { padding: 6px 8px; font-size: 11px; }
+    .flow-arrow { width: 18px; font-size: 12px; }
+    .section-title { font-size: 15px; }
+    .nav-tab { padding: 8px 12px; font-size: 12px; }
+}
 </style>
 </head>
 <body>

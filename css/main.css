@@ -164,7 +164,37 @@ body {
     .nav-tab { padding: 6px 10px; font-size: 12px; }
     .view-container { padding: 16px; }
 }
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    body { overflow-y: auto; height: auto; }
+    #header {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 8px 12px;
+        gap: 6px;
+    }
+    .header-left { order: 1; }
+    .header-right {
+        order: 3;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 2px;
+    }
+    .header-center {
+        order: 2;
+        flex: 0 0 auto;
+        max-width: 200px;
+        margin: 0 0 0 auto;
+    }
+    .nav-tab { padding: 5px 10px; font-size: 12px; flex-shrink: 0; }
+    .test-toggle { flex-shrink: 0; }
+    .view-container { padding: 12px; overflow-y: visible; }
+    #app { height: auto; min-height: 100vh; overflow: visible; flex-direction: column; }
+}
+@media (max-width: 480px) {
+    body { overflow-y: auto; height: auto; }
+    .header-center { max-width: 140px; margin: 0 0 0 auto; }
     .nav-tab { padding: 4px 8px; font-size: 11px; }
     .logo { font-size: 14px; }
+    .view-container { padding: 8px; }
 }

@@ -10,11 +10,15 @@ Pure static site — no build tools, no package manager, no server required. Ope
 
 ## Architecture
 
-Two self-contained pages, each loading its own JS/CSS via `<script>` and `<link>` tags in dependency order:
+Two shared-CSS pages and two self-contained pages:
 
-**`index.html`** — Main page with 3 views (matrix/performance domains/essays) + right-side detail panel. Module init chain: `DataStore.init()` → `Matrix.init()` → `Panel.init()` → `Search.init()` → view tab setup.
+**`index.html`** — Main page with 3 views (matrix/performance domains/essays) + right-side detail panel (desktop) / bottom sheet panel (mobile). Uses `css/main.css`, `css/matrix.css`, `css/panel.css`. Module init chain: `DataStore.init()` → `Matrix.init()` → `Panel.init()` → `Search.init()` → view tab setup.
 
-**`itto.html`** — ITTO overview with 4-quadrant layout (compact matrix, process ITTO details, documents catalog, tools catalog). Standalone logic in `js/itto.js`.
+**`itto.html`** — ITTO overview with 4-quadrant layout (compact matrix, process ITTO details, documents catalog, tools catalog). Uses `css/main.css`, `css/itto.css`. Standalone logic in `js/itto.js`.
+
+**`performance.html`** — Performance domain memory page with check tables, core points, and comparison panels. Self-contained with inline `<style>` and `<script>`.
+
+**`memory.html`** — Knowledge association memory page with flow chains, tool sharing cards, pattern cards. Self-contained with inline `<style>` and `<script>`.
 
 ### JS Module Pattern
 
@@ -38,7 +42,14 @@ All data lives in `data/*.js` files, each assigning to a `window.*` global varia
 
 ### CSS Organization
 
-Dark theme (GitHub Dark style) using CSS custom properties in `css/main.css`. Component CSS split by feature: `matrix.css`, `panel.css`, `itto.css`. Responsive breakpoints at 900px and 600px.
+Dark theme (GitHub Dark style) using CSS custom properties in `css/main.css`. Component CSS split by feature: `matrix.css`, `panel.css`, `itto.css`.
+
+**Responsive breakpoints** (shared CSS files and inline styles both follow):
+- **900px**: Grid columns reduce (4→2→1), table font sizes shrink
+- **768px**: Mobile layout — `body { overflow-y: auto; height: auto }` overrides desktop `overflow: hidden; height: 100vh`; layout containers switch to `height: auto`; grids collapse to single column; nav tabs become horizontally scrollable; detail panel becomes fixed bottom sheet
+- **480px**: Small screen — further reduced padding, font sizes, and spacing
+
+**Key mobile pattern**: Desktop uses `body { overflow: hidden; height: 100vh }` with internal scrolling in flex/grid children. On mobile (≤768px), body becomes the scroll container (`overflow-y: auto; height: auto`) and all layout containers switch to `height: auto; overflow: visible`. This applies to all 4 pages.
 
 ## Development
 
