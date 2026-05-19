@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英语词汇 - 软考十大管理</title>
+<style>
+:root {
+    --bg-primary:#ffffff; --bg-secondary:#f6f8fa; --bg-tertiary:#eef1f5;
+    --bg-card:#f6f8fa; --bg-hover:#e1e4e8;
+    --text-primary:#1f2328; --text-secondary:#656d76; --text-muted:#8b949e;
+    --border-color:#d0d7de;
+    --accent-blue:#0969da; --accent-green:#1a7f37; --accent-red:#cf222e;
+    --accent-orange:#9a6700; --accent-purple:#8250df;
+    --radius:4px; --radius-lg:6px; --transition:0.2s ease;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",-apple-system,sans-serif;font-size:14px;color:var(--text-primary);background:var(--bg-primary);height:100vh;overflow:hidden}
+
+/* Header */
+#header{display:flex;align-items:center;justify-content:space-between;height:52px;padding:0 20px;background:var(--bg-tertiary);border-bottom:1px solid var(--border-color);position:relative;z-index:100}
+.header-left{display:flex;align-items:center;gap:8px}
+.header-left a{text-decoration:none;color:var(--text-primary);font-size:16px;font-weight:600}
+.header-right{display:flex;align-items:center;gap:4px}
+.page-tab{padding:6px 16px;background:none;border:none;color:var(--text-secondary);font-size:13px;font-weight:500;cursor:pointer;transition:color var(--transition);text-decoration:none;white-space:nowrap}
+.page-tab:hover{color:var(--text-primary)}
+.page-tab.active{color:var(--text-primary);font-weight:600}
+.test-toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);cursor:pointer;user-select:none}
+.test-toggle input{display:none}
+.toggle-track{width:32px;height:18px;border-radius:4px;background:var(--bg-hover);position:relative;transition:var(--transition)}
+.toggle-track::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:3px;background:var(--text-secondary);transition:var(--transition)}
+.test-toggle input:checked+.toggle-track{background:var(--accent-orange)}
+.test-toggle input:checked+.toggle-track::after{left:16px;background:#fff}
+body.test-mode .answer{color:transparent!important;background:var(--bg-hover)!important;border-radius:3px;cursor:pointer}
+body.test-mode .answer:hover{background:var(--bg-tertiary)!important}
+body.test-mode .answer.revealed{color:inherit!important;background:transparent!important}
+
+/* Nav */
+#nav{display:flex;gap:0;padding:0 16px;background:var(--bg-secondary);border-bottom:1px solid var(--border-color);overflow-x:auto}
+.nav-btn{padding:10px 16px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;border-bottom:2px solid transparent;transition:var(--transition);user-select:none;white-space:nowrap;background:none;border-left:none;border-right:none;border-top:none}
+.nav-btn:hover{color:var(--text-primary)}
+.nav-btn.active{color:var(--accent-blue);border-bottom-color:var(--accent-blue)}
+
+/* Main */
+#main{height:calc(100vh - 52px - 41px);overflow-y:auto;padding:20px 24px;scroll-behavior:smooth}
+.section{display:none}.section.active{display:block}
+.section-title{font-size:18px;font-weight:700;margin-bottom:6px}
+.section-desc{font-size:13px;color:var(--text-secondary);margin-bottom:20px}
+
+/* Stats bar */
+.stats-bar{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.stat-item{font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
+.stat-num{font-weight:700;color:var(--accent-blue)}
+
+/* Filter bar */
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-chip{padding:4px 12px;font-size:12px;border:1px solid var(--border-color);border-radius:3px;background:var(--bg-secondary);color:var(--text-secondary);cursor:pointer;transition:var(--transition);white-space:nowrap}
+.filter-chip:hover{border-color:var(--accent-blue);color:var(--text-primary)}
+.filter-chip.active{background:var(--accent-blue);color:#fff;border-color:var(--accent-blue)}
+.filter-chip.hl-tech{background:rgba(9,105,218,0.1);color:var(--accent-blue);border-color:rgba(9,105,218,0.3)}
+.filter-chip.hl-tech.active{background:var(--accent-blue);color:#fff}
+.filter-chip.hl-pm{background:rgba(154,103,0,0.1);color:var(--accent-orange);border-color:rgba(154,103,0,0.3)}
+.filter-chip.hl-pm.active{background:var(--accent-orange);color:#fff}
+.filter-chip.hl-predict{background:rgba(130,80,223,0.1);color:var(--accent-purple);border-color:rgba(130,80,223,0.3)}
+.filter-chip.hl-predict.active{background:var(--accent-purple);color:#fff}
+
+/* Search */
+.search-box{display:flex;gap:8px;margin-bottom:16px}
+.search-box input{flex:1;padding:8px 12px;border:1px solid var(--border-color);border-radius:var(--radius);background:var(--bg-secondary);font-size:13px;color:var(--text-primary);outline:none}
+.search-box input:focus{border-color:var(--accent-blue)}
+.search-box input::placeholder{color:var(--text-muted)}
+
+/* Vocab table */
+.vocab-table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border-color);border-radius:var(--radius-lg);overflow:hidden}
+.vocab-table th{padding:8px 12px;font-size:12px;font-weight:600;color:var(--text-secondary);background:var(--bg-tertiary);text-align:left;border-bottom:1px solid var(--border-color);white-space:nowrap}
+.vocab-table td{padding:6px 12px;font-size:13px;border-bottom:1px solid var(--border-color);vertical-align:middle}
+.vocab-table tr:last-child td{border-bottom:none}
+.vocab-table tr:hover td{background:var(--bg-secondary)}
+.vocab-table .col-en{font-weight:500;color:var(--text-primary)}
+.vocab-table .col-abbr{font-size:12px;color:var(--accent-blue);font-weight:600;font-family:monospace}
+.vocab-table .col-zh{color:var(--text-secondary)}
+
+/* Category section */
+.category-group{margin-bottom:24px}
+.category-title{font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border-color)}
+.category-title .cat-tag{font-size:11px;font-weight:500;padding:2px 8px;border-radius:3px;margin-left:8px}
+.cat-tag.tag-tech{background:rgba(9,105,218,0.1);color:var(--accent-blue)}
+.cat-tag.tag-pm{background:rgba(154,103,0,0.1);color:var(--accent-orange)}
+.cat-tag.tag-ka{background:rgba(26,127,55,0.1);color:var(--accent-green)}
+.cat-tag.tag-base{background:rgba(130,80,223,0.1);color:var(--accent-purple)}
+.cat-tag.tag-predict{background:rgba(207,34,46,0.1);color:var(--accent-red)}
+
+/* Vocab card grid */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px}
+.vocab-card{display:flex;align-items:center;padding:6px 12px;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--radius);cursor:default;transition:var(--transition)}
+.vocab-card:hover{border-color:var(--accent-blue)}
+.vocab-card .vc-en{font-size:13px;font-weight:500;flex:1;line-height:1.4}
+.vocab-card .vc-abbr{font-size:11px;color:var(--accent-blue);font-weight:600;font-family:monospace;margin-left:6px;white-space:nowrap}
+.vocab-card .vc-zh{font-size:12px;color:var(--text-muted);margin-left:8px;white-space:nowrap}
+.vocab-card .vc-tag{font-size:10px;padding:1px 5px;border-radius:2px;margin-left:6px;white-space:nowrap}
+.vc-tag.tag-tech{background:rgba(9,105,218,0.1);color:var(--accent-blue)}
+.vc-tag.tag-pm{background:rgba(154,103,0,0.1);color:var(--accent-orange)}
+.vc-tag.tag-predict{background:rgba(130,80,223,0.1);color:var(--accent-purple)}
+
+/* Predict card */
+.predict-card{background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:10px}
+.predict-card .pc-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.predict-card .pc-en{font-size:14px;font-weight:600}
+.predict-card .pc-abbr{font-size:12px;color:var(--accent-blue);font-family:monospace;font-weight:600}
+.predict-card .pc-zh{font-size:13px;color:var(--text-secondary)}
+.predict-card .pc-reason{font-size:11px;color:var(--text-muted);line-height:1.5;margin-top:6px;padding:4px 8px;background:rgba(130,80,223,0.05);border-left:2px solid rgba(130,80,223,0.2);border-radius:2px}
+
+/* Exam history */
+.exam-table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border-color);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:20px}
+.exam-table th{padding:8px 12px;font-size:12px;font-weight:600;color:var(--text-secondary);background:var(--bg-tertiary);text-align:left;border-bottom:1px solid var(--border-color)}
+.exam-table td{padding:6px 12px;font-size:12px;border-bottom:1px solid var(--border-color);line-height:1.5}
+.exam-table tr:last-child td{border-bottom:none}
+.exam-table tr:hover td{background:var(--bg-secondary)}
+.exam-table .col-year{white-space:nowrap;font-weight:600;color:var(--text-primary);width:100px}
+.exam-table .col-tech{color:var(--accent-blue)}
+.exam-table .col-mgmt{color:var(--accent-orange)}
+
+/* Responsive */
+@media(max-width:900px){
+    .vocab-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+    .stats-bar{gap:10px}
+}
+@media(max-width:768px){
+    body{overflow-y:auto;height:auto}
+    #header{flex-wrap:wrap;height:auto;padding:8px 12px;gap:6px}
+    .header-left{order:1}
+    .header-right{order:3;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+    #main{height:auto;min-height:calc(100vh - 52px - 41px);overflow:visible;padding:12px}
+    .vocab-grid{grid-template-columns:1fr}
+    .filter-bar{gap:4px}
+    .filter-chip{font-size:11px;padding:3px 8px}
+    .stats-bar{gap:8px}
+}
+@media(max-width:480px){
+    .vocab-card .vc-zh{display:none}
+    .predict-card .pc-reason{font-size:10px}
+    .section-title{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div id="header">
+    <div class="header-left"><a href="index.html">软考知识图谱</a></div>
+    <div class="header-right">
+        <a class="page-tab" href="index.html">矩阵</a>
+        <a class="page-tab" href="performance.html">绩效域</a>
+        <a class="page-tab" href="itto.html">ITTO</a>
+        <a class="page-tab" href="memory.html">关联记忆</a>
+        <a class="page-tab active" href="english.html">英语词汇</a>
+        <label class="test-toggle" style="margin-left:8px">
+            <input type="checkbox" id="testMode" onchange="document.body.classList.toggle('test-mode',this.checked)">
+            <span class="toggle-track"></span>
+            <span>测试</span>
+        </label>
+    </div>
+</div>
+
+<!-- Sub nav -->
+<div id="nav">
+    <div class="nav-btn active" data-section="tech">技术词汇</div>
+    <div class="nav-btn" data-section="pm">管理词汇</div>
+    <div class="nav-btn" data-section="category">按管理分类</div>
+    <div class="nav-btn" data-section="exam">历年真题</div>
+    <div class="nav-btn" data-section="predict">2026预测</div>
+</div>
+
+<!-- Main content -->
+<div id="main">
+    <!-- Section 1: Tech vocab -->
+    <div class="section active" id="sec-tech">
+        <div class="section-title">计算机技术词汇</div>
+        <div class="section-desc">备考常见计算机技术英文术语，共39个</div>
+        <div class="search-box">
+            <input type="text" id="search-tech" placeholder="搜索技术词汇..." oninput="filterTech()">
+        </div>
+        <table class="vocab-table" id="tech-table">
+            <thead><tr><th style="width:50%">英文</th><th style="width:15%">缩写</th><th>中文</th></tr></thead>
+            <tbody id="tech-body"></tbody>
+        </table>
+    </div>
+
+    <!-- Section 2: PM vocab -->
+    <div class="section" id="sec-pm">
+        <div class="section-title">项目管理词汇</div>
+        <div class="section-desc">备考常见项目管理英文术语，共213个（按字母排序）</div>
+        <div class="stats-bar">
+            <div class="stat-item">共 <span class="stat-num" id="pm-count">0</span> 个</div>
+            <div class="stat-item">当前显示 <span class="stat-num" id="pm-show">0</span> 个</div>
+        </div>
+        <div class="search-box">
+            <input type="text" id="search-pm" placeholder="搜索管理词汇（英文/中文）..." oninput="filterPm()">
+        </div>
+        <div class="filter-bar" id="pm-alpha-filter"></div>
+        <table class="vocab-table" id="pm-table">
+            <thead><tr><th style="width:55%">英文</th><th>中文</th></tr></thead>
+            <tbody id="pm-body"></tbody>
+        </table>
+    </div>
+
+    <!-- Section 3: By category -->
+    <div class="section" id="sec-category">
+        <div class="section-title">按十大管理分类</div>
+        <div class="section-desc">项目管理词汇按知识领域分组，便于关联记忆</div>
+        <div class="search-box">
+            <input type="text" id="search-cat" placeholder="搜索分类词汇..." oninput="filterCategory()">
+        </div>
+        <div id="category-list"></div>
+    </div>
+
+    <!-- Section 4: Exam history -->
+    <div class="section" id="sec-exam">
+        <div class="section-title">英语历年真题汇总</div>
+        <div class="section-desc">2017-2025年英语选择题考点分布（每年5分：技术类2-3分 + 管理类2-3分）</div>
+        <div class="stats-bar">
+            <div class="stat-item">技术类占比约 <span class="stat-num">45%</span></div>
+            <div class="stat-item">管理类占比约 <span class="stat-num">55%</span></div>
+            <div class="stat-item">高频考点：<span class="stat-num">AI/IoT/区块链/风险管理/范围管理</span></div>
+        </div>
+        <table class="exam-table">
+            <thead><tr><th>年份</th><th>技术类</th><th>管理类</th></tr></thead>
+            <tbody>
+                <tr><td class="col-year">2017年11月</td><td class="col-tech">2分（KPI、RACI）</td><td class="col-mgmt">3分（范围验证、WBS字典、关键路径）</td></tr>
+                <tr><td class="col-year">2018年5月</td><td class="col-tech">2分（人工智能、区块链）</td><td class="col-mgmt">3分（范围管理、进度管理、质量管理）</td></tr>
+                <tr><td class="col-year">2018年11月</td><td class="col-tech">2分（物联网、人工智能）</td><td class="col-mgmt">3分（范围确认、质量控制、类比估算）</td></tr>
+                <tr><td class="col-year">2019年5月</td><td class="col-tech">2分（物联网、区块链）</td><td class="col-mgmt">3分（成本、成本、风险）</td></tr>
+                <tr><td class="col-year">2019年11月</td><td class="col-tech">2分（问题管理、服务设计）</td><td class="col-mgmt">3分（采购、WBS、风险）</td></tr>
+                <tr><td class="col-year">2020年11月</td><td class="col-tech">3分（大数据、人工智能、信息安全）</td><td class="col-mgmt">2分（统计抽样、范围验证）</td></tr>
+                <tr><td class="col-year">2021年5月</td><td class="col-tech">2分（边缘计算、区块链）</td><td class="col-mgmt">3分（整体管理、风险管理、采购管理）</td></tr>
+                <tr><td class="col-year">2021年11月</td><td class="col-tech">2分（云计算、区块链）</td><td class="col-mgmt">3分（风险、需求、质量管理）</td></tr>
+                <tr><td class="col-year">2022年5月</td><td class="col-tech">2分（十四五规划、人工智能）</td><td class="col-mgmt">3分（风险、质量、成本）</td></tr>
+                <tr><td class="col-year">2022年11月</td><td class="col-tech">2分（数据资产、大数据）</td><td class="col-mgmt">3分（集成管理、战略管理、干系人管理）</td></tr>
+                <tr><td class="col-year">2023年5月</td><td class="col-tech">3分（自动驾驶、数字化转型、安全）</td><td class="col-mgmt">2分（活动持续时间估算、浮动时间）</td></tr>
+                <tr><td class="col-year">2023年11月</td><td class="col-tech" colspan="2">分4批：数字孪生、SMART、人工智能、趋势分析、模拟、规范期、进度计划、国际环境、WBS、凸显模型等</td></tr>
+                <tr><td class="col-year">2024年</td><td class="col-tech" colspan="2">分2批：管理质量、控制质量、风险审查、沟通策略、规划采购、燃尽图、大语言模型、组织项目管理、项目临时性、数据、安全漏洞</td></tr>
+                <tr><td class="col-year">2025年</td><td class="col-tech" colspan="2">分2批：开发方法、项目治理、排列活动顺序、规划风险应对、绩效测量基准</td></tr>
+            </tbody>
+        </table>
+        <div style="margin-top:20px">
+            <div class="section-title" style="font-size:15px">2026年分值预测</div>
+            <div class="stats-bar">
+                <div class="stat-item">预计共 <span class="stat-num">5</span> 道英语题（5分）</div>
+                <div class="stat-item">技术类 <span class="stat-num">2-3</span> 分</div>
+                <div class="stat-item">管理类 <span class="stat-num">2-3</span> 分</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+                <div style="background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:14px">
+                    <div style="font-size:13px;font-weight:700;color:var(--accent-blue);margin-bottom:8px">第一批预测</div>
+                    <div style="font-size:12px;color:var(--text-secondary);line-height:1.6">
+                        <div>技术：<span class="answer">AIGC/生成式AI、数据要素/新质生产力</span></div>
+                        <div>管理：<span class="answer">绩效域/Performance Domain、服务型领导力、冲刺待办列表</span></div>
+                    </div>
+                </div>
+                <div style="background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:14px">
+                    <div style="font-size:13px;font-weight:700;color:var(--accent-orange);margin-bottom:8px">第二批预测</div>
+                    <div style="font-size:12px;color:var(--text-secondary);line-height:1.6">
+                        <div>技术：<span class="answer">智能体/AI Agent、算力/算力网络、边缘AI</span></div>
+                        <div>管理：<span class="answer">裁剪/Tailoring、价值交付/Value Delivery、看板/Kanban Board</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 5: 2026 predictions -->
+    <div class="section" id="sec-predict">
+        <div class="section-title">2026年英语考核预测</div>
+        <div class="section-desc">基于历年真题趋势分析的高频预测词汇</div>
+        <div style="margin-bottom:24px;padding:12px 16px;background:rgba(9,105,218,0.04);border-left:3px solid var(--accent-blue);border-radius:2px;font-size:12px;color:var(--text-secondary);line-height:1.6">
+            <strong style="color:var(--accent-blue)">技术类趋势：</strong>2018-2021围绕IoT/AI/区块链，2022-2023转向数字化转型/数据资产/数字孪生，2024出现大语言模型。2026年预计继续聚焦AI新发展。<br>
+            <strong style="color:var(--accent-orange)">管理类趋势：</strong>2023年起向PMBOK第7版和敏捷方向倾斜，2024考燃尽图，2025考开发方法/项目治理/绩效测量基准。2026年预计继续深化绩效域和敏捷术语。
+        </div>
+        <div id="predict-tech-list">
+            <div class="category-group">
+                <div class="category-title">技术类高频预测 <span class="cat-tag tag-predict">12个</span></div>
+                <div id="predict-tech-cards"></div>
+            </div>
+        </div>
+        <div id="predict-pm-list" style="margin-top:24px">
+            <div class="category-group">
+                <div class="category-title">管理类高频预测 <span class="cat-tag tag-predict">20+个</span></div>
+                <div id="predict-pm-cards"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ===== Data =====
+var TECH_VOCAB = [
+    ["On-Line Analytical Processing","OLAP","在线联机分析处理"],
+    ["Data Mining","","数据挖掘"],
+    ["Service Oriented Architecture","SOA","面向服务的体系结构"],
+    ["Distributed Computing","","分布式计算"],
+    ["Business Intelligence","BI","商业智能"],
+    ["Cloud Computing","","云计算"],
+    ["Internet of Things","IoT","物联网"],
+    ["Radio Frequency Identification","RFID","射频识别"],
+    ["Big Data","","大数据"],
+    ["Artificial Intelligence","AI","人工智能"],
+    ["Blockchain","","区块链"],
+    ["Internet Plus","","互联网+"],
+    ["Industry 4.0","","工业4.0"],
+    ["5th-Generation","5G","第五代移动通信"],
+    ["Network Layer","","网络层"],
+    ["Sensing Layer","","感知层"],
+    ["Application Layer","","应用层"],
+    ["Machine Learning","ML","机器学习"],
+    ["Embedded System","","嵌入式系统"],
+    ["Volume, Velocity, Variety, Value","4V","大数据特征：大量、高速、多样、价值"],
+    ["New Infrastructure Construction","","新型基础设施建设"],
+    ["Beidou Satellite Navigation System","BDS","北斗卫星导航系统"],
+    ["Digital Currency","","数字货币"],
+    ["Driverless","","无人驾驶"],
+    ["Industrial Internet","","工业互联网"],
+    ["Time-Sensitive Network","TSN","时间敏感网络"],
+    ["Internet of Vehicles","IoV","车联网"],
+    ["Intelligent Manufacturing","IM","智能制造"],
+    ["Digital Transformation","","数字化转型"],
+    ["Metaverse","","元宇宙"],
+    ["Software Defined Network","SDN","软件定义网络"],
+    ["Storage Virtualization","","存储虚拟化"],
+    ["Green Storage","","绿色存储"],
+    ["User and Entity Behavior Analytics","UEBA","用户和实体行为分析"],
+    ["Network Security Situation Awareness","","网络安全态势感知"],
+    ["Micro-Electro-Mechanical Systems","MEMS","微机电系统"],
+    ["Natural Language Processing","NLP","自然语言处理"],
+    ["Virtual Reality","VR","虚拟现实"],
+    ["Augmented Reality","AR","增强现实"]
+];
+
+var PM_VOCAB = [
+    ["Accepted Deliverables","验收的可交付成果"],
+    ["Acquire Resources","获取资源"],
+    ["Activity Duration Estimates","活动持续时间估算"],
+    ["Adaptive Life Cycle","适应型生命周期"],
+    ["Affinity Diagrams","亲和图"],
+    ["Alternative Analysis","备选方案分析"],
+    ["Analogous Estimating","类比估算"],
+    ["Benchmarking","标杆对照"],
+    ["Bid Documents","招标文件"],
+    ["Bottom-Up Estimating","自下而上估算"],
+    ["Cause and Effect Diagram","因果图"],
+    ["Checklist Analysis","核对单分析"],
+    ["Checksheets","核查表"],
+    ["Close Project or Phase","结束项目或阶段"],
+    ["Closing Process Group","收尾过程组"],
+    ["Collect Requirements","收集需求"],
+    ["Colocation","集中办公"],
+    ["Communication Methods","沟通方法"],
+    ["Communication Models","沟通模型"],
+    ["Communications Management Plan","沟通管理计划"],
+    ["Communication Technology","沟通技术"],
+    ["Conduct Procurements","实施采购"],
+    ["Context Diagrams","系统交互图"],
+    ["Contingency Reserve","应急储备"],
+    ["Control Chart","控制图"],
+    ["Control Costs","控制成本"],
+    ["Control Procurements","控制采购"],
+    ["Control Quality","控制质量"],
+    ["Control Resources","控制资源"],
+    ["Control Schedule","控制进度"],
+    ["Control Scope","控制范围"],
+    ["Cost Aggregation","成本汇总"],
+    ["Cost Baseline","成本基准"],
+    ["Cost-Benefit Analysis","成本效益分析"],
+    ["Cost Management Plan","成本管理计划"],
+    ["Cost of Quality (CoQ)","质量成本"],
+    ["Crashing","赶工"],
+    ["Create WBS","创建工作分解结构"],
+    ["Critical Path Method (CPM)","关键路径法"],
+    ["Decision Tree Analysis","决策树分析"],
+    ["Decomposition","分解"],
+    ["Defect Repair","缺陷补救"],
+    ["Define Activities","定义活动"],
+    ["Define Scope","定义范围"],
+    ["Determine Budget","制定预算"],
+    ["Develop Project Charter","制定项目章程"],
+    ["Develop Schedule","制定进度计划"],
+    ["Diagramming Techniques","图解技术"],
+    ["Direct and Manage Project Work","指导与管理项目工作"],
+    ["Documentation Reviews","文件审查"],
+    ["Emotional Intelligence","情商"],
+    ["Estimate Activity Durations","估算活动持续时间"],
+    ["Estimate Activity Resources","估算活动资源"],
+    ["Estimate Costs","估算成本"],
+    ["Executing Process Group","执行过程组"],
+    ["Fast Tracking","快速跟进"],
+    ["Fishbone Diagram","鱼骨图"],
+    ["Flowchart","流程图"],
+    ["Focus Groups","焦点小组"],
+    ["Free Float","自由浮动时间"],
+    ["Funding Limit Reconciliation","资金限制平衡"],
+    ["Gantt Chart","甘特图"],
+    ["Ground Rules","基本规则"],
+    ["Histogram","直方图"],
+    ["Identify Risks","识别风险"],
+    ["Identify Stakeholders","识别干系人"],
+    ["Implement Risk Responses","实施风险应对"],
+    ["Incremental Life Cycle","增量型生命周期"],
+    ["Independent Estimates","独立估算"],
+    ["Influence Diagram","影响图"],
+    ["Initiating Process Group","启动过程组"],
+    ["Interpersonal and Team Skills","人际关系与团队技能"],
+    ["Interviews","访谈"],
+    ["Invitation for Bid (IFB)","投标邀请书"],
+    ["Iterative Life Cycle","迭代型生命周期"],
+    ["Make-or-Buy Analysis","自制或外购分析"],
+    ["Make-or-Buy Decisions","自制或外购决策"],
+    ["Manage Communications","管理沟通"],
+    ["Management Reserve","管理储备"],
+    ["Manage Quality","管理质量"],
+    ["Manage Stakeholder Engagement","管理干系人参与"],
+    ["Mandatory Dependency","强制性依赖关系"],
+    ["Matrix Diagrams","矩阵图"],
+    ["Matrix Organization","矩阵型组织"],
+    ["Mind-Mapping","思维导图"],
+    ["Monitor","监督（收集项目绩效数据）"],
+    ["Monitor Communications","监督沟通"],
+    ["Monitoring and Controlling Process Group","监控过程组"],
+    ["Monitor Risks","监督风险"],
+    ["Monte Carlo Simulation","蒙特卡洛模拟"],
+    ["Multicriteria Decision Analysis","多标准决策分析"],
+    ["Nominal Group Technique","名义小组技术"],
+    ["Organizational Breakdown Structure (OBS)","组织分解结构"],
+    ["Overall Project Risk","整体项目风险"],
+    ["Parametric Estimating","参数估算"],
+    ["Performance Reviews","绩效审查"],
+    ["Perform Integrated Change Control","实施整体变更控制"],
+    ["Perform Qualitative Risk Analysis","实施定性风险分析"],
+    ["Perform Quantitative Risk Analysis","实施定量风险分析"],
+    ["Plan Communications Management","规划沟通管理"],
+    ["Plan Cost Management","规划成本管理"],
+    ["Planning Process Group","规划过程组"],
+    ["Plan Procurement Management","规划采购管理"],
+    ["Plan Quality Management","规划质量管理"],
+    ["Plan Resource Management","规划资源管理"],
+    ["Plan Risk Management","规划风险管理"],
+    ["Plan Risk Responses","规划风险应对"],
+    ["Plan Schedule Management","规划进度管理"],
+    ["Plan Scope Management","规划范围管理"],
+    ["Plan Stakeholder Engagement","规划干系人参与"],
+    ["Plurality","相对多数原则"],
+    ["Predictive Life Cycle","预测型生命周期"],
+    ["Preventive Action","预防措施"],
+    ["Probability and Impact Matrix","概率和影响矩阵"],
+    ["Procurement Audits","采购审计"],
+    ["Procurement Documents","采购文件"],
+    ["Procurement Management Plan","采购管理计划"],
+    ["Procurement Statement of Work","采购工作说明书"],
+    ["Procurement Strategy","采购策略"],
+    ["Product Analysis","产品分析"],
+    ["Project Calendar","项目日历"],
+    ["Project Communications Management","项目沟通管理"],
+    ["Project Cost Management","项目成本管理"],
+    ["Project Integration Management","项目整合管理"],
+    ["Project Procurement Management","项目采购管理"],
+    ["Project Quality Management","项目质量管理"],
+    ["Project Resource Management","项目资源管理"],
+    ["Project Risk Management","项目风险管理"],
+    ["Project Schedule","项目进度计划"],
+    ["Project Schedule Management","项目进度管理"],
+    ["Project Schedule Network Diagram","项目进度网络图"],
+    ["Project Scope Management","项目范围管理"],
+    ["Project Scope Statement","项目范围说明书"],
+    ["Project Stakeholder Management","项目干系人管理"],
+    ["Proposal Evaluation Techniques","建议书评价技术"],
+    ["Quality Audits","质量审计"],
+    ["Quality Checklists","质量核对单"],
+    ["Quality Control Measurements","质量控制测量结果"],
+    ["Quality Management Plan","质量管理计划"],
+    ["Quality Metrics","质量测量指标"],
+    ["Quality Report","质量报告"],
+    ["Questionnaires","问卷调查"],
+    ["Regression Analysis","回归分析"],
+    ["Request for Information (RFI)","信息邀请书"],
+    ["Request for Proposal (RFP)","建议邀请书"],
+    ["Request for Quotation (RFQ)","报价邀请书"],
+    ["Requirements Management Plan","需求管理计划"],
+    ["Requirements Traceability Matrix","需求跟踪矩阵"],
+    ["Reserve Analysis","储备分析"],
+    ["Resource Breakdown Structure","资源分解结构"],
+    ["Resource Calendar","资源日历"],
+    ["Resource Leveling","资源平衡"],
+    ["Resource Management Plan","资源管理计划"],
+    ["Resource Optimization Technique","资源优化技术"],
+    ["Resource Smoothing","资源平滑"],
+    ["Risk Acceptance","风险接受"],
+    ["Risk Audit","风险审计"],
+    ["Risk Avoidance","风险规避"],
+    ["Risk Data Quality Assessment","风险数据质量评估"],
+    ["Risk Enhancement","风险提高"],
+    ["Risk Escalation","风险上报"],
+    ["Risk Exploiting","风险开拓"],
+    ["Risk Exposure","风险敞口"],
+    ["Risk Management Plan","风险管理计划"],
+    ["Risk Mitigation","风险减轻"],
+    ["Risk Owner","风险责任人"],
+    ["Risk Register","风险登记册"],
+    ["Risk Report","风险报告"],
+    ["Risk Review","风险审查"],
+    ["Risk Sharing","风险分享"],
+    ["Risk Threshold","风险临界值"],
+    ["Risk Transference","风险转移"],
+    ["Root Cause Analysis","根本原因分析"],
+    ["Schedule Baseline","进度基准"],
+    ["Schedule Compression","进度压缩"],
+    ["Schedule Forecasts","进度预测"],
+    ["Schedule Management Plan","进度管理计划"],
+    ["Schedule Network Analysis","进度网络分析"],
+    ["Scope Baseline","范围基准"],
+    ["Scope Creep","范围蔓延"],
+    ["Scope Management Plan","范围管理计划"],
+    ["Self-Organizing Teams","自组织团队"],
+    ["Seller Proposals","卖方建议书"],
+    ["Sensitivity Analysis","敏感性分析"],
+    ["Sequence Activities","排列活动顺序"],
+    ["Simulation","模拟"],
+    ["Source Selection Criteria","供方选择标准"],
+    ["Sponsor","发起人"],
+    ["Stakeholder Analysis","干系人分析"],
+    ["Stakeholder Engagement Assessment Matrix","干系人参与度评估矩阵"],
+    ["Stakeholder Engagement Plan","干系人参与计划"],
+    ["Stakeholder Register","干系人登记册"],
+    ["Statement of Work (SOW)","工作说明书"],
+    ["Statistical Sampling","统计抽样"],
+    ["Team Charter","团队章程"],
+    ["Team Management Plan","团队管理计划"],
+    ["Test and Evaluation Documents","测试与评估文件"],
+    ["Three-Point Estimating","三点估算"],
+    ["Tornado Diagram","龙卷风图"],
+    ["Total Float","总浮动时间"],
+    ["Trend Analysis","趋势分析"],
+    ["Unanimity","一致同意"],
+    ["Validate Scope","确认范围"],
+    ["Variance Analysis","偏差分析"],
+    ["Verified Deliverables","核实的可交付成果"],
+    ["Virtual Teams","虚拟团队"],
+    ["WBS Dictionary","WBS词典"],
+    ["What-If Scenario Analysis","假设情景分析"],
+    ["Work Breakdown Structure (WBS)","工作分解结构"],
+    ["Work Package","工作包"],
+    ["Work Performance Data","工作绩效数据"],
+    ["Work Performance Information","工作绩效信息"],
+    ["Work Performance Reports","工作绩效报告"]
+];
+
+var CATEGORY_DATA = {
+    "基础概念 - 过程组与生命周期": {tag:"tag-base", items:[
+        ["Initiating Process Group","启动过程组"],
+        ["Planning Process Group","规划过程组"],
+        ["Executing Process Group","执行过程组"],
+        ["Monitoring and Controlling Process Group","监控过程组"],
+        ["Closing Process Group","收尾过程组"],
+        ["Predictive Life Cycle","预测型生命周期"],
+        ["Iterative Life Cycle","迭代型生命周期"],
+        ["Incremental Life Cycle","增量型生命周期"],
+        ["Adaptive Life Cycle","适应型生命周期"]
+    ]},
+    "基础概念 - 组织与团队": {tag:"tag-base", items:[
+        ["Matrix Organization","矩阵型组织"],
+        ["Sponsor","发起人"],
+        ["Self-Organizing Teams","自组织团队"],
+        ["Virtual Teams","虚拟团队"],
+        ["Colocation","集中办公"],
+        ["Team Charter","团队章程"],
+        ["Ground Rules","基本规则"],
+        ["Emotional Intelligence","情商"],
+        ["Interpersonal and Team Skills","人际关系与团队技能"],
+        ["Plurality","相对多数原则"],
+        ["Unanimity","一致同意"]
+    ]},
+    "基础概念 - 通用工具与技术": {tag:"tag-base", items:[
+        ["Analogous Estimating","类比估算"],
+        ["Parametric Estimating","参数估算"],
+        ["Bottom-Up Estimating","自下而上估算"],
+        ["Three-Point Estimating","三点估算"],
+        ["Reserve Analysis","储备分析"],
+        ["Alternative Analysis","备选方案分析"],
+        ["Multicriteria Decision Analysis","多标准决策分析"],
+        ["Affinity Diagrams","亲和图"],
+        ["Mind-Mapping","思维导图"],
+        ["Nominal Group Technique","名义小组技术"],
+        ["Matrix Diagrams","矩阵图"],
+        ["Diagramming Techniques","图解技术"],
+        ["Interviews","访谈"],
+        ["Focus Groups","焦点小组"],
+        ["Questionnaires","问卷调查"],
+        ["Checklist Analysis","核对单分析"],
+        ["Decomposition","分解"],
+        ["Root Cause Analysis","根本原因分析"],
+        ["Trend Analysis","趋势分析"],
+        ["Variance Analysis","偏差分析"],
+        ["Regression Analysis","回归分析"],
+        ["Performance Reviews","绩效审查"],
+        ["Monitor","监督（收集项目绩效数据）"]
+    ]},
+    "基础概念 - 工作绩效信息": {tag:"tag-base", items:[
+        ["Work Performance Data","工作绩效数据"],
+        ["Work Performance Information","工作绩效信息"],
+        ["Work Performance Reports","工作绩效报告"]
+    ]},
+    "1. 项目整合管理": {tag:"tag-ka", items:[
+        ["Project Integration Management","项目整合管理"],
+        ["Develop Project Charter","制定项目章程"],
+        ["Direct and Manage Project Work","指导与管理项目工作"],
+        ["Perform Integrated Change Control","实施整体变更控制"],
+        ["Close Project or Phase","结束项目或阶段"],
+        ["Defect Repair","缺陷补救"],
+        ["Preventive Action","预防措施"]
+    ]},
+    "2. 项目范围管理": {tag:"tag-ka", items:[
+        ["Project Scope Management","项目范围管理"],
+        ["Plan Scope Management","规划范围管理"],
+        ["Collect Requirements","收集需求"],
+        ["Define Scope","定义范围"],
+        ["Create WBS","创建工作分解结构"],
+        ["Validate Scope","确认范围"],
+        ["Control Scope","控制范围"],
+        ["Scope Baseline","范围基准"],
+        ["Scope Creep","范围蔓延"],
+        ["Scope Management Plan","范围管理计划"],
+        ["Project Scope Statement","项目范围说明书"],
+        ["Work Breakdown Structure (WBS)","工作分解结构"],
+        ["WBS Dictionary","WBS词典"],
+        ["Work Package","工作包"],
+        ["Requirements Management Plan","需求管理计划"],
+        ["Requirements Traceability Matrix","需求跟踪矩阵"],
+        ["Context Diagrams","系统交互图"],
+        ["Product Analysis","产品分析"],
+        ["Accepted Deliverables","验收的可交付成果"],
+        ["Verified Deliverables","核实的可交付成果"]
+    ]},
+    "3. 项目进度管理": {tag:"tag-ka", items:[
+        ["Project Schedule Management","项目进度管理"],
+        ["Plan Schedule Management","规划进度管理"],
+        ["Define Activities","定义活动"],
+        ["Sequence Activities","排列活动顺序"],
+        ["Estimate Activity Durations","估算活动持续时间"],
+        ["Develop Schedule","制定进度计划"],
+        ["Control Schedule","控制进度"],
+        ["Project Schedule","项目进度计划"],
+        ["Project Schedule Network Diagram","项目进度网络图"],
+        ["Schedule Baseline","进度基准"],
+        ["Schedule Compression","进度压缩"],
+        ["Schedule Forecasts","进度预测"],
+        ["Schedule Management Plan","进度管理计划"],
+        ["Schedule Network Analysis","进度网络分析"],
+        ["Activity Duration Estimates","活动持续时间估算"],
+        ["Critical Path Method (CPM)","关键路径法"],
+        ["Mandatory Dependency","强制性依赖关系"],
+        ["Fast Tracking","快速跟进"],
+        ["Crashing","赶工"],
+        ["Free Float","自由浮动时间"],
+        ["Total Float","总浮动时间"],
+        ["Gantt Chart","甘特图"],
+        ["Project Calendar","项目日历"],
+        ["Resource Optimization Technique","资源优化技术"],
+        ["Resource Leveling","资源平衡"],
+        ["Resource Smoothing","资源平滑"],
+        ["What-If Scenario Analysis","假设情景分析"],
+        ["Monte Carlo Simulation","蒙特卡洛模拟"],
+        ["Simulation","模拟"]
+    ]},
+    "4. 项目成本管理": {tag:"tag-ka", items:[
+        ["Project Cost Management","项目成本管理"],
+        ["Plan Cost Management","规划成本管理"],
+        ["Estimate Costs","估算成本"],
+        ["Determine Budget","制定预算"],
+        ["Control Costs","控制成本"],
+        ["Cost Baseline","成本基准"],
+        ["Cost Management Plan","成本管理计划"],
+        ["Cost Aggregation","成本汇总"],
+        ["Cost-Benefit Analysis","成本效益分析"],
+        ["Funding Limit Reconciliation","资金限制平衡"],
+        ["Contingency Reserve","应急储备"],
+        ["Management Reserve","管理储备"]
+    ]},
+    "5. 项目质量管理": {tag:"tag-ka", items:[
+        ["Project Quality Management","项目质量管理"],
+        ["Plan Quality Management","规划质量管理"],
+        ["Manage Quality","管理质量"],
+        ["Control Quality","控制质量"],
+        ["Quality Management Plan","质量管理计划"],
+        ["Quality Metrics","质量测量指标"],
+        ["Quality Audits","质量审计"],
+        ["Quality Checklists","质量核对单"],
+        ["Quality Control Measurements","质量控制测量结果"],
+        ["Quality Report","质量报告"],
+        ["Cost of Quality (CoQ)","质量成本"],
+        ["Benchmarking","标杆对照"],
+        ["Cause and Effect Diagram","因果图"],
+        ["Fishbone Diagram","鱼骨图"],
+        ["Flowchart","流程图"],
+        ["Histogram","直方图"],
+        ["Control Chart","控制图"],
+        ["Checksheets","核查表"],
+        ["Statistical Sampling","统计抽样"],
+        ["Test and Evaluation Documents","测试与评估文件"]
+    ]},
+    "6. 项目资源管理": {tag:"tag-ka", items:[
+        ["Project Resource Management","项目资源管理"],
+        ["Plan Resource Management","规划资源管理"],
+        ["Estimate Activity Resources","估算活动资源"],
+        ["Acquire Resources","获取资源"],
+        ["Control Resources","控制资源"],
+        ["Resource Management Plan","资源管理计划"],
+        ["Team Management Plan","团队管理计划"],
+        ["Resource Breakdown Structure","资源分解结构"],
+        ["Resource Calendar","资源日历"],
+        ["Organizational Breakdown Structure (OBS)","组织分解结构"]
+    ]},
+    "7. 项目沟通管理": {tag:"tag-ka", items:[
+        ["Project Communications Management","项目沟通管理"],
+        ["Plan Communications Management","规划沟通管理"],
+        ["Manage Communications","管理沟通"],
+        ["Monitor Communications","监督沟通"],
+        ["Communications Management Plan","沟通管理计划"],
+        ["Communication Methods","沟通方法"],
+        ["Communication Models","沟通模型"],
+        ["Communication Technology","沟通技术"]
+    ]},
+    "8. 项目风险管理": {tag:"tag-ka", items:[
+        ["Project Risk Management","项目风险管理"],
+        ["Plan Risk Management","规划风险管理"],
+        ["Identify Risks","识别风险"],
+        ["Perform Qualitative Risk Analysis","实施定性风险分析"],
+        ["Perform Quantitative Risk Analysis","实施定量风险分析"],
+        ["Plan Risk Responses","规划风险应对"],
+        ["Implement Risk Responses","实施风险应对"],
+        ["Monitor Risks","监督风险"],
+        ["Risk Management Plan","风险管理计划"],
+        ["Risk Register","风险登记册"],
+        ["Risk Report","风险报告"],
+        ["Risk Review","风险审查"],
+        ["Risk Audit","风险审计"],
+        ["Overall Project Risk","整体项目风险"],
+        ["Risk Owner","风险责任人"],
+        ["Risk Exposure","风险敞口"],
+        ["Risk Threshold","风险临界值"],
+        ["Risk Data Quality Assessment","风险数据质量评估"],
+        ["Probability and Impact Matrix","概率和影响矩阵"],
+        ["Risk Acceptance","风险接受"],
+        ["Risk Avoidance","风险规避"],
+        ["Risk Mitigation","风险减轻"],
+        ["Risk Transference","风险转移"],
+        ["Risk Sharing","风险分享"],
+        ["Risk Exploiting","风险开拓"],
+        ["Risk Enhancement","风险提高"],
+        ["Risk Escalation","风险上报"],
+        ["Decision Tree Analysis","决策树分析"],
+        ["Sensitivity Analysis","敏感性分析"],
+        ["Tornado Diagram","龙卷风图"],
+        ["Influence Diagram","影响图"],
+        ["Documentation Reviews","文件审查"]
+    ]},
+    "9. 项目采购管理": {tag:"tag-ka", items:[
+        ["Project Procurement Management","项目采购管理"],
+        ["Plan Procurement Management","规划采购管理"],
+        ["Conduct Procurements","实施采购"],
+        ["Control Procurements","控制采购"],
+        ["Procurement Management Plan","采购管理计划"],
+        ["Procurement Strategy","采购策略"],
+        ["Procurement Documents","采购文件"],
+        ["Procurement Statement of Work","采购工作说明书"],
+        ["Procurement Audits","采购审计"],
+        ["Make-or-Buy Analysis","自制或外购分析"],
+        ["Make-or-Buy Decisions","自制或外购决策"],
+        ["Statement of Work (SOW)","工作说明书"],
+        ["Bid Documents","招标文件"],
+        ["Invitation for Bid (IFB)","投标邀请书"],
+        ["Request for Information (RFI)","信息邀请书"],
+        ["Request for Proposal (RFP)","建议邀请书"],
+        ["Request for Quotation (RFQ)","报价邀请书"],
+        ["Seller Proposals","卖方建议书"],
+        ["Source Selection Criteria","供方选择标准"],
+        ["Proposal Evaluation Techniques","建议书评价技术"],
+        ["Independent Estimates","独立估算"]
+    ]},
+    "10. 项目干系人管理": {tag:"tag-ka", items:[
+        ["Project Stakeholder Management","项目干系人管理"],
+        ["Identify Stakeholders","识别干系人"],
+        ["Plan Stakeholder Engagement","规划干系人参与"],
+        ["Manage Stakeholder Engagement","管理干系人参与"],
+        ["Stakeholder Analysis","干系人分析"],
+        ["Stakeholder Register","干系人登记册"],
+        ["Stakeholder Engagement Plan","干系人参与计划"],
+        ["Stakeholder Engagement Assessment Matrix","干系人参与度评估矩阵"]
+    ]}
+};
+
+var PREDICT_TECH = [
+    ["Generative AI / AIGC","AIGC","生成式人工智能","2024考LLM，2025-2026年AIGC是最大热点"],
+    ["AI Agent","","智能体","2025年行业最热方向，尚未考过"],
+    ["Data Elements / Data Factor","","数据要素","国家战略级概念，2022考数据资产，延伸考数据要素概率高"],
+    ["New Quality Productive Forces","","新质生产力","2024-2025国家高频词，尚未出现在考题中"],
+    ["Computing Power / Computing Force Network","","算力/算力网络","东数西算核心概念，尚未考过"],
+    ["Retrieval-Augmented Generation","RAG","检索增强生成","大模型落地主流技术，紧跟LLM考点"],
+    ["Multimodal AI","","多模态人工智能","AI发展方向，技术前沿"],
+    ["Edge AI","","边缘AI","2021考过边缘计算，结合AI是延伸考点"],
+    ["Embodied AI","","具身智能","AI前沿方向，2024-2025热门"],
+    ["AI Safety / AI Governance","","AI安全/人工智能治理","2023考过安全，AI治理是新热点"],
+    ["Digital Human / Virtual Human","","数字人","元宇宙延伸，尚未考过"],
+    ["Trustworthy AI","","可信AI","AI治理核心概念"]
+];
+
+var PREDICT_PM = [
+    ["Performance Domain","绩效域","第4版教材核心变更，2025已考绩效测量基准，2026可能直接考绩效域"],
+    ["Value Delivery","价值交付","PMBOK第7版核心概念，交付绩效域关键词"],
+    ["Servant Leadership","服务型领导力","团队绩效域和敏捷核心概念，尚未考过"],
+    ["Adaptive Leadership","适应性领导力","不确定性绩效域和团队绩效域相关，新教材新增"],
+    ["Tailoring","裁剪","PMBOK第7版强调的方法论，尚未考过"],
+    ["Business Value","商业价值","交付绩效域和度量绩效域核心概念"],
+    ["Sprint Backlog","冲刺待办列表","敏捷Scrum术语，2024考燃尽图后的延伸"],
+    ["Product Backlog","产品待办列表","敏捷核心术语，开发方法绩效域相关"],
+    ["Empirical Process Control","经验过程控制","敏捷三大支柱之一，开发方法相关"],
+    ["Definition of Done (DoD)","完成定义","敏捷核心概念，交付质量保证"],
+    ["Agile Manifesto","敏捷宣言","开发方法绩效域基础概念"],
+    ["Increment","增量","增量型生命周期核心术语，2025考开发方法的延伸"],
+    ["Team Charter","团队章程","团队绩效域相关，2024教材新增重点"],
+    ["Stakeholder Engagement","干系人参与","干系人绩效域核心，2022考干系人管理后的延伸"],
+    ["Organizational Process Assets (OPA)","组织过程资产","工作绩效域持续改进考点，高频重复出现"],
+    ["Enterprise Environmental Factors (EEF)","事业环境因素","与OPA成对出现的基础概念"],
+    ["Risk Appetite","风险偏好","不确定性绩效域新概念，区分风险临界值"],
+    ["Burndown Chart","燃尽图","2024已考中文，2026可能考英文对应"],
+    ["Kanban Board","看板","敏捷可视化工具，与燃尽图同类考点"],
+    ["Earned Value Management (EVM)","挣值管理","度量绩效域核心方法，经典高频考点"],
+    ["Baseline","基准","2025考绩效测量基准，基准概念可能单独考"],
+    ["Milestone","里程碑","规划和交付绩效域通用概念，简单高频"]
+];
+
+// ===== Render Functions =====
+function renderTech(filter) {
+    var tbody = document.getElementById('tech-body');
+    var html = '';
+    var count = 0;
+    var kw = (filter || '').toLowerCase();
+    for (var i = 0; i < TECH_VOCAB.length; i++) {
+        var item = TECH_VOCAB[i];
+        if (kw && item[0].toLowerCase().indexOf(kw) === -1 && item[1].toLowerCase().indexOf(kw) === -1 && item[2].indexOf(kw) === -1) continue;
+        html += '<tr><td class="col-en">' + item[0] + '</td><td class="col-abbr">' + (item[1] || '-') + '</td><td class="col-zh"><span class="answer">' + item[2] + '</span></td></tr>';
+        count++;
+    }
+    if (!count) html = '<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:20px">无匹配结果</td></tr>';
+    tbody.innerHTML = html;
+}
+
+function renderPm(filter, letter) {
+    var tbody = document.getElementById('pm-body');
+    var html = '';
+    var count = 0;
+    var kw = (filter || '').toLowerCase();
+    for (var i = 0; i < PM_VOCAB.length; i++) {
+        var item = PM_VOCAB[i];
+        if (letter && item[0][0].toUpperCase() !== letter) continue;
+        if (kw && item[0].toLowerCase().indexOf(kw) === -1 && item[1].indexOf(kw) === -1) continue;
+        html += '<tr><td class="col-en">' + item[0] + '</td><td class="col-zh"><span class="answer">' + item[1] + '</span></td></tr>';
+        count++;
+    }
+    if (!count) html = '<tr><td colspan="2" style="text-align:center;color:var(--text-muted);padding:20px">无匹配结果</td></tr>';
+    tbody.innerHTML = html;
+    document.getElementById('pm-show').textContent = count;
+}
+
+function renderPmAlphaFilter() {
+    var letters = {};
+    for (var i = 0; i < PM_VOCAB.length; i++) {
+        var l = PM_VOCAB[i][0][0].toUpperCase();
+        letters[l] = (letters[l] || 0) + 1;
+    }
+    var sorted = Object.keys(letters).sort();
+    var bar = document.getElementById('pm-alpha-filter');
+    var html = '<span class="filter-chip' + (!currentPmLetter ? ' active' : '') + '" onclick="selectLetter(\'\')">全部</span>';
+    for (var i = 0; i < sorted.length; i++) {
+        html += '<span class="filter-chip' + (currentPmLetter === sorted[i] ? ' active' : '') + '" onclick="selectLetter(\'' + sorted[i] + '\')">' + sorted[i] + ' (' + letters[sorted[i]] + ')</span>';
+    }
+    bar.innerHTML = html;
+    document.getElementById('pm-count').textContent = PM_VOCAB.length;
+}
+
+var currentPmLetter = '';
+function selectLetter(l) {
+    currentPmLetter = l;
+    renderPmAlphaFilter();
+    renderPm(document.getElementById('search-pm').value, l);
+}
+
+function renderCategory(filter) {
+    var container = document.getElementById('category-list');
+    var html = '';
+    var kw = (filter || '').toLowerCase();
+    var keys = Object.keys(CATEGORY_DATA);
+    for (var i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        var group = CATEGORY_DATA[key];
+        var items = group.items;
+        var filtered = [];
+        for (var j = 0; j < items.length; j++) {
+            if (kw && items[j][0].toLowerCase().indexOf(kw) === -1 && items[j][1].indexOf(kw) === -1) continue;
+            filtered.push(items[j]);
+        }
+        if (kw && filtered.length === 0) continue;
+        var showItems = kw ? filtered : items;
+        html += '<div class="category-group">';
+        html += '<div class="category-title">' + key + ' <span class="cat-tag ' + group.tag + '">' + showItems.length + '个</span></div>';
+        html += '<div class="vocab-grid">';
+        for (var j = 0; j < showItems.length; j++) {
+            html += '<div class="vocab-card"><span class="vc-en">' + showItems[j][0] + '</span><span class="vc-zh"><span class="answer">' + showItems[j][1] + '</span></span></div>';
+        }
+        html += '</div></div>';
+    }
+    container.innerHTML = html || '<div style="text-align:center;color:var(--text-muted);padding:40px">无匹配结果</div>';
+}
+
+function renderPredict() {
+    var techContainer = document.getElementById('predict-tech-cards');
+    var html = '';
+    for (var i = 0; i < PREDICT_TECH.length; i++) {
+        var item = PREDICT_TECH[i];
+        html += '<div class="predict-card"><div class="pc-header"><span class="pc-en">' + item[0] + '</span>';
+        if (item[1]) html += '<span class="pc-abbr">' + item[1] + '</span>';
+        html += '<span class="vc-tag tag-predict">预测</span></div>';
+        html += '<div class="pc-zh"><span class="answer">' + item[2] + '</span></div>';
+        html += '<div class="pc-reason">' + item[3] + '</div></div>';
+    }
+    techContainer.innerHTML = html;
+
+    var pmContainer = document.getElementById('predict-pm-cards');
+    html = '';
+    for (var i = 0; i < PREDICT_PM.length; i++) {
+        var item = PREDICT_PM[i];
+        html += '<div class="predict-card"><div class="pc-header"><span class="pc-en">' + item[0] + '</span>';
+        html += '<span class="vc-tag tag-predict">预测</span></div>';
+        html += '<div class="pc-zh"><span class="answer">' + item[1] + '</span></div>';
+        html += '<div class="pc-reason">' + item[2] + '</div></div>';
+    }
+    pmContainer.innerHTML = html;
+}
+
+// ===== Filter handlers =====
+function filterTech() { renderTech(document.getElementById('search-tech').value); }
+function filterPm() { renderPm(document.getElementById('search-pm').value, currentPmLetter); }
+function filterCategory() { renderCategory(document.getElementById('search-cat').value); }
+
+// ===== Nav switching =====
+var navBtns = document.querySelectorAll('.nav-btn');
+var sections = document.querySelectorAll('.section');
+for (var i = 0; i < navBtns.length; i++) {
+    navBtns[i].addEventListener('click', function() {
+        var target = this.getAttribute('data-section');
+        for (var j = 0; j < navBtns.length; j++) navBtns[j].classList.remove('active');
+        this.classList.add('active');
+        for (var j = 0; j < sections.length; j++) {
+            sections[j].classList.toggle('active', sections[j].id === 'sec-' + target);
+        }
+        document.getElementById('main').scrollTop = 0;
+    });
+}
+
+// ===== Test mode click reveal =====
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('answer') && document.body.classList.contains('test-mode')) {
+        e.target.classList.toggle('revealed');
+    }
+});
+
+// ===== Init =====
+renderTech();
+renderPmAlphaFilter();
+renderPm();
+renderCategory();
+renderPredict();
+</script>
+</body>
+</html>
